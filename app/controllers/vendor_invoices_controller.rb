@@ -1,4 +1,9 @@
 class VendorInvoicesController < ApplicationController
+  unloadable
+  layout 'base'
+  # Redmine fitlers
+  before_filter :authorize
+
   before_filter :load_vendor_invoice, :only => [ :show, :edit, :update, :destroy ]
   before_filter :load_vendor_invoices, :only => [ :index ]
   before_filter :new_vendor_invoice, :only => [ :new ]
@@ -100,6 +105,15 @@ class VendorInvoicesController < ApplicationController
       format.xml  { head :ok }
       format.js
     end
+  end
+  
+  private
+  
+  # Override the default authorize and add in the global option. This will allow
+  # the user in if they have any roles with the correct permission
+  def authorize(ctrl = params[:controller], action = params[:action])
+    allowed = User.current.allowed_to?({:controller => ctrl, :action => action}, nil, { :global => true})
+    allowed ? true : deny_access
   end
 end
 
