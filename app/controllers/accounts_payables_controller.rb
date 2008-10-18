@@ -1,4 +1,4 @@
-class VendorInvoicesController < ApplicationController
+class AccountsPayablesController < ApplicationController
   unloadable
   layout 'base'
   # Redmine fitlers
