@@ -1,1 +1,1 @@
-resources :vendor_invoices
+resources :accounts_payables
