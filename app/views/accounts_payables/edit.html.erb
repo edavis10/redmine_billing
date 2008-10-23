@@ -11,8 +11,11 @@
   <%= f.text_field :invoiced_on %><%= calendar_for('vendor_invoice_invoiced_on') %>
 </p>
 <p>
-  <%# TODO %>
-  <%= f.select :users, [] %>
+  <label for="vendor_invoice[users][]"><%= l(:field_users)%></label>
+  <%= select_tag 'vendor_invoice[users][]',
+    options_from_collection_for_select(User.find(:all), :id, :name, @vendor_invoice.users.collect(&:id)),
+    { :multiple => true, :size => 5}
+  %>
 </p>
 <p>
   <%= f.text_field :comment %>
