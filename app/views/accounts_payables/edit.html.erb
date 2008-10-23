@@ -28,8 +28,7 @@
   <%= f.text_field :hours %>
 </p>
 <p>
-  <%# TODO %>
-  <%= f.select :type, [] %>
+  <%= f.select :type, BillingType.to_array %>
 </p>
 </fieldset>
 
