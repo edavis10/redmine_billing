@@ -8,7 +8,6 @@ class AccountsPayablesController < ApplicationController
   before_filter :new_vendor_invoice, :only => [ :new ]
   before_filter :create_vendor_invoice, :only => [ :create ]
   before_filter :update_vendor_invoice, :only => [ :update ]
-  before_filter :destroy_vendor_invoice, :only => [ :destroy ]
   before_filter :load_users, :only => [ :index ]
 
   protected
@@ -27,10 +26,6 @@ class AccountsPayablesController < ApplicationController
 
   def update_vendor_invoice
     @updated = @vendor_invoice.update_attributes(params[:vendor_invoice])
-  end
-
-  def destroy_vendor_invoice
-    @vendor_invoice = @vendor_invoice.destroy
   end
 
   def load_users
@@ -99,14 +94,6 @@ class AccountsPayablesController < ApplicationController
     end
   end
 
-  def destroy          
-    respond_to do |format|
-      format.html { redirect_to :action => vendor_invoices_url }
-      format.xml  { head :ok }
-      format.js
-    end
-  end
-  
   private
   
   # Override the default authorize and add in the global option. This will allow
