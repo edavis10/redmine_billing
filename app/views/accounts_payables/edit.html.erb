@@ -5,23 +5,23 @@
 <fieldset>
 <%= error_messages_for 'vendor_invoice' %>
 <p>
-  <%= f.text_field :number %>
+  <%= f.text_field :number, :size => 10, :required => true %>
 </p>
 <p>
-  <%= f.text_field :invoiced_on %><%= calendar_for('vendor_invoice_invoiced_on') %>
+  <%= f.text_field :invoiced_on, :size => 10, :required => true %><%= calendar_for('vendor_invoice_invoiced_on') %>
 </p>
 <p>
   <label for="vendor_invoice[users][]"><%= l(:field_users)%></label>
   <%= select_tag 'vendor_invoice[users][]',
     options_from_collection_for_select(User.find(:all), :id, :name, @vendor_invoice.users.collect(&:id)),
-    { :multiple => true, :size => 5}
+    { :multiple => true, :size => 5 }
   %>
 </p>
 <p>
   <%= f.text_field :comment %>
 </p>
 <p>
-  <%= f.select :billing_status, BillingStatus.to_array %>
+  <%= f.select :billing_status, BillingStatus.to_array, :required => true %>
 </p>
 <p>
   <%= f.text_field :amount %>
