@@ -26,10 +26,10 @@
       <td align="center"><%= format_date(invoice.invoiced_on) %></td>
       <td align="center"><%= user.name %></td>
       <td align="center"><%= invoice.number %></td>
-      <td align="center">TODO: invoice.status</td>
-      <td align="center">TODO: invoice.hours</td>
+      <td align="center"><%= invoice.billing_status %></td>
+      <td align="center"><%= invoice.hours %></td>
       <td align="center"><%= invoice.amount %></td>
-      <td align="center">TODO: invoice.type</td>
+      <td align="center"><% invoice.type %></td>
       <td><%= h invoice.comment %></td>
       <td align="center">
         <%= link_to image_tag('edit.png'), edit_accounts_payable_path(invoice), :title => l(:button_edit) %> 
