@@ -26,12 +26,6 @@
 <p>
   <%= f.text_field :amount %>
 </p>
-<p>
-  <%= f.text_field :hours %>
-</p>
-<p>
-  <%= f.select :type, BillingType.to_array %>
-</p>
 </fieldset>
 
 <%= f.submit l(:button_save), :class => 'button-small'  %>
