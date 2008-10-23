@@ -5,11 +5,11 @@ class AccountsPayablesController < ApplicationController
   before_filter :authorize
 
   before_filter :load_vendor_invoice, :only => [ :show, :edit, :update, :destroy ]
-  before_filter :load_vendor_invoices, :only => [ :index ]
   before_filter :new_vendor_invoice, :only => [ :new ]
   before_filter :create_vendor_invoice, :only => [ :create ]
   before_filter :update_vendor_invoice, :only => [ :update ]
   before_filter :destroy_vendor_invoice, :only => [ :destroy ]
+  before_filter :load_users, :only => [ :index ]
 
   protected
   def load_vendor_invoice
@@ -33,15 +33,15 @@ class AccountsPayablesController < ApplicationController
     @vendor_invoice = @vendor_invoice.destroy
   end
 
-  def load_vendor_invoices
-    @vendor_invoices = VendorInvoice.find(:all)
+  def load_users
+    @users = User.find(:all)
   end
 
   public
   def index
     respond_to do |format|
       format.html
-      format.xml  { render :xml => @vendor_invoices }
+      format.xml  { render :xml => @users.collect(&:vendor_invoices) }
       format.js
     end
   end

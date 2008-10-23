@@ -2,7 +2,22 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 module AccountsPayablesControllerSpecHelper
   def login
+    # Redmine Application controller
+    controller.stub!(:user_setup)
+    controller.stub!(:check_if_login_required).and_return(true)
+    controller.stub!(:set_localization)
+
     controller.stub!(:authorize).and_return(true)
+  end
+  
+  def user_factory(id, options = { })
+    object_options = { 
+      :id => id,
+      :to_param => id.to_s
+    }.merge(options)
+    
+    user = mock_model(User, object_options)
+    return user
   end
   
   def vendor_invoice_factory(id, options = { })
@@ -30,11 +45,18 @@ describe AccountsPayablesController, "#index" do
   
   before(:each) do
     login
-
+    
     @vendor_invoice_one = vendor_invoice_factory(1)
     @vendor_invoice_two = vendor_invoice_factory(2)
     @vendor_invoices = [@vendor_invoice_one, @vendor_invoice_two]
-    VendorInvoice.stub!(:find).with(:all).and_return(@vendor_invoices)
+
+    @user_one = user_factory(1)
+    @user_one.stub!(:vendor_invoices).and_return(@vendor_invoices)
+
+    @user_two = user_factory(2)
+    @user_two.stub!(:vendor_invoices).and_return([])
+    @users = [@user_one, @user_two]
+    User.stub!(:find).with(:all).and_return(@users)
   end
   
   it 'should be successful' do
@@ -42,9 +64,9 @@ describe AccountsPayablesController, "#index" do
     response.should be_success
   end
 
-  it 'should load all vendor invoices' do
+  it 'should load all users and their vendor invoices' do
     get :index
-    assigns[:vendor_invoices].should eql(@vendor_invoices)
+    assigns[:users].should eql(@users)
   end
 
   it 'should render the index template' do

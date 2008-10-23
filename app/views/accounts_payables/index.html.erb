@@ -1,6 +1,10 @@
 <h2><%= l(:billing_accounts_payable_title)%></h2>
 
-<h3>TODO: User grouping</h3>
+<% @users.each do |user| %>
+
+<% unless user.vendor_invoices.empty? %>
+
+<h3><%= user.name %></h3>
 <table class="list">
   <thead>
     <th></th>
@@ -15,12 +19,11 @@
     <th></th>
   </thead>
   <tbody>
-    <% @vendor_invoices.each do |invoice| %>
+    <% user.vendor_invoices.each do |invoice| %>
     <tr class="<%= cycle("odd", "even") %>">
       <td align="center">TODO: CHECK</td>
       <td align="center"><%= format_date(invoice.invoiced_on) %></td>
-      <%# TODO hardcoded user %>
-      <td align="center"><%= invoice.users[0].name %></td>
+      <td align="center"><%= user.name %></td>
       <td align="center"><%= invoice.number %></td>
       <td align="center">TODO: invoice.status</td>
       <td align="center">TODO: invoice.hours</td>
@@ -38,4 +41,6 @@
   <% end %>
   </tbody>
 </table>
+<% end %>
 <br />
+<% end %>
