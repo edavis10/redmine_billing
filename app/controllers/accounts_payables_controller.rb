@@ -83,7 +83,7 @@ class AccountsPayablesController < ApplicationController
     respond_to do |format|
       if @updated
         flash[:notice] = 'Vendor invoice was successfully updated.'
-        format.html { redirect_to @vendor_invoice }
+        format.html { redirect_to accounts_payable_path(@vendor_invoice) }
         format.xml  { head :ok }
         format.js
       else

@@ -202,16 +202,51 @@ describe AccountsPayablesController, "#edit" do
 end
 
 describe AccountsPayablesController, "#update with successful save" do
-  it 'should redirect to the vendor invoice'
+  include AccountsPayablesControllerSpecHelper
 
-  it 'should update the vendor invoice'
+  before(:each) do
+    @params = { :vendor_invoice => { :id => 1, :number => 'Test001', :invoiced_on => Date.today, :comment => 'A comment', :amount => '200.30', :billing_status => 'unbilled' }}
+    login
+    @vendor_invoice = vendor_invoice_factory(1)
+    @vendor_invoice.stub!(:update_attributes).and_return(true)
+    VendorInvoice.stub!(:find).and_return(@vendor_invoice)
+  end
 
-  it 'should set the flash message'
+  it 'should redirect to the vendor invoice' do
+    put :update, @params
+    response.should redirect_to(accounts_payable_path(@vendor_invoice))
+  end
+
+  it 'should update the vendor invoice' do
+    @vendor_invoice.should_receive(:update_attributes).and_return(true)
+    put :update, @params
+  end
+
+  it 'should set the flash message' do
+    put :update, @params 
+    flash[:notice].should match(/successfully updated/)
+  end
 end
 
 describe AccountsPayablesController, "#update with unsuccessful save" do
-  it 'should redirect to the edit vendor invoice form'
+  include AccountsPayablesControllerSpecHelper
 
-  it 'should not update the vendor invoice'
+  before(:each) do
+    @params = { :vendor_invoice => { :id => 1, :number => 'Test001', :invoiced_on => Date.today, :comment => 'A comment', :amount => '200.30', :billing_status => 'unbilled' }}
+    login
+    @vendor_invoice = vendor_invoice_factory(1)
+    @vendor_invoice.stub!(:update_attributes).and_return(false)
+    VendorInvoice.stub!(:find).and_return(@vendor_invoice)
+  end
+  
+  it 'should redirect to the edit vendor invoice form' do
+    put :update, @params
+    response.should render_template('accounts_payables/edit')
+  end
+
+  it 'should not update the vendor invoice' do
+    @vendor_invoice.should_receive(:update_attributes).and_return(false)
+    post :update, @params
+  end
 end
 
