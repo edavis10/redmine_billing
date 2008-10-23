@@ -20,7 +20,7 @@
   <%= f.select :billing_status, BillingStatus.to_array, :required => true %>
 </p>
 <p>
-  <%= f.text_field :amount %>
+  <%= f.text_field :amount %> <small>Enter only for Fixed Rate Invoices</small>
 </p>
 </fieldset>
 
