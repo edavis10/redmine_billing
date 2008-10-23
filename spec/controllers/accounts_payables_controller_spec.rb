@@ -1,5 +1,21 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+module AccountsPayablesControllerSpecHelper
+  def login
+    controller.stub!(:authorize).and_return(true)
+  end
+  
+  def vendor_invoice_factory(id, options = { })
+    object_options = { 
+      :id => id,
+      :to_param => id.to_s
+    }.merge(options)
+    
+    vendor_invoice = mock_model(VendorInvoice, object_options)
+    return vendor_invoice
+  end
+end
+
 describe AccountsPayablesController do
 
   #Delete this example and add some real ones
@@ -10,11 +26,31 @@ describe AccountsPayablesController do
 end
 
 describe AccountsPayablesController, "#index" do
-  it 'should be successful'
+  include AccountsPayablesControllerSpecHelper
+  
+  before(:each) do
+    login
 
-  it 'should load all vendor invoices'
+    @vendor_invoice_one = vendor_invoice_factory(1)
+    @vendor_invoice_two = vendor_invoice_factory(2)
+    @vendor_invoices = [@vendor_invoice_one, @vendor_invoice_two]
+    VendorInvoice.stub!(:find).with(:all).and_return(@vendor_invoices)
+  end
+  
+  it 'should be successful' do
+    get :index
+    response.should be_success
+  end
 
-  it 'should render the index template'
+  it 'should load all vendor invoices' do
+    get :index
+    assigns[:vendor_invoices].should eql(@vendor_invoices)
+  end
+
+  it 'should render the index template' do
+    get :index
+    response.should render_template('accounts_payables/index')
+  end
 end
 
 describe AccountsPayablesController, "#show" do
