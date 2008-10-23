@@ -29,7 +29,7 @@
       <td align="center"><%= check_box_tag 'multi' %></td>
       <td align="center"><%= format_date(invoice.invoiced_on) %></td>
       <td align="center"><%= user.name %></td>
-      <td align="center"><%= invoice.number %></td>
+      <td align="center"><%= link_to invoice.number, accounts_payable_path(invoice) %></td>
       <td align="center"><%= invoice.billing_status %></td>
       <td align="center"><%# TODO: invoice.hours %></td>
       <td align="center"><%= invoice.amount %></td>

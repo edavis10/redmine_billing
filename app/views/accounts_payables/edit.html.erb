@@ -1,3 +1,8 @@
+<div class="contextual">
+  <%= link_to l(:billing_invoice_title_plural), accounts_payables_path %>
+  <%= link_to l(:billing_create_new_vendor_invoice), new_accounts_payable_path %>
+</div>
+
 <h2><%= l(:billing_new_invoice_title)%></h2>
 
 <% labelled_tabular_form_for(:vendor_invoice, @vendor_invoice, :url => accounts_payables_path(), :method => :post) do |f| %>

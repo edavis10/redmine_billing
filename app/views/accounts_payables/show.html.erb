@@ -1,0 +1,28 @@
+<div class="contextual">
+  <%= link_to l(:billing_invoice_title_plural), accounts_payables_path %>
+  <%= link_to l(:billing_create_new_vendor_invoice), new_accounts_payable_path %>
+  <%= link_to l(:billing_invoice_edit), edit_accounts_payable_path(@vendor_invoice) %>
+</div>
+
+<h2><%= l(:billing_invoice_title)%></h2>
+
+<div class="box">
+  <p>
+    <%= l(:field_number) %>: <%= h @vendor_invoice.number %>
+  </p>
+  <p>
+    <%= l(:field_invoiced_on) %>: <%= format_date(@vendor_invoice.invoiced_on) %>
+  </p>
+  <p>
+    <%= l(:field_user_ids) %>: <%= h(@vendor_invoice.users.collect(&:name)) unless @vendor_invoice.users.empty? %>
+  </p>
+  <p>
+    <%= l(:field_comment) %>: <%= h @vendor_invoice.comment %>
+  </p>
+  <p>
+    <%= l(:field_billing_status) %>: <%= h @vendor_invoice.billing_status %>
+  </p>
+  <p>
+    <%= l(:field_amount) %>: <%= h @vendor_invoice.amount %>
+  </p>
+</div>

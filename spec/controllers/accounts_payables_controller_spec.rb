@@ -76,11 +76,29 @@ describe AccountsPayablesController, "#index" do
 end
 
 describe AccountsPayablesController, "#show" do
-  it 'should be successful'
+  include AccountsPayablesControllerSpecHelper
+  
+  before(:each) do
+    login
+    
+    @vendor_invoice = vendor_invoice_factory(1)
+    VendorInvoice.stub!(:find).and_return(@vendor_invoice)
+  end
 
-  it 'should load the vendor invoice'
+  it 'should be successful' do
+    get :show, :id => @vendor_invoice.id
+    response.should be_success
+  end
 
-  it 'should render the show template'
+  it 'should load the vendor invoice' do
+    get :show, :id => @vendor_invoice.id
+    assigns[:vendor_invoice].should eql(@vendor_invoice)
+  end
+
+  it 'should render the show template' do
+    get :show, :id => @vendor_invoice.id
+    response.should render_template('accounts_payables/show')
+  end
 end
 
 describe AccountsPayablesController, "#new" do

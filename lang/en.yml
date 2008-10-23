@@ -1,8 +1,11 @@
 # Text strings
 accounts_payable_menu: Accounts Payable
 billing_accounts_payable_title: Accounts Payable (Invoices)
-billing_create_new_vendor_invoice: "+ Create New Invoice"
+billing_create_new_vendor_invoice: Create New Invoice
+billing_invoice_title: Invoice
+billing_invoice_title_plural: Invoices
 billing_new_invoice_title: Invoice
+billing_invoice_edit: Edit Invoice
 
 # Labels
 label_vendor_invoice: Invoice
@@ -17,3 +20,4 @@ field_number: 'Invoice #'
 field_user_ids: Member(s)
 field_comment: Comment
 field_billing_status: Billing Status
+field_invoiced_on: Date
