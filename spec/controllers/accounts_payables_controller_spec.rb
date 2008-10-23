@@ -110,17 +110,52 @@ describe AccountsPayablesController, "#new" do
 end
 
 describe AccountsPayablesController, "#create with successful save" do
-  it 'should redirect to the vendor invoice'
+  include AccountsPayablesControllerSpecHelper
 
-  it 'should save the vendor invoice'
+  before(:each) do
+    @params = { :vendor_invoice => { :number => 'Test001', :invoiced_on => Date.today, :comment => 'A comment', :amount => '200.30', :billing_status => 'unbilled' }}
+    login
+    @vendor_invoice = vendor_invoice_factory(1)
+    @vendor_invoice.stub!(:save).and_return(true)
+    VendorInvoice.stub!(:new).and_return(@vendor_invoice)
+  end
+  
+  it 'should redirect to the vendor invoice' do
+    post :create, @params
+    response.should redirect_to(accounts_payable_path(@vendor_invoice))
+  end
 
-  it 'should set the flash message'
+  it 'should save the vendor invoice' do
+    @vendor_invoice.should_receive(:save).and_return(true)
+    post :create, @params
+  end
+
+  it 'should set the flash message' do
+    post :create, @params 
+    flash[:notice].should match(/successfully created/)
+  end
 end
 
 describe AccountsPayablesController, "#create with unsuccessful save" do
-  it 'should redirect to the new vendor invoice form'
+  include AccountsPayablesControllerSpecHelper
 
-  it 'should not save the vendor invoice'
+  before(:each) do
+    @params = { :vendor_invoice => { :number => 'Test001', :invoiced_on => Date.today, :comment => 'A comment', :amount => '200.30', :billing_status => 'unbilled' }}
+    login
+    @vendor_invoice = vendor_invoice_factory(1)
+    @vendor_invoice.stub!(:save).and_return(false)
+    VendorInvoice.stub!(:new).and_return(@vendor_invoice)
+  end
+
+  it 'should render the new vendor invoice form' do
+    post :create, @params
+    response.should render_template('accounts_payables/edit')
+  end
+
+  it 'should not save the vendor invoice' do
+    @vendor_invoice.should_receive(:save).and_return(false)
+    post :create, @params
+  end
 end
 
 describe AccountsPayablesController, "#edit" do

@@ -66,11 +66,11 @@ class AccountsPayablesController < ApplicationController
     respond_to do |format|
       if @created
         flash[:notice] = 'Vendor invoice was successfully created.'
-        format.html { redirect_to @vendor_invoice }
+        format.html { redirect_to accounts_payable_path(@vendor_invoice) }
         format.xml  { render :xml => @vendor_invoice, :status => :created, :location => @vendor_invoice }
         format.js
       else
-        format.html { render :action => :new }
+        format.html { render :action => :edit }
         format.xml  { render :xml => @vendor_invoice.errors, :status => :unprocessable_entity }
         format.js
       end
