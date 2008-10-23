@@ -9,7 +9,7 @@ label_vendor_invoice: Invoice
 label_vendor_invoice_status: Status
 label_vendor_invoice_hours: Hours
 label_vendor_invoice_amount: Value
-label_vendor_invoice_type: Type
+label_vendor_invoice_billing_type: Type
 label_vendor_invoice_comment: Comment
 
 # Fields
