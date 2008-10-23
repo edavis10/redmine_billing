@@ -180,11 +180,3 @@ describe AccountsPayablesController, "#update with unsuccessful save" do
   it 'should not update the vendor invoice'
 end
 
-describe AccountsPayablesController, "#destroy" do
-  it 'should redirect to the vendor invoices list'
-
-  it 'should delete the vendor invoice'
-
-  it 'should set the flash message'
-end
-
