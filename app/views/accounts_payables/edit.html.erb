@@ -1,0 +1,37 @@
+<h2><%= l(:billing_new_invoice_title)%></h2>
+
+<% labelled_tabular_form_for(:vendor_invoice, @vendor_invoice, :url => accounts_payables_path(), :method => :post) do |f| %>
+
+<fieldset>
+<%= error_messages_for 'vendor_invoice' %>
+<p>
+  <%= f.text_field :number %>
+</p>
+<p>
+  <%= f.text_field :invoiced_on %><%= calendar_for('vendor_invoice_invoiced_on') %>
+</p>
+<p>
+  <%# TODO %>
+  <%= f.select :users, [] %>
+</p>
+<p>
+  <%= f.text_field :comment %>
+</p>
+<p>
+  <%# TODO %>
+  <%= f.select :billing_status, [] %>
+</p>
+<p>
+  <%= f.text_field :amount %>
+</p>
+<p>
+  <%= f.text_field :hours %>
+</p>
+<p>
+  <%# TODO %>
+  <%= f.select :type, [] %>
+</p>
+</fieldset>
+
+<%= f.submit l(:button_save), :class => 'button-small'  %>
+<% end %>

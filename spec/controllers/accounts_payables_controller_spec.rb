@@ -84,11 +84,29 @@ describe AccountsPayablesController, "#show" do
 end
 
 describe AccountsPayablesController, "#new" do
-  it 'should be successful'
+  include AccountsPayablesControllerSpecHelper
 
-  it 'should load a new vendor invoice'
+  before(:each) do
+    login
+    @vendor_invoice = vendor_invoice_factory(1)
+    VendorInvoice.stub!(:new).and_return(@vendor_invoice)
+  end
+  
+  it 'should be successful' do
+    get :new
+    response.should be_success
+  end
 
-  it 'should render the new template'
+  it 'should load a new vendor invoice' do
+    VendorInvoice.should_receive(:new).and_return(@vendor_invoice)
+    get :new
+    assigns[:vendor_invoice].should_not be_nil
+  end
+
+  it 'should render the edit template' do
+    get :new
+    response.should render_template('accounts_payables/edit')
+  end
 end
 
 describe AccountsPayablesController, "#create with successful save" do
