@@ -177,11 +177,28 @@ describe AccountsPayablesController, "#create with unsuccessful save" do
 end
 
 describe AccountsPayablesController, "#edit" do
-  it 'should be successful'
+  include AccountsPayablesControllerSpecHelper
 
-  it 'should load the vendor invoice'
+  before(:each) do
+    login
+    @vendor_invoice = vendor_invoice_factory(1)
+    VendorInvoice.stub!(:find).and_return(@vendor_invoice)
+  end
 
-  it 'should render the edit template'
+  it 'should be successful' do
+    get :edit, :id => @vendor_invoice.id
+    response.should be_success
+  end
+  
+  it 'should load the vendor invoice' do
+    get :edit, :id => @vendor_invoice.id
+    assigns[:vendor_invoice].should eql(@vendor_invoice)
+  end
+
+  it 'should render the edit template' do
+    get :edit, :id => @vendor_invoice.id
+    response.should render_template('accounts_payables/edit')
+  end
 end
 
 describe AccountsPayablesController, "#update with successful save" do

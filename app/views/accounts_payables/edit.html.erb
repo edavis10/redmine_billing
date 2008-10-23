@@ -5,7 +5,10 @@
 
 <h2><%= l(:billing_new_invoice_title)%></h2>
 
-<% labelled_tabular_form_for(:vendor_invoice, @vendor_invoice, :url => accounts_payables_path(), :method => :post) do |f| %>
+<% labelled_tabular_form_for(:vendor_invoice,
+                             @vendor_invoice,
+                             :url => @vendor_invoice.new_record? ? accounts_payables_path() : accounts_payable_path(@vendor_invoice),
+                             :html => { :method => @vendor_invoice.new_record? ? :post : :put}) do |f| %>
 
 <fieldset>
 <%= error_messages_for 'vendor_invoice' %>
