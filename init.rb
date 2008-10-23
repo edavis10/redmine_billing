@@ -3,6 +3,9 @@ require 'redmine'
 # Hooks
 require_dependency 'billing_routing_hooks'
 
+# Patches
+require_dependency 'billing_user_patch'
+
 Redmine::Plugin.register :redmine_billing do
   name 'Redmine Billing plugin'
   author 'Author name'
