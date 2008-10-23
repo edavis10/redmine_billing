@@ -21,7 +21,8 @@
   <tbody>
     <% user.vendor_invoices.each do |invoice| %>
     <tr class="<%= cycle("odd", "even") %>">
-      <td align="center">TODO: CHECK</td>
+      <%# TODO: Multi select %>
+      <td align="center"><%= check_box_tag 'multi' %></td>
       <td align="center"><%= format_date(invoice.invoiced_on) %></td>
       <td align="center"><%= user.name %></td>
       <td align="center"><%= invoice.number %></td>
