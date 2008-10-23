@@ -18,8 +18,7 @@
   <%= f.text_field :comment %>
 </p>
 <p>
-  <%# TODO %>
-  <%= f.select :billing_status, [] %>
+  <%= f.select :billing_status, BillingStatus.to_array %>
 </p>
 <p>
   <%= f.text_field :amount %>
