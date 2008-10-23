@@ -14,6 +14,6 @@ label_vendor_invoice_comment: Comment
 
 # Fields
 field_number: 'Invoice #'
-field_users: Member(s)
+field_user_ids: Member(s)
 field_comment: Comment
 field_billing_status: Billing Status
