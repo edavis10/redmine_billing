@@ -1,1 +1,41 @@
-Hello
+<h2><%= l(:billing_accounts_payable_title)%></h2>
+
+<h3>TODO: User grouping</h3>
+<table class="list">
+  <thead>
+    <th></th>
+    <th><%= l(:label_date) %></th>
+    <th><%= l(:label_member) %></th>
+    <th><%= l(:label_vendor_invoice) %></th>
+    <th><%= l(:label_vendor_invoice_status) %></th>
+    <th><%= l(:label_vendor_invoice_hours) %></th>
+    <th><%= l(:label_vendor_invoice_amount) %></th>
+    <th><%= l(:label_vendor_invoice_type) %></th>
+    <th><%= l(:label_vendor_invoice_comment) %></th>
+    <th></th>
+  </thead>
+  <tbody>
+    <% @vendor_invoices.each do |invoice| %>
+    <tr class="<%= cycle("odd", "even") %>">
+      <td align="center">TODO: CHECK</td>
+      <td align="center"><%= format_date(invoice.invoiced_on) %></td>
+      <%# TODO hardcoded user %>
+      <td align="center"><%= invoice.users[0].name %></td>
+      <td align="center"><%= invoice.number %></td>
+      <td align="center">TODO: invoice.status</td>
+      <td align="center">TODO: invoice.hours</td>
+      <td align="center"><%= invoice.amount %></td>
+      <td align="center">TODO: invoice.type</td>
+      <td><%= h invoice.comment %></td>
+      <td align="center">
+        <%= link_to image_tag('edit.png'), edit_accounts_payable_path(invoice), :title => l(:button_edit) %> 
+        <%= link_to image_tag('delete.png'), accounts_payable_path(invoice),
+          :method => :delete,
+          :confirm => l(:text_are_you_sure),
+        :title => l(:button_delete) %>
+    </td>
+  </tr>
+  <% end %>
+  </tbody>
+</table>
+<br />
