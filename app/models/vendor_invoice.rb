@@ -1,5 +1,6 @@
 class VendorInvoice < ActiveRecord::Base
   has_and_belongs_to_many :users
+  has_many :time_entries
   
   validates_presence_of :number
   validates_presence_of :invoiced_on
