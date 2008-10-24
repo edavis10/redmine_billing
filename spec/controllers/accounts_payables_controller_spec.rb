@@ -250,3 +250,30 @@ describe AccountsPayablesController, "#update with unsuccessful save" do
   end
 end
 
+describe AccountsPayablesController, "#bulk_edit" do
+  include AccountsPayablesControllerSpecHelper
+
+  before(:each) do
+    login
+    @vendor_invoice_one = vendor_invoice_factory(1)
+    @vendor_invoice_two = vendor_invoice_factory(2)
+    @vendor_invoices = [@vendor_invoice_one, @vendor_invoice_two]
+    VendorInvoice.stub!(:find_all_by_id).with(['1','2']).and_return(@vendor_invoices)
+  end
+
+  it 'should be successful' do
+    post :bulk_edit, :ids => ['1','2']
+    response.should be_success
+  end
+  
+  it 'should load the vendor invoices' do
+    post :bulk_edit, :ids => ['1','2']
+    assigns[:vendor_invoices].should eql(@vendor_invoices)
+  end
+
+  it 'should render the bulk_edit template' do
+    post :bulk_edit, :ids => ['1','2']
+    response.should render_template('accounts_payables/bulk_edit')
+  end
+end
+

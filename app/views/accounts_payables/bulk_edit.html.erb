@@ -1,0 +1,56 @@
+<div class="contextual">
+  <%= link_to l(:billing_invoice_title_plural), accounts_payables_path %>
+  <%= link_to l(:billing_create_new_vendor_invoice), new_accounts_payable_path %>
+</div>
+
+<h2><%= l(:billing_bulk_edit_selected_vendor_invoices)%></h2>
+
+<ul>
+  <%= bulk_edit_list_for_vendor_invoices(@vendor_invoices) %>
+</ul>
+
+<% form_tag() do %>
+<div class="box">
+<fieldset>
+<legend><%= l(:label_change_properties) %></legend>
+
+<%= @vendor_invoices.collect {|i| hidden_field_tag('ids[]', i.id)}.join %>
+<p>
+  <label><%= l(:field_invoiced_on) %>:
+  <%= text_field_tag 'invoiced_on', '', :size => 10 %><%= calendar_for('invoiced_on') %>
+  </label>
+
+  <label><%= l(:field_billing_status) %>:
+  <%= select_tag('billing_status',
+    content_tag('option', l(:label_no_change_option), :value => '') + options_for_select(BillingStatus.to_array))
+    %>
+  </label>
+
+</p>
+<p>
+  <label><%= l(:field_comment) %>:
+  <%= text_field_tag 'comment', '', :size => '35' %>
+  </label>
+</p>
+
+<p>
+  <label><%= l(:field_user_ids) %>:
+  <%= select_tag('user_ids',
+    options_from_collection_for_select(User.find(:all), :id, :name),
+    { :multiple => true, :size => 5})
+    %>
+  </label>
+</p>
+
+<p>
+</p>
+
+</div>
+</fieldset>
+<p><%= submit_tag l(:button_submit) %></p>
+
+<% end %>
+         
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag "billing.css", :plugin => "billing_plugin", :media => "screen" %>
+<% end %>

@@ -5,6 +5,7 @@ class AccountsPayablesController < ApplicationController
   before_filter :authorize
 
   before_filter :load_vendor_invoice, :only => [ :show, :edit, :update, :destroy ]
+  before_filter :load_vendor_invoices, :only => [ :bulk_edit ]
   before_filter :new_vendor_invoice, :only => [ :new ]
   before_filter :create_vendor_invoice, :only => [ :create ]
   before_filter :update_vendor_invoice, :only => [ :update ]
@@ -15,6 +16,10 @@ class AccountsPayablesController < ApplicationController
   protected
   def load_vendor_invoice
     @vendor_invoice = VendorInvoice.find(params[:id])
+  end
+
+  def load_vendor_invoices
+    @vendor_invoices = VendorInvoice.find_all_by_id(params[:ids])
   end
 
   def new_vendor_invoice
@@ -75,6 +80,13 @@ class AccountsPayablesController < ApplicationController
   end 
 
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
+  
+  def bulk_edit
     respond_to do |format|
       format.html
       format.js

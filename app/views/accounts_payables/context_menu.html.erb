@@ -1,4 +1,4 @@
 <ul>
-  <li><%= context_menu_link l(:button_edit),{ :ids => @vendor_invoices.collect(&:id)},
+  <li><%= context_menu_link l(:button_edit), bulk_edit_accounts_payables_path(:ids => @vendor_invoices.collect(&:id)),
 	                        :class => 'icon-move' %></li>
 </ul>

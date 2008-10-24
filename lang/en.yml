@@ -6,6 +6,7 @@ billing_invoice_title: Invoice
 billing_invoice_title_plural: Invoices
 billing_new_invoice_title: Invoice
 billing_invoice_edit: Edit Invoice
+billing_bulk_edit_selected_vendor_invoices: Bulk edit selected invoices
 
 # Labels
 label_vendor_invoice: Invoice
