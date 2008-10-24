@@ -1,11 +1,10 @@
 /* Invoice links based on billing statuses */
 
-a.billing-status-unbilled {  }
-a.billing-status-billed {  }
-a.billing-status-approved { color: green; }
-a.billing-status-paid { color: green; }
-a.billing-status-hold { color: brown; }
-a.billing-status-rejected { color: red; }
-a.billing-status-pro_bono {  }
-a.billing-status-internal { color: gray; }
-
+a.billing-status-unbilled {background-color:#FFFFDD;}
+a.billing-status-billed {background-color:#FFCCCC; color: #CC0000;}
+a.billing-status-approved {color: #999000;}
+a.billing-status-paid { }
+a.billing-status-hold {color: #999999}
+a.billing-status-rejected {color: #CC0000;}
+a.billing-status-pro_bono { }
+a.billing-status-internal { }
