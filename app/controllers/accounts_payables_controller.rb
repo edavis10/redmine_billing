@@ -97,6 +97,8 @@ class AccountsPayablesController < ApplicationController
   end
 
   def context_menu
+    @vendor_invoices = VendorInvoice.find_all_by_id(params[:ids])
+    render :layout => false
   end
 
   private

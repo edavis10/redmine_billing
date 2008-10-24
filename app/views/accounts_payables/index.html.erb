@@ -27,7 +27,7 @@
     <% user.vendor_invoices.each do |invoice| %>
     <tr class="<%= cycle("odd", "even") %> hascontextmenu">
       <%# TODO: Multi select %>
-      <td align="center"><%= check_box_tag 'multi', '1', false, { :class => 'checkbox' } %></td>
+      <td align="center"><%= check_box_tag 'ids[]', invoice.id, false, { :class => 'checkbox' } %></td>
       <td align="center"><%= format_date(invoice.invoiced_on) %></td>
       <td align="center"><%= user.name %></td>
       <td align="center"><%= vendor_invoice_number_for(invoice) %></td>

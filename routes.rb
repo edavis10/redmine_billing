@@ -1,1 +1,1 @@
-resources :accounts_payables
+resources :accounts_payables, :collection => { :context_menu => :post }
