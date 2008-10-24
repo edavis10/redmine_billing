@@ -9,7 +9,7 @@
   <%= bulk_edit_list_for_vendor_invoices(@vendor_invoices) %>
 </ul>
 
-<% form_tag() do %>
+<% form_tag(bulk_update_accounts_payables_path, :method => :put) do %>
 <div class="box">
 <fieldset>
 <legend><%= l(:label_change_properties) %></legend>
@@ -35,7 +35,7 @@
 
 <p>
   <label><%= l(:field_user_ids) %>:
-  <%= select_tag('user_ids',
+  <%= select_tag('user_ids[]',
     options_from_collection_for_select(User.find(:all), :id, :name),
     { :multiple => true, :size => 5})
     %>

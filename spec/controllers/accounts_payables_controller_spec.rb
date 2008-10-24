@@ -277,3 +277,74 @@ describe AccountsPayablesController, "#bulk_edit" do
   end
 end
 
+describe AccountsPayablesController, "#bulk_update with successful save" do
+  include AccountsPayablesControllerSpecHelper
+
+  before(:each) do
+    login
+    @vendor_invoice_one = vendor_invoice_factory(1)
+    @vendor_invoice_one.stub!(:update_attributes).and_return(true)
+    @vendor_invoice_two = vendor_invoice_factory(2)
+    @vendor_invoice_two.stub!(:update_attributes).and_return(true)
+    @vendor_invoices = [@vendor_invoice_one, @vendor_invoice_two]
+    @params = { :invoiced_on => Date.today, :ids => [@vendor_invoice_one.id, @vendor_invoice_two.id], :comment => 'comment'}
+    VendorInvoice.stub!(:find_all_by_id).and_return(@vendor_invoices)
+  end
+
+  it 'should redirect to the vendor invoice list' do
+    put :bulk_update, @params
+    response.should redirect_to(accounts_payables_path)
+  end
+
+  it 'should update the vendor invoices' do
+    VendorInvoice.should_receive(:find_all_by_id).and_return(@vendor_invoices)
+    @vendor_invoice_one.should_receive(:update_attributes).and_return(true)
+    @vendor_invoice_two.should_receive(:update_attributes).and_return(true)
+    put :bulk_update, @params
+  end
+
+  it 'should set the flash message' do
+    put :bulk_update, @params 
+    flash[:notice].should match(/successfully updated/)
+  end
+end
+
+describe AccountsPayablesController, "#bulk_update with an unsuccessful save" do
+  include AccountsPayablesControllerSpecHelper
+
+  before(:each) do
+    login
+    @vendor_invoice_one = vendor_invoice_factory(1)
+    @vendor_invoice_one.stub!(:update_attributes).and_return(false)
+    @vendor_invoice_two = vendor_invoice_factory(2)
+    @vendor_invoice_two.stub!(:update_attributes).and_return(true)
+    @vendor_invoices = [@vendor_invoice_one, @vendor_invoice_two]
+    @params = { :invoiced_on => Date.today, :ids => [@vendor_invoice_one.id, @vendor_invoice_two.id], :comment => 'comment'}
+    VendorInvoice.stub!(:find_all_by_id).and_return(@vendor_invoices)
+  end
+
+  it 'should redirect to the vendor invoice list' do
+    put :bulk_update, @params
+    response.should redirect_to(accounts_payables_path)
+  end
+
+  it 'should update the vendor invoices' do
+    VendorInvoice.should_receive(:find_all_by_id).and_return(@vendor_invoices)
+    @vendor_invoice_one.should_receive(:update_attributes).and_return(false)
+    @vendor_invoice_two.should_receive(:update_attributes).and_return(true)
+    put :bulk_update, @params
+  end
+
+  it 'should save the unsaved vendor invoice ids to @unsaved_ids' do
+    put :bulk_update, @params
+    assigns[:unsaved_ids].should_not be_empty
+    assigns[:unsaved_ids].should eql([@vendor_invoice_one.id])
+  end
+  
+  it 'should set the flash message' do
+    put :bulk_update, @params 
+    flash[:error].should match(/failed/i)
+    flash[:error].should match(/##{@vendor_invoice_one.id}/i)
+  end
+end
+

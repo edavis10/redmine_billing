@@ -5,10 +5,11 @@ class AccountsPayablesController < ApplicationController
   before_filter :authorize
 
   before_filter :load_vendor_invoice, :only => [ :show, :edit, :update, :destroy ]
-  before_filter :load_vendor_invoices, :only => [ :bulk_edit ]
+  before_filter :load_vendor_invoices, :only => [ :bulk_edit, :bulk_update ]
   before_filter :new_vendor_invoice, :only => [ :new ]
   before_filter :create_vendor_invoice, :only => [ :create ]
   before_filter :update_vendor_invoice, :only => [ :update ]
+  before_filter :update_vendor_invoices, :only => [ :bulk_update ]
   before_filter :load_users, :only => [ :index ]
 
   helper :vendor_invoices
@@ -33,6 +34,23 @@ class AccountsPayablesController < ApplicationController
 
   def update_vendor_invoice
     @updated = @vendor_invoice.update_attributes(params[:vendor_invoice])
+  end
+
+  def update_vendor_invoices
+    @unsaved_ids = []
+    @vendor_invoices.each do |vendor_invoice|
+      attr = { }
+      attr[:invoiced_on] = params[:invoiced_on] unless params[:invoiced_on].nil? || params[:invoiced_on].blank?
+      attr[:user_ids] = params[:user_ids] unless params[:user_ids].nil? || params[:user_ids].empty?
+      attr[:comment] = params[:comment] unless params[:comment].nil? || params[:comment].blank?
+      attr[:billing_status] = params[:billing_status] unless params[:billing_status].nil? || params[:billing_status].blank?
+        
+      unless vendor_invoice.update_attributes(attr)
+        @unsaved_ids << vendor_invoice.id
+      end
+    end
+    
+    @updated = @unsaved_ids.empty?
   end
 
   def load_users
@@ -108,6 +126,22 @@ class AccountsPayablesController < ApplicationController
     end
   end
 
+  def bulk_update
+    respond_to do |format|
+      if @updated
+        flash[:notice] = 'Vendor invoices were successfully updated.'
+        format.html { redirect_to accounts_payables_path }
+        format.xml  { head :ok }
+        format.js
+      else
+        flash[:error] = 'Failed to save some Vendor invoices: #' + @unsaved_ids.join(', #')
+        format.html { redirect_to accounts_payables_path }
+        format.xml  { head :bad_request }
+        format.js
+      end
+    end
+  end
+  
   def context_menu
     @vendor_invoices = VendorInvoice.find_all_by_id(params[:ids])
     render :layout => false
