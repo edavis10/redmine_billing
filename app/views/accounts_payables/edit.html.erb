@@ -25,7 +25,7 @@
   <%= f.text_field :comment %>
 </p>
 <p>
-  <%= f.select :billing_status, BillingStatus.to_array, :required => true %>
+  <%= f.select :billing_status, BillingStatus.to_array, { :required => true, :selected => @vendor_invoice.billing_status_id} %>
 </p>
 <p>
   <%= f.text_field :amount %> <small>Enter only for Fixed Rate Invoices</small>

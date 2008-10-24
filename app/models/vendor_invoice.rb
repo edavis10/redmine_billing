@@ -16,4 +16,8 @@ class VendorInvoice < ActiveRecord::Base
 
     return true
   end
+  
+  def billing_status_id
+    BillingStatus.find_by_id(self.billing_status)
+  end
 end
