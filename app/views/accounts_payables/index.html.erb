@@ -12,7 +12,10 @@
 <h3><%= user.name %></h3>
 <table class="list issues">
   <thead>
-    <th></th>
+    <th>
+      <%= link_to image_tag('toggle_check.png'), {}, :onclick => 'toggleIssuesSelection(Element.up(this, "table")); return false;',
+                                                           :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+    </th>
     <th><%= l(:label_date) %></th>
     <th><%= l(:label_member) %></th>
     <th><%= l(:label_vendor_invoice) %></th>
