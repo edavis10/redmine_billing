@@ -8,8 +8,9 @@
 
 <% unless user.vendor_invoices.empty? %>
 
+<% form_tag({}) do -%>	
 <h3><%= user.name %></h3>
-<table class="list">
+<table class="list issues">
   <thead>
     <th></th>
     <th><%= l(:label_date) %></th>
@@ -24,9 +25,9 @@
   </thead>
   <tbody>
     <% user.vendor_invoices.each do |invoice| %>
-    <tr class="<%= cycle("odd", "even") %>">
+    <tr class="<%= cycle("odd", "even") %> hascontextmenu">
       <%# TODO: Multi select %>
-      <td align="center"><%= check_box_tag 'multi' %></td>
+      <td align="center"><%= check_box_tag 'multi', '1', false, { :class => 'checkbox' } %></td>
       <td align="center"><%= format_date(invoice.invoiced_on) %></td>
       <td align="center"><%= user.name %></td>
       <td align="center"><%= vendor_invoice_number_for(invoice) %></td>
@@ -42,10 +43,16 @@
   <% end %>
   </tbody>
 </table>
+<% end # form %>
 <% end %>
 <br />
 <% end %>
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag "billing.css", :plugin => "billing_plugin", :media => "screen" %>
+  <%= javascript_include_tag 'context_menu' %>
+  <%= stylesheet_link_tag 'context_menu' %>
 <% end %>
+
+<div id="context-menu" style="display: none;"></div>
+<%= javascript_tag "new ContextMenu('#{url_for(:controller => 'accounts_payables', :action => 'context_menu')}')" %>

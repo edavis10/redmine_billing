@@ -96,6 +96,9 @@ class AccountsPayablesController < ApplicationController
     end
   end
 
+  def context_menu
+  end
+
   private
   
   # Override the default authorize and add in the global option. This will allow
