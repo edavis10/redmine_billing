@@ -1,4 +1,11 @@
 <ul>
-  <li><%= context_menu_link l(:button_edit), bulk_edit_accounts_payables_path(:ids => @vendor_invoices.collect(&:id)),
-	                        :class => 'icon-move' %></li>
+<% if @vendor_invoices.size <= 0 %>
+<li><%= context_menu_link l(:button_edit), bulk_edit_accounts_payables_path(:ids => nil), :class => 'icon-move', :disabled => true %></li>
+<% elsif @vendor_invoices.size == 1 %>
+<li><%= context_menu_link l(:button_edit), edit_accounts_payable_path(:id => @vendor_invoices[0].id),
+        :class => 'icon-move' %></li>
+<% else %>
+<li><%= context_menu_link l(:button_edit), bulk_edit_accounts_payables_path(:ids => @vendor_invoices.collect(&:id)),
+        :class => 'icon-move' %></li>
+<% end %>
 </ul>
