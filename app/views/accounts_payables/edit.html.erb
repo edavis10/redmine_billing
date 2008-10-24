@@ -34,3 +34,7 @@
 
 <%= f.submit l(:button_save), :class => 'button-small'  %>
 <% end %>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag "billing.css", :plugin => "billing_plugin", :media => "screen" %>
+<% end %>

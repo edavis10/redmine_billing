@@ -10,6 +10,8 @@ class AccountsPayablesController < ApplicationController
   before_filter :update_vendor_invoice, :only => [ :update ]
   before_filter :load_users, :only => [ :index ]
 
+  helper :vendor_invoices
+
   protected
   def load_vendor_invoice
     @vendor_invoice = VendorInvoice.find(params[:id])

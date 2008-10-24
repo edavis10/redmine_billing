@@ -1,0 +1,11 @@
+/* Invoice links based on billing statuses */
+
+a.billing-status-unbilled {  }
+a.billing-status-billed {  }
+a.billing-status-approved { color: green; }
+a.billing-status-paid { color: green; }
+a.billing-status-hold { color: brown; }
+a.billing-status-rejected { color: red; }
+a.billing-status-pro_bono {  }
+a.billing-status-internal { color: gray; }
+
