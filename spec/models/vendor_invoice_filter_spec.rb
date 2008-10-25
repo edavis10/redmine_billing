@@ -176,33 +176,43 @@ describe VendorInvoiceFilter, '.filter!' do
     vendor_invoice_filter.vendor_invoices.should include(user1)
     vendor_invoice_filter.vendor_invoices.should include(user2)
   end
-  
-  it 'should fetch all the vendor_invoices in the date range' do
-    vendor_invoice_filter = vendor_invoice_filter_factory(:date_from => 5.days.ago.to_date, :date_to => 0.days.ago.to_date)
+end
 
+describe VendorInvoiceFilter, '.conditions_for_user' do
+  include VendorInvoiceFilterSpecHelper
+
+  it 'should return an ActiveRecord conditon' do
+    vendor_invoice_filter = vendor_invoice_filter_factory
     user = user_factory(1)
-    vendor_invoice_today = mock_model(VendorInvoice, :id => '9000', :user => user, :invoiced_on => Date.today)
-    vendor_invoice_last_month = mock_model(VendorInvoice, :id => '9000', :user => user, :invoiced_on => 1.month.ago)
 
-    vendor_invoice_mock = mock('vendor_invoice_mock')
-    vendor_invoice_mock.should_receive(:find).
-      with(:all,
-           :conditions => 
-           ['invoiced_on >= (:from) AND invoiced_on <= (:to)', { :from => 5.days.ago.to_date, :to => 0.days.ago.to_date}]).
-      and_return([vendor_invoice_today])
-
-    user.stub!(:vendor_invoices).and_return(vendor_invoice_mock)
+    conditions = vendor_invoice_filter.conditions_for_user(user)
     
-    stub_admin_user
-    vendor_invoice_filter.users = [user]
+    conditions.should be_a_kind_of(Array)
+    conditions[0].should be_a_kind_of(String)
+    conditions[1].should be_a_kind_of(Hash)
+  end
+  
+  it 'should include :from' do
+    vendor_invoice_filter = vendor_invoice_filter_factory({ :date_from => 5.days.ago.to_date})
+    user = user_factory(1)
+    conditions = vendor_invoice_filter.conditions_for_user(user)
     
-    vendor_invoice_filter.filter!
-    vendor_invoice_filter.vendor_invoices.should include(user)
+    conditions[1].values_at(:from).should eql([5.days.ago.to_date])
   end
 
-  it 'should fetch all the vendor_invoices matching the billing statuses'
+  it 'should include :to' do
+    vendor_invoice_filter = vendor_invoice_filter_factory({ :date_to => 15.days.ago.to_date})
+    user = user_factory(1)
+    conditions = vendor_invoice_filter.conditions_for_user(user)
+    
+    conditions[1].values_at(:to).should eql([15.days.ago.to_date])
+  end
 
-  it 'should fetch all the vendor_invoices with time_entries matching the activities'
-
-  it 'should fetch all the vendor_invoices with time_entries matching the projects'
+  it 'should include :biling_status' do
+    vendor_invoice_filter = vendor_invoice_filter_factory({ :billing_status => ['paid', 'due']})
+    user = user_factory(1)
+    conditions = vendor_invoice_filter.conditions_for_user(user)
+    
+    conditions[1].values_at(:billing_status).should eql([['paid','due']])
+  end
 end
