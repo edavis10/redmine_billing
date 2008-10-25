@@ -21,4 +21,16 @@ class VendorInvoice < ActiveRecord::Base
   def billing_status_id
     BillingStatus.find_by_id(self.billing_status)
   end
+  
+  # Returns the hours logged to the vendor invoice
+  # Optionally only shows ones logged by the +user+
+  def hours(user=nil)
+    return 0 if self.time_entries.size <= 0
+    if user.nil?
+      return self.time_entries.collect(&:hours).sum
+    else
+      return self.time_entries.collect { |te| te.user == user ? te.hours : 0}.sum
+    end
+    
+  end
 end
