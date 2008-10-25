@@ -17,6 +17,15 @@
     { :multiple => true, :size => 5}
   %>
 </p>
+             
+<p>
+  <label for="vendor_invoice_filter[activities][]"><%= l(:vendor_invoice_filter_activities_label)%>:</label><br />
+  <%= select_tag 'vendor_invoice_filter[activities][]',
+    options_from_collection_for_select(Enumeration::get_values('ACTI'), :id, :name, @vendor_invoice_filter.activities),
+    { :multiple => true, :size => 5}
+  %>
+</p>
+
 
 <p>
   <label for="vendor_invoice_filter[billing_status][]"><%= l(:vendor_invoice_filter_billing_status)%>:</label><br />

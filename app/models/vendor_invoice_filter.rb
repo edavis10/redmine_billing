@@ -51,7 +51,7 @@ class VendorInvoiceFilter
   end
   
   def conditions_for_user(user)
-    return ['invoiced_on >= (:from) AND invoiced_on <= (:to) AND billing_status IN (:billing_status) AND project_id IN (:projects)',
+    return ['invoiced_on >= (:from) AND invoiced_on <= (:to) AND billing_status IN (:billing_status) AND project_id IN (:projects) AND activity_id IN (:activities)',
             {
               :from => self.date_from,
               :to => self.date_to,
