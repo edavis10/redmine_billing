@@ -19,7 +19,7 @@ class BillingStatus
   end
   
   def self.find_by_id(id)
-    return id.to_sym if Statuses.key?(id.to_sym)
+    return id.to_sym if !id.nil? && Statuses.key?(id.to_sym)
   end
 
   def self.find_by_name(id)
