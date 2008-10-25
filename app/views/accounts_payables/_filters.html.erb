@@ -29,7 +29,7 @@
 <p>
   <label for="vendor_invoice_filter[users][]"><%= l(:label_user)%>:</label><br />
   <%= select_tag 'vendor_invoice_filter[users][]',
-    options_from_collection_for_select(User.find(:all), :id, :name, @vendor_invoice_filter.users),
+    options_from_collection_for_select(User.find(:all), :id, :name, @vendor_invoice_filter.users.collect(&:id)),
     { :multiple => true, :size => 8}
 
            %>
