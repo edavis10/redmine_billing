@@ -215,4 +215,21 @@ describe VendorInvoiceFilter, '.conditions_for_user' do
     
     conditions[1].values_at(:billing_status).should eql([['paid','due']])
   end
+  
+  it 'should include :projects' do
+    vendor_invoice_filter = vendor_invoice_filter_factory
+    vendor_invoice_filter.projects = [1,2]
+    user = user_factory(1)
+    conditions = vendor_invoice_filter.conditions_for_user(user)
+    
+    conditions[1].values_at(:projects).should eql([[1,2]])
+  end
+  
+  it 'should include :activities' do
+    vendor_invoice_filter = vendor_invoice_filter_factory({ :activities => [1,2]})
+    user = user_factory(1)
+    conditions = vendor_invoice_filter.conditions_for_user(user)
+    
+    conditions[1].values_at(:activities).should eql([[1,2]])
+  end
 end

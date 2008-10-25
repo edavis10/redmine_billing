@@ -11,6 +11,14 @@
 </p>
 
 <p>
+  <label for="vendor_invoice_filter[projects][]"><%= l(:vendor_invoice_filter_project_label)%>:</label><br />
+  <%= select_tag 'vendor_invoice_filter[projects][]',
+    options_from_collection_for_select(@vendor_invoice_filter.allowed_projects, :id, :name, @vendor_invoice_filter.projects.collect(&:id)),
+    { :multiple => true, :size => 5}
+  %>
+</p>
+
+<p>
   <label for="vendor_invoice_filter[billing_status][]"><%= l(:vendor_invoice_filter_billing_status)%>:</label><br />
   <%= select_tag 'vendor_invoice_filter[billing_status][]',
     options_for_select(BillingStatus.to_array_of_strings, @vendor_invoice_filter.billing_status),
