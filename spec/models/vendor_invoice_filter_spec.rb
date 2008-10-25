@@ -87,6 +87,11 @@ describe VendorInvoiceFilter, 'initializing' do
     vendor_invoice_filter.users.should be_a_kind_of(Array)
   end
 
+  it 'should initialize billing status to an Array' do 
+    vendor_invoice_filter = VendorInvoiceFilter.new
+    vendor_invoice_filter.billing_status.should be_a_kind_of(Array)
+  end
+
   it 'should initialize vendor_invoices to the passed in options' do 
     data = { :test => true }
     vendor_invoice_filter = VendorInvoiceFilter.new({ :vendor_invoices => data })
@@ -123,6 +128,13 @@ describe VendorInvoiceFilter, 'initializing' do
     vendor_invoice_filter.users.should_not be_empty
     vendor_invoice_filter.users.should eql([user1, user2])
   end
+
+  it 'should initialize billing status to the passed in options' do 
+    data = ['unbilled', 'paid']
+    vendor_invoice_filter = VendorInvoiceFilter.new({ :billing_status => data})
+    vendor_invoice_filter.billing_status.should eql(data)
+  end
+
 end
 
 describe VendorInvoiceFilter, '.filter!' do

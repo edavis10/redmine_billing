@@ -6,6 +6,7 @@ class VendorInvoiceFilter
   attr_accessor :users
   attr_accessor :vendor_invoices
   attr_accessor :allowed_projects
+  attr_accessor :billing_status
   
   def initialize(options = { })
     self.vendor_invoices = options[:vendor_invoices] || { }
@@ -26,6 +27,7 @@ class VendorInvoiceFilter
 
     self.date_from = options[:date_from] || 1.month.ago.to_date
     self.date_to = options[:date_to] || Date.today.to_s
+    self.billing_status = options[:billing_status] || BillingStatus.names.map { |n| n.to_s }
   end
   
   def filter!

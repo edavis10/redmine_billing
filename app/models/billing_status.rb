@@ -21,4 +21,12 @@ class BillingStatus
   def self.find_by_name(id)
     return Statuses[id.to_sym]
   end
+  
+  def self.names
+    Statuses.keys
+  end
+  
+  def self.values
+    Statuses.values
+  end
 end
