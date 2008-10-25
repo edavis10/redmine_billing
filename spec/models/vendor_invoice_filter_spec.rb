@@ -1,15 +1,54 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 module VendorInvoiceFilterSpecHelper
-  def vendor_invoice_factory(options={ })
+  def vendor_invoice_filter_factory(options={ })
     object_options = { 
-      :id => id,
       :date_from => Date.today,
       :date_to => Date.today
     }.merge(options)
     
     
     return VendorInvoiceFilter.new(object_options)
+  end
+  
+  def user_factory(id, options = { })
+    object_options = { 
+      :id => id,
+      :to_param => id.to_s
+    }.merge(options)
+
+    user = mock_model(User, object_options)
+    vendor_invoice_one = mock_model(VendorInvoice, :id => '100' + id.to_s, :user => user, :invoiced_on => Date.today)
+    vendor_invoice_two = mock_model(VendorInvoice, :id => '200' + id.to_s, :user => user, :invoiced_on => Date.today)
+    vendor_invoice_three = mock_model(VendorInvoice, :id => '300' + id.to_s, :user => user, :invoiced_on => Date.today)
+    vendor_invoice_mock = mock('vendor_invoice_mock')
+    vendor_invoice_mock.stub!(:find).and_return([vendor_invoice_one, vendor_invoice_two, vendor_invoice_three])
+    user.stub!(:vendor_invoices).and_return(vendor_invoice_mock)
+    return user
+  end
+
+  def stub_non_member_user(projects)
+    @current_user = mock_model(User)
+    @current_user.stub!(:admin?).and_return(false)
+    User.stub!(:current).and_return(@current_user)
+  end
+  
+  def stub_normal_user(projects)
+    @current_user = mock_model(User)
+    @current_user.stub!(:admin?).and_return(false)
+    User.stub!(:current).and_return(@current_user)
+  end
+  
+  def stub_manager_user(projects)
+    @current_user = mock_model(User)
+    @current_user.stub!(:admin?).and_return(false)
+    User.stub!(:current).and_return(@current_user)
+  end
+  
+  def stub_admin_user
+    @current_user = mock_model(User)
+    @current_user.stub!(:admin?).and_return(true)
+    User.stub!(:current).and_return(@current_user)    
   end
 end
 
@@ -97,4 +136,58 @@ describe VendorInvoiceFilter, '.filter!' do
     
   end
 
+  it 'should add a vendor_invoice array for each user' do
+    vendor_invoice_filter = vendor_invoice_filter_factory
+
+    user1 = user_factory(1)
+    user2 = user_factory(2)
+
+    stub_admin_user
+    vendor_invoice_filter.users = [user1, user2]
+    
+    vendor_invoice_filter.filter!
+    vendor_invoice_filter.vendor_invoices.should_not be_empty
+    vendor_invoice_filter.vendor_invoices.should have(2).things
+  end
+  
+  it 'should use the user as the key for each vendor_invoice' do
+    vendor_invoice_filter = vendor_invoice_filter_factory
+
+    user1 = user_factory(1)
+    user2 = user_factory(2)
+
+    stub_admin_user
+    vendor_invoice_filter.users = [user1, user2]
+    
+    vendor_invoice_filter.filter!
+    vendor_invoice_filter.vendor_invoices.should include(user1)
+    vendor_invoice_filter.vendor_invoices.should include(user2)
+  end
+  
+  it 'should fetch all the vendor_invoices in the date range' do
+    vendor_invoice_filter = vendor_invoice_filter_factory(:date_from => 5.days.ago.to_date, :date_to => 0.days.ago.to_date)
+
+    user = user_factory(1)
+    vendor_invoice_today = mock_model(VendorInvoice, :id => '9000', :user => user, :invoiced_on => Date.today)
+    vendor_invoice_last_month = mock_model(VendorInvoice, :id => '9000', :user => user, :invoiced_on => 1.month.ago)
+
+    vendor_invoice_mock = mock('vendor_invoice_mock')
+    vendor_invoice_mock.should_receive(:find).
+      with(:all,
+           :conditions => 
+           ['invoiced_on >= (:from) AND invoiced_on <= (:to)', { :from => 5.days.ago.to_date, :to => 0.days.ago.to_date}]).
+      and_return([vendor_invoice_today])
+
+    user.stub!(:vendor_invoices).and_return(vendor_invoice_mock)
+    
+    stub_admin_user
+    vendor_invoice_filter.users = [user]
+    
+    vendor_invoice_filter.filter!
+    vendor_invoice_filter.vendor_invoices.should include(user)
+  end
+
+  it 'should fetch all the vendor_invoices with time_entries matching the activities'
+
+  it 'should fetch all the vendor_invoices with time_entries matching the projects'
 end

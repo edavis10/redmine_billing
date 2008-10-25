@@ -30,5 +30,31 @@ class VendorInvoiceFilter
   
   def filter!
     self.vendor_invoices = { }
+    
+    self.users.each do |user|
+      logs = []
+      if User.current.admin?
+        # Administrators can see all vendor invoices
+        invoices = vendor_invoices_for_user(user)
+      elsif User.current == user
+        # Users with permission to see their own vendor invoices
+        invoices = vendor_invoices_for_user(user)
+      else
+        # Nothing
+      end
+
+      self.vendor_invoices[user] = invoices
+    end
+  end
+  
+  private
+  def vendor_invoices_for_user(user)
+    user.vendor_invoices.find(:all,
+                              :conditions => ['invoiced_on >= (:from) AND invoiced_on <= (:to)',
+                                             {
+                                                :from => self.date_from,
+                                                :to => self.date_to}
+                                             ]
+                              )
   end
 end
