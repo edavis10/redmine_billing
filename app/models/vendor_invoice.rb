@@ -8,6 +8,7 @@ class VendorInvoice < ActiveRecord::Base
   
   before_save :set_billing_type
   
+  # A VendorInvoice is the billing_type of fixed if it has amount
   def set_billing_type
     if !self.read_attribute(:amount).nil? && self.read_attribute(:amount) > 0
       self.write_attribute(:billing_type, 'fixed')

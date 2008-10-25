@@ -51,8 +51,11 @@ class VendorInvoiceFilter
   end
   
   def conditions_for_user(user)
-    return ['invoiced_on >= (:from) AND invoiced_on <= (:to) AND billing_status IN (:billing_status) AND project_id IN (:projects) AND activity_id IN (:activities)',
+    return ['invoiced_on >= (:from) AND invoiced_on <= (:to) AND billing_status IN (:billing_status) AND ' +
+            # Only check time_entry fields for hourly billing_types
+            '(billing_type = (:fixed) OR (project_id IN (:projects) AND activity_id IN (:activities)))',
             {
+              :fixed => 'fixed',
               :from => self.date_from,
               :to => self.date_to,
               :billing_status => self.billing_status,
