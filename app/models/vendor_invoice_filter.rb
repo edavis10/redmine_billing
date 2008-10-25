@@ -24,7 +24,7 @@ class VendorInvoiceFilter
       self.users = User.find(:all)
     end
 
-    self.date_from = options[:date_from] || Date.today.to_s
+    self.date_from = options[:date_from] || 1.month.ago.to_date
     self.date_to = options[:date_to] || Date.today.to_s
   end
   
