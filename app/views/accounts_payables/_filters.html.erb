@@ -1,4 +1,4 @@
-<div id="timesheet-form">
+<div id="filter-form">
 <fieldset>
 <% form_tag({ }, { :method => :get })do |f|  %>
 
@@ -27,3 +27,10 @@
 </fieldset>
 </div>
 
+<% content_for(:header_tags) do %>
+<style type="text/css">
+
+div#filter-form p { padding:0px 10px; float:left; }
+
+</style>
+<% end %>
