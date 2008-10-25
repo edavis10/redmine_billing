@@ -4,9 +4,11 @@
 
 <h2><%= l(:billing_accounts_payable_title)%></h2>
 
-<% @users.each do |user| %>
+<%= render :partial => 'filters' %>
 
-<% unless user.vendor_invoices.empty? %>
+<% @vendor_invoice_filter.vendor_invoices.each do |user, vendor_invoices| %>
+
+<% unless vendor_invoices.empty? %>
 
 <% form_tag({}) do -%>	
 <h3><%= user.name %></h3>
@@ -27,7 +29,7 @@
     <th></th>
   </thead>
   <tbody>
-    <% user.vendor_invoices.each do |invoice| %>
+    <% vendor_invoices.each do |invoice| %>
     <tr class="<%= cycle("odd", "even") %> hascontextmenu">
       <%# TODO: Multi select %>
       <td align="center"><%= check_box_tag 'ids[]', invoice.id, false, { :class => 'checkbox' } %></td>
@@ -48,7 +50,6 @@
 </table>
 <% end # form %>
 <% end %>
-<br />
 <% end %>
 
 <% content_for :header_tags do %>

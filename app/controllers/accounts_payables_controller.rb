@@ -10,7 +10,7 @@ class AccountsPayablesController < ApplicationController
   before_filter :create_vendor_invoice, :only => [ :create ]
   before_filter :update_vendor_invoice, :only => [ :update ]
   before_filter :update_vendor_invoices, :only => [ :bulk_update ]
-  before_filter :load_users, :only => [ :index ]
+  before_filter :load_vendor_invoice_filter, :only => [ :index ]
 
   helper :vendor_invoices
 
@@ -53,8 +53,24 @@ class AccountsPayablesController < ApplicationController
     @updated = @unsaved_ids.empty?
   end
 
-  def load_users
-    @users = User.find(:all)
+  def load_vendor_invoice_filter
+    if params && params[:vendor_invoice_filter]
+      @vendor_invoice_filter = VendorInvoiceFilter.new( params[:vendor_invoice_filter] )
+    else
+      @vendor_invoice_filter = VendorInvoiceFilter.new
+    end
+    
+    @vendor_invoice_filter.allowed_projects = allowed_projects
+
+    if params && params[:vendor_invoice_filter] && !params[:vendor_invoice_filter][:projects].blank?
+      @vendor_invoice_filter.projects = @vendor_invoice_filter.allowed_projects.find_all do |project| 
+        params[:vendor_invoice_filter][:projects].include?(project.id.to_s)
+      end
+    else 
+      @vendor_invoice_filter.projects = @vendor_invoice_filter.allowed_projects
+    end
+    
+    @vendor_invoice_filter.filter!
   end
 
   public
@@ -154,6 +170,14 @@ class AccountsPayablesController < ApplicationController
   def authorize(ctrl = params[:controller], action = params[:action])
     allowed = User.current.allowed_to?({:controller => ctrl, :action => action}, nil, { :global => true})
     allowed ? true : deny_access
+  end
+  
+  def allowed_projects
+    if User.current.admin?
+      return Project.find(:all, :order => 'name ASC')
+    else
+      return User.current.projects.find(:all, :order => 'name ASC')
+    end
   end
 end
 

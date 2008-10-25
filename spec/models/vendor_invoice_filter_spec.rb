@@ -112,15 +112,16 @@ describe VendorInvoiceFilter, 'initializing' do
     vendor_invoice_filter.activities.should eql([200, 300])
   end
 
-  it 'should initialize users to the ids of the passed in options' do 
-    user1 = mock('user1')
-    user1.stub!(:to_i).and_return(100)
-    user2 = mock('user2')
-    user2.stub!(:to_i).and_return(101)
-    data = [user1, user2]
+  it 'should initialize users to the users passed in options' do 
+    user1 = mock_model(User, :id => 100)
+    user2 = mock_model(User, :id => 101)
+    data = [user1.id, user2.id]
+    User.should_receive(:find).with(100).and_return(user1)
+    User.should_receive(:find).with(101).and_return(user2)
+    
     vendor_invoice_filter = VendorInvoiceFilter.new({ :users => data })
     vendor_invoice_filter.users.should_not be_empty
-    vendor_invoice_filter.users.should eql([100, 101])
+    vendor_invoice_filter.users.should eql([user1, user2])
   end
 end
 

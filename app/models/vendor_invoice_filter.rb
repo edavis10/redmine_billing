@@ -19,9 +19,9 @@ class VendorInvoiceFilter
     end
 
     unless options[:users].nil?
-      self.users = options[:users].collect { |u| u.to_i }
+      self.users = options[:users].collect { |u| User.find(u.to_i) }
     else
-      self.users = User.find(:all).collect(&:id)
+      self.users = User.find(:all)
     end
 
     self.date_from = options[:date_from] || Date.today.to_s
@@ -32,7 +32,7 @@ class VendorInvoiceFilter
     self.vendor_invoices = { }
     
     self.users.each do |user|
-      logs = []
+
       if User.current.admin?
         # Administrators can see all vendor invoices
         invoices = vendor_invoices_for_user(user)
@@ -44,6 +44,7 @@ class VendorInvoiceFilter
       end
 
       self.vendor_invoices[user] = invoices
+      self.vendor_invoices[user] ||= []
     end
   end
   

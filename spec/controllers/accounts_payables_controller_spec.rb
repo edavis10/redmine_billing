@@ -9,7 +9,7 @@ module AccountsPayablesControllerSpecHelper
 
     controller.stub!(:authorize).and_return(true)
   end
-  
+
   def user_factory(id, options = { })
     object_options = { 
       :id => id,
@@ -57,6 +57,8 @@ describe AccountsPayablesController, "#index" do
     @user_two.stub!(:vendor_invoices).and_return([])
     @users = [@user_one, @user_two]
     User.stub!(:find).with(:all).and_return(@users)
+    
+    controller.stub!(:allowed_projects).and_return([])
   end
   
   it 'should be successful' do
@@ -64,10 +66,7 @@ describe AccountsPayablesController, "#index" do
     response.should be_success
   end
 
-  it 'should load all users and their vendor invoices' do
-    get :index
-    assigns[:users].should eql(@users)
-  end
+  it 'should load the vendor invoice filter'
 
   it 'should render the index template' do
     get :index

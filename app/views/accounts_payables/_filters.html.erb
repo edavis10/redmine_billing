@@ -1,0 +1,19 @@
+<div id="timesheet-form">
+<fieldset>
+<% form_tag({ }, { :method => :get })do |f|  %>
+
+<p>
+  <label for="vendor_invoice_filter_date_from"><%= l(:vendor_invoice_filter_date_from_label)%>:</label><br />
+  <%= text_field :vendor_invoice_filter, "date_from", :size => 10, :value => @vendor_invoice_filter.date_from %><%= calendar_for('vendor_invoice_filter_date_from') %><br /><br />
+
+  <label for="vendor_invoice_filter_date_to"><%= l(:vendor_invoice_filter_date_to_label)%>:</label><br />
+  <%= text_field :vendor_invoice_filter, "date_to", :size => 10, :value => @vendor_invoice_filter.date_to %><%= calendar_for('vendor_invoice_filter_date_to') %>
+</p>
+
+<div class="clear"></div>
+<%= submit_tag l(:button_apply),:class => 'button-small' -%>
+
+<% end %>
+</fieldset>
+</div>
+
