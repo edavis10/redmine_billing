@@ -10,6 +10,16 @@
   <%= text_field :vendor_invoice_filter, "date_to", :size => 10, :value => @vendor_invoice_filter.date_to %><%= calendar_for('vendor_invoice_filter_date_to') %>
 </p>
 
+<p>
+  <label for="vendor_invoice_filter[billing_status][]"><%= l(:vendor_invoice_filter_billing_status)%>:</label><br />
+  <%= select_tag 'vendor_invoice_filter[billing_status][]',
+    options_for_select(BillingStatus.to_array_of_strings, @vendor_invoice_filter.billing_status),
+    { :multiple => true, :size => 5}
+
+           %>
+</p>
+
+
 <div class="clear"></div>
 <%= submit_tag l(:button_apply),:class => 'button-small' -%>
 

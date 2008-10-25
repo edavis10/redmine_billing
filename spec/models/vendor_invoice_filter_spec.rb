@@ -18,9 +18,9 @@ module VendorInvoiceFilterSpecHelper
     }.merge(options)
 
     user = mock_model(User, object_options)
-    vendor_invoice_one = mock_model(VendorInvoice, :id => '100' + id.to_s, :user => user, :invoiced_on => Date.today)
-    vendor_invoice_two = mock_model(VendorInvoice, :id => '200' + id.to_s, :user => user, :invoiced_on => Date.today)
-    vendor_invoice_three = mock_model(VendorInvoice, :id => '300' + id.to_s, :user => user, :invoiced_on => Date.today)
+    vendor_invoice_one = mock_model(VendorInvoice, :id => '100' + id.to_s, :user => user, :invoiced_on => Date.today, :billing_status => 'paid')
+    vendor_invoice_two = mock_model(VendorInvoice, :id => '200' + id.to_s, :user => user, :invoiced_on => Date.today, :billing_status => 'paid')
+    vendor_invoice_three = mock_model(VendorInvoice, :id => '300' + id.to_s, :user => user, :invoiced_on => Date.today, :billing_status => 'paid')
     vendor_invoice_mock = mock('vendor_invoice_mock')
     vendor_invoice_mock.stub!(:find).and_return([vendor_invoice_one, vendor_invoice_two, vendor_invoice_three])
     user.stub!(:vendor_invoices).and_return(vendor_invoice_mock)
@@ -199,6 +199,8 @@ describe VendorInvoiceFilter, '.filter!' do
     vendor_invoice_filter.filter!
     vendor_invoice_filter.vendor_invoices.should include(user)
   end
+
+  it 'should fetch all the vendor_invoices matching the billing statuses'
 
   it 'should fetch all the vendor_invoices with time_entries matching the activities'
 

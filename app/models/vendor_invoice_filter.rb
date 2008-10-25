@@ -53,10 +53,11 @@ class VendorInvoiceFilter
   private
   def vendor_invoices_for_user(user)
     user.vendor_invoices.find(:all,
-                              :conditions => ['invoiced_on >= (:from) AND invoiced_on <= (:to)',
+                              :conditions => ['invoiced_on >= (:from) AND invoiced_on <= (:to) AND billing_status IN (:billing_status)',
                                              {
                                                 :from => self.date_from,
-                                                :to => self.date_to}
+                                                :to => self.date_to,
+                                                :billing_status => self.billing_status},
                                              ]
                               )
   end

@@ -14,6 +14,10 @@ class BillingStatus
     Statuses.invert.sort.to_a
   end
   
+  def self.to_array_of_strings
+    Statuses.invert.sort.map {|value,key| [value, key.to_s] }
+  end
+  
   def self.find_by_id(id)
     return id.to_sym if Statuses.key?(id.to_sym)
   end
