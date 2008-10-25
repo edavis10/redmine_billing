@@ -3,43 +3,43 @@
 <% form_tag({ }, { :method => :get })do |f|  %>
 
 <p>
-  <label for="vendor_invoice_filter_date_from"><%= l(:vendor_invoice_filter_date_from_label)%>:</label><br />
+  <label for="vendor_invoice_filter_date_from"><%= l(:label_date_from)%>:</label><br />
   <%= text_field :vendor_invoice_filter, "date_from", :size => 10, :value => @vendor_invoice_filter.date_from %><%= calendar_for('vendor_invoice_filter_date_from') %><br /><br />
 
-  <label for="vendor_invoice_filter_date_to"><%= l(:vendor_invoice_filter_date_to_label)%>:</label><br />
+  <label for="vendor_invoice_filter_date_to"><%= l(:label_date_to)%>:</label><br />
   <%= text_field :vendor_invoice_filter, "date_to", :size => 10, :value => @vendor_invoice_filter.date_to %><%= calendar_for('vendor_invoice_filter_date_to') %>
 </p>
 
 <p>
-  <label for="vendor_invoice_filter[projects][]"><%= l(:vendor_invoice_filter_project_label)%>:</label><br />
+  <label for="vendor_invoice_filter[projects][]"><%= l(:label_project)%>:</label><br />
   <%= select_tag 'vendor_invoice_filter[projects][]',
     options_from_collection_for_select(@vendor_invoice_filter.allowed_projects, :id, :name, @vendor_invoice_filter.projects.collect(&:id)),
-    { :multiple => true, :size => 5}
+    { :multiple => true, :size => 8}
   %>
 </p>
              
 <p>
-  <label for="vendor_invoice_filter[activities][]"><%= l(:vendor_invoice_filter_activities_label)%>:</label><br />
+  <label for="vendor_invoice_filter[activities][]"><%= l(:label_activity)%>:</label><br />
   <%= select_tag 'vendor_invoice_filter[activities][]',
     options_from_collection_for_select(Enumeration::get_values('ACTI'), :id, :name, @vendor_invoice_filter.activities),
-    { :multiple => true, :size => 5}
+    { :multiple => true, :size => 8}
   %>
 </p>
 
 <p>
-  <label for="vendor_invoice_filter[users][]"><%= l(:vendor_invoice_filter_users_label)%>:</label><br />
+  <label for="vendor_invoice_filter[users][]"><%= l(:label_user)%>:</label><br />
   <%= select_tag 'vendor_invoice_filter[users][]',
     options_from_collection_for_select(User.find(:all), :id, :name, @vendor_invoice_filter.users),
-    { :multiple => true, :size => 5}
+    { :multiple => true, :size => 8}
 
            %>
 </p>
 
 <p>
-  <label for="vendor_invoice_filter[billing_status][]"><%= l(:vendor_invoice_filter_billing_status)%>:</label><br />
+  <label for="vendor_invoice_filter[billing_status][]"><%= l(:field_billing_status)%>:</label><br />
   <%= select_tag 'vendor_invoice_filter[billing_status][]',
     options_for_select(BillingStatus.to_array_of_strings, @vendor_invoice_filter.billing_status),
-    { :multiple => true, :size => 5}
+    { :multiple => true, :size => 8}
 
            %>
 </p>
