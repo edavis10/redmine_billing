@@ -8,6 +8,9 @@ module AccountsPayablesControllerSpecHelper
     controller.stub!(:set_localization)
 
     controller.stub!(:authorize).and_return(true)
+    @current_user = mock_model(User)
+    @current_user.stub!(:admin?).and_return(false)
+    User.stub!(:current).and_return(@current_user)
   end
 
   def user_factory(id, options = { })
