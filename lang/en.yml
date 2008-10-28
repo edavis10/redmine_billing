@@ -22,3 +22,4 @@ field_user_ids: Member(s)
 field_comment: Comment
 field_billing_status: Billing Status
 field_invoiced_on: Date
+field_vendor_invoice: Invoice
