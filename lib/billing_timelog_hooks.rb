@@ -17,7 +17,9 @@ class BillingTimelogHooks < Redmine::Hook::ViewListener
                                            :action => 'auto_complete_for_vendor_invoice_number',
                                            :protocol => Setting.protocol,
                                            :host => Setting.host_name
-                                         }})
+                                         },
+                                         :after_update_element => "function(element, value) {  $('time_entry_vendor_invoice_id').value = value.id }"
+                                       })
     # Add JS to swap the autocompleter and the plain old HTML
     js = <<EOJS
 <script type="text/javascript">
