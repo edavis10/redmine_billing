@@ -164,9 +164,9 @@ class AccountsPayablesController < ApplicationController
   end
 
   def auto_complete_for_vendor_invoice_number
-    re = Regexp.new("^#{params[:time_entry][:vendor_invoice_id]}", "i")
+    re = Regexp.new("^#{params[:time_entry][:vendor_invoice_number]}", "i")
     find_options = { :order => "name ASC" }
-    @vendor_invoices = VendorInvoice.find(:all, :conditions => [ "LOWER(number) LIKE ?", '%' + params[:time_entry][:vendor_invoice_id].downcase + '%' ])
+    @vendor_invoices = VendorInvoice.find(:all, :conditions => [ "LOWER(number) LIKE ?", '%' + params[:time_entry][:vendor_invoice_number].downcase + '%' ])
     render :partial => 'autocomplete.html.erb'
   end
   
