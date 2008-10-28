@@ -2,6 +2,7 @@ require 'redmine'
 
 # Hooks
 require_dependency 'billing_routing_hooks'
+require_dependency 'billing_timelog_hooks'
 
 # Patches
 require_dependency 'billing_user_patch'
