@@ -34,4 +34,8 @@ class VendorInvoice < ActiveRecord::Base
     end
     
   end
+  
+  def user_names
+    self.users.collect(&:name).join(", ")
+  end
 end

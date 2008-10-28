@@ -95,3 +95,25 @@ describe VendorInvoice, 'hours' do
   end
   
 end
+
+describe VendorInvoice, 'user_names' do
+  include VendorInvoiceSpecHelper
+  
+  it 'should return an empty string if there are no users' do
+    vendor_invoice = vendor_invoice_object_factory(1)
+    vendor_invoice.should_receive(:users).and_return([])
+    vendor_invoice.user_names.should eql('')
+    
+  end
+
+  it 'should return a comma separated string listing each user' do
+    @user = mock_model(User, :id => 1)
+    @user.should_receive(:name).and_return("Joe User")
+    @user_two = mock_model(User, :id => 2)
+    @user_two.should_receive(:name).and_return("Jane User")
+    
+    vendor_invoice = vendor_invoice_object_factory(1)
+    vendor_invoice.should_receive(:users).and_return([@user, @user_two])
+    vendor_invoice.user_names.should eql('Joe User, Jane User')
+  end
+end
