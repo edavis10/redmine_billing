@@ -11,7 +11,11 @@ class BillingTimelogHooks < Redmine::Hook::ViewListener
     # Create a autocomplete text field for number
     o << text_field_with_auto_complete(:time_entry,
                                        :vendor_invoice_number,
-                                       { :autocomplete => "off", :size => 35, :style => 'display: none;', :value => context[:time_entry].vendor_invoice.nil? ? '' : context[:time_entry].vendor_invoice.number },
+                                       {
+                                         :autocomplete => "off",
+                                         :size => 35,
+                                         :style => 'display: none;',
+                                         :value => context[:time_entry].vendor_invoice.nil? ? '' : context[:time_entry].vendor_invoice.number },
                                        { :url => {
                                            :controller => 'accounts_payables',
                                            :action => 'auto_complete_for_vendor_invoice_number',
