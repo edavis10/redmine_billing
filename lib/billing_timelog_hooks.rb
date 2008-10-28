@@ -24,6 +24,9 @@ class BillingTimelogHooks < Redmine::Hook::ViewListener
                                          },
                                          :after_update_element => "function(element, value) {  $('time_entry_vendor_invoice_id').value = value.id }"
                                        })
+    # Clear vendor_invoice_id if vendor_invoice_number is cleared
+    o << observe_field('time_entry_vendor_invoice_number', :function => "if (value.replace(/\s/g,'') =='') { $('time_entry_vendor_invoice_id').value = '' }")
+
     # Add JS to swap the autocompleter and the plain old HTML
     js = <<EOJS
 <script type="text/javascript">
