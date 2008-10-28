@@ -1,0 +1,5 @@
+<ul>
+<% @vendor_invoices.each do |invoice| %>
+   <li id="<%= invoice.id %>"><%= invoice.number %><span class="informal"> | <%= invoice.users.collect(&:name).join(", ") %></span></li>
+<% end %>
+</ul>
