@@ -163,6 +163,13 @@ class AccountsPayablesController < ApplicationController
     render :layout => false
   end
 
+  def auto_complete_for_vendor_invoice_number
+    re = Regexp.new("^#{params[:time_entry][:vendor_invoice_id]}", "i")
+    find_options = { :order => "name ASC" }
+    @vendor_invoices = VendorInvoice.find(:all, :conditions => [ "LOWER(number) LIKE ?", '%' + params[:time_entry][:vendor_invoice_id].downcase + '%' ])
+    render :inline => "<%= auto_complete_result @vendor_invoices, 'number' %>"
+  end
+  
   private
   
   # Override the default authorize and add in the global option. This will allow
