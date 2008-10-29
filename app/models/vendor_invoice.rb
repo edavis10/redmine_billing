@@ -30,6 +30,10 @@ class VendorInvoice < ActiveRecord::Base
   def hourly?
     return self.read_attribute(:billing_type) == "hourly"
   end
+  
+  def open?
+    self.billing_status == "paid"
+  end
 
   # Returns the hours logged to the vendor invoice
   # Optionally only shows ones logged by the +user+

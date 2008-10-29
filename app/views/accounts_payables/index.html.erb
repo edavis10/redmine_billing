@@ -11,7 +11,9 @@
 <% unless vendor_invoices.empty? %>
 
 <% form_tag({}) do -%>	
-<h3><%= user.name %></h3>
+<h3>
+  <%= user.name %> <%= totals_for_user(user, vendor_invoices) %>
+</h3>
 <table class="list issues">
   <thead>
     <th>

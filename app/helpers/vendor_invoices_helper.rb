@@ -44,4 +44,21 @@ module VendorInvoicesHelper
       end
     end
   end
+  
+  def totals_for_user(user, vendor_invoices)
+    total = 0
+    open = 0
+    vendor_invoices.each do |invoice|
+      if invoice.fixed?
+        total += invoice.amount
+        open += invoice.amount unless invoice.open?
+      else
+        total += invoice.amount_for_user(user)
+        open += invoice.amount_for_user(user) unless invoice.open?
+      end
+    end
+    
+    return "(" + number_to_currency(open) + "/" + number_to_currency(total) + ")"
+
+  end
 end
