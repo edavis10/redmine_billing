@@ -23,6 +23,14 @@ class VendorInvoice < ActiveRecord::Base
     BillingStatus.find_by_id(self.billing_status)
   end
   
+  def fixed?
+    return self.read_attribute(:billing_type) == "fixed"
+  end
+
+  def hourly?
+    return self.read_attribute(:billing_type) == "hourly"
+  end
+
   # Returns the hours logged to the vendor invoice
   # Optionally only shows ones logged by the +user+
   def hours(user=nil)

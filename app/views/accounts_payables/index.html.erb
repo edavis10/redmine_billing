@@ -38,7 +38,7 @@
       <td align="center"><%= vendor_invoice_number_for(invoice) %></td>
       <td align="center"><%= invoice.billing_status %></td>
       <td align="center"><%= user_hours_for_vendor_invoice(invoice, user) %></td>
-      <td align="center"><%= invoice.amount %></td>
+      <td align="center"><%= user_amount_for_vendor_invoice(invoice, user) %></td>
       <td align="center"><% invoice.billing_type %></td>
       <td><%= h invoice.comment %></td>
       <td align="center">

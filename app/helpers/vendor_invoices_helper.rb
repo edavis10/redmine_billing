@@ -12,16 +12,25 @@ module VendorInvoicesHelper
   
   def user_hours_for_vendor_invoice(invoice, user)
     total = invoice.hours
-    return number_to_currency(total) if total == 0
+    return "" if total == 0
 
     case invoice.users.count
     when 0
       # nothing
-      return ''
+      return ""
     when 1
-      return number_to_currency(total)
+      return total.to_s
     else
-      return number_to_currency(invoice.hours(user)) + ' of ' + number_to_currency(total)
+      return invoice.hours(user).to_s + ' of ' + total.to_s
+    end
+  end
+
+  def user_amount_for_vendor_invoice(invoice, user)
+    if invoice.fixed?
+      return number_to_currency(invoice.amount)
+    else
+      # TODO: Get hourly amounts
+      return ""
     end
   end
 end
