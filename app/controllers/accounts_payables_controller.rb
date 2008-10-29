@@ -171,6 +171,7 @@ class AccountsPayablesController < ApplicationController
   end
   
   def timesheet
+    @time_entries = params[:time_entry_ids]
     render :layout => false
   end
   

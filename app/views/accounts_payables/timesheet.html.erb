@@ -1,3 +1,17 @@
-<h1>Timesheet</h1>
+<h1><%= l(:billing_add_time_to_invoice) %></h1>
 
-<p>Hello</p>
+<p>
+  TODO: Existing
+</p>
+
+<h3><%= l(:billing_create_new_vendor_invoice) %></h3>
+
+<% form_tag(new_accounts_payable_path, :method => :get) do |f| %>
+<% @time_entries.each do |entry| %>
+<%= hidden_field_tag 'time_entry_ids[]', entry %>
+<% end %>
+
+<p>
+  <%= submit_tag(l(:billing_create_new_vendor_invoice)) %>
+</p>
+<% end %>
