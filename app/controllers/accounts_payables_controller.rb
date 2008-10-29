@@ -171,6 +171,7 @@ class AccountsPayablesController < ApplicationController
   end
   
   def timesheet
+    render :layout => false
   end
   
   private
