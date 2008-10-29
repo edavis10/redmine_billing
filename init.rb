@@ -14,6 +14,7 @@ require File.join(directory,'vendor','plugins','auto_complete','init')
 # Hooks
 require_dependency 'billing_routing_hooks'
 require_dependency 'billing_timelog_hooks'
+require_dependency 'billing_timesheet_hooks'
 
 # Patches
 require_dependency 'billing_user_patch'

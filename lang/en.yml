@@ -23,3 +23,4 @@ field_comment: Comment
 field_billing_status: Billing Status
 field_invoiced_on: Date
 field_vendor_invoice: Invoice
+button_invoice: Invoice
