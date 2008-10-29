@@ -170,6 +170,9 @@ class AccountsPayablesController < ApplicationController
     render :partial => 'autocomplete.html.erb'
   end
   
+  def timesheet
+  end
+  
   private
   
   # Override the default authorize and add in the global option. This will allow
