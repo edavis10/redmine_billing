@@ -25,10 +25,12 @@ class AccountsPayablesController < ApplicationController
 
   def new_vendor_invoice
     @vendor_invoice = VendorInvoice.new
+    @vendor_invoice.time_entry_ids = params[:time_entry_ids] unless params[:time_entry_ids].nil?
   end
 
   def create_vendor_invoice
     @vendor_invoice = VendorInvoice.new(params[:vendor_invoice])
+    @vendor_invoice.time_entry_ids = params[:time_entry_ids] unless params[:time_entry_ids].nil?
     @created = @vendor_invoice.save
   end
 

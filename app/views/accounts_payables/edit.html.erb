@@ -12,6 +12,11 @@
 
 <fieldset>
 <%= error_messages_for 'vendor_invoice' %>
+
+<% @vendor_invoice.time_entry_ids.each do |entry| %>
+<%= hidden_field_tag 'time_entry_ids[]', entry %>
+<% end %>
+
 <p>
   <%= f.text_field :number, :size => 10, :required => true %>
 </p>
