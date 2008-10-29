@@ -43,6 +43,21 @@ class VendorInvoice < ActiveRecord::Base
     
   end
   
+  def amount_for_user(user=nil)
+    return 0 if self.time_entries.size <= 0
+    amount = 0
+    self.time_entries.each do |te|
+      if user.nil? || te.user == user
+        mem = Member.find_by_user_id_and_project_id(te.user_id, te.project_id)
+        if !mem.nil? && mem.respond_to?(:rate) && !mem.rate.nil?
+          amount += mem.rate * te.hours
+        end
+      end
+    end
+
+    return amount
+  end
+  
   def user_names
     self.users.collect(&:name).join(", ")
   end

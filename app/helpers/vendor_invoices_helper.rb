@@ -29,8 +29,19 @@ module VendorInvoicesHelper
     if invoice.fixed?
       return number_to_currency(invoice.amount)
     else
-      # TODO: Get hourly amounts
-      return ""
+      total = invoice.amount_for_user
+      return "" if total == 0
+    
+      case invoice.users.count
+      when 0
+        # nothing
+        return ""
+      when 1
+        # One user has all time
+        return number_to_currency(total)
+      else
+        return number_to_currency(invoice.amount_for_user(user)) + ' of ' + number_to_currency(total)
+      end
     end
   end
 end
