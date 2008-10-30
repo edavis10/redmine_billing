@@ -4,7 +4,6 @@ class BillingTimesheetooks < Redmine::Hook::ViewListener
     time_entries = context[:time_entries]
     
     o = ''
-    o << "<ul>"
     if time_entries.size <= 0
       o << content_tag(:li,
                        context_menu_link(GLoc.l(:button_invoice),
