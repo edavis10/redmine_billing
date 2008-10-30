@@ -6,6 +6,8 @@
 
 <%= render :partial => 'filters' %>
 
+<h3><%= totals(@vendor_invoice_filter.vendor_invoices.values.reject {|i| i.empty?}.flatten.uniq) %></h2>
+
 <% @vendor_invoice_filter.vendor_invoices.each do |user, vendor_invoices| %>
 
 <% unless vendor_invoices.empty? %>
