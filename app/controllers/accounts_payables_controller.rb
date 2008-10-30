@@ -171,7 +171,7 @@ class AccountsPayablesController < ApplicationController
   end
 
   def auto_complete_for_vendor_invoice_number
-    @vendor_invoices = VendorInvoice.find(:all, :conditions => [ "LOWER(number) LIKE ?", '%' + params[:time_entry][:vendor_invoice_number].downcase + '%' ])
+    @vendor_invoices = VendorInvoice.search_allowed(User.current, params[:time_entry][:vendor_invoice_number].downcase)
     render :partial => 'autocomplete.html.erb'
   end
   

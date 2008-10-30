@@ -65,4 +65,39 @@ class VendorInvoice < ActiveRecord::Base
   def user_names
     self.users.collect(&:name).join(", ")
   end
+  
+  # OPTIMIZE: Try to use less SQL queries and less AR object construction
+  def self.search_allowed(user, term)
+    
+    if user.admin?
+      # Admins can see all
+      conditions = [ "LOWER(number) LIKE (?)", '%' + term + '%' ]
+      return self.find(:all, :conditions => conditions)
+    else
+      invoices = []
+      # All fixed bids
+      invoices << self.find(:all, :conditions => [ "LOWER(number) LIKE (?) AND billing_type = ?", '%' + term + '%', 'fixed'])
+      # All hourly where ...
+      hourly = self.find(:all, :conditions => [ "LOWER(number) LIKE (?) AND billing_type = ?", '%' + term + '%', 'hourly'])
+      hourly.each do |invoice|
+        if invoice.users.include?(user)
+          # ... the user is the invoice owner or ...
+          invoices << invoice
+        end
+
+        if !invoice.time_entries.empty?
+          projects = invoice.time_entries.collect(&:project).uniq
+          projects.each do |project|
+            if user.allowed_to?(:all_invoices_on_project, project)
+              # ... they are on the project with the permission to see all invoices
+              invoices << invoice
+            end
+          end
+        end
+      end
+      
+      return invoices.flatten.uniq
+    end
+    
+  end
 end
