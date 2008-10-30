@@ -26,7 +26,7 @@ Redmine::Plugin.register :redmine_billing do
   description 'This is a plugin for Redmine'
   version '0.0.1'
 
-  permission(:use_accounts_payable, { :accounts_payables => [:index, :show, :new, :create, :edit, :update, :destroy, :context_menu, :bulk_edit, :bulk_update, :auto_complete_for_vendor_invoice_number, :timesheet] })
+  permission(:use_accounts_payable, { :accounts_payables => [:index, :show, :new, :create, :edit, :update, :destroy, :context_menu, :bulk_edit, :bulk_update, :auto_complete_for_vendor_invoice_number, :timesheet, :update_time_entries] })
 
   menu :top_menu, :accounts_payables, {:controller => 'accounts_payables', :action => 'index'}, :caption => :accounts_payable_menu, :if => Proc.new{User.current.logged?} 
 end

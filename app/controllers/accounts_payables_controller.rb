@@ -4,8 +4,9 @@ class AccountsPayablesController < ApplicationController
   # Redmine fitlers
   before_filter :authorize
 
-  before_filter :load_vendor_invoice, :only => [ :show, :edit, :update, :destroy ]
+  before_filter :load_vendor_invoice, :only => [ :show, :edit, :update, :destroy, :update_time_entries ]
   before_filter :load_vendor_invoices, :only => [ :bulk_edit, :bulk_update ]
+  before_filter :load_all_vendor_invoices, :only => [ :timesheet ]
   before_filter :new_vendor_invoice, :only => [ :new ]
   before_filter :create_vendor_invoice, :only => [ :create ]
   before_filter :update_vendor_invoice, :only => [ :update ]
@@ -21,6 +22,10 @@ class AccountsPayablesController < ApplicationController
 
   def load_vendor_invoices
     @vendor_invoices = VendorInvoice.find_all_by_id(params[:ids])
+  end
+
+  def load_all_vendor_invoices
+    @vendor_invoices = VendorInvoice.find(:all)
   end
 
   def new_vendor_invoice
@@ -174,7 +179,24 @@ class AccountsPayablesController < ApplicationController
     @time_entries = params[:time_entry_ids]
     render :layout => false
   end
-  
+
+  def update_time_entries
+    respond_to do |format|
+      @vendor_invoice.time_entry_ids += params[:time_entry_ids] unless params[:time_entry_ids].empty?
+      if @vendor_invoice.save
+        flash[:notice] = 'Time Entries were successfully updated.'
+        format.html { redirect_to accounts_payables_path }
+        format.xml  { head :ok }
+        format.js
+      else
+        flash[:error] = 'Time Entries were not assigned correctly, please try again.'
+        format.html { redirect_to accounts_payables_path }
+        format.xml  { render :xml => @vendor_invoice.errors, :status => :unprocessable_entity }
+        format.js
+      end
+    end
+  end
+
   private
   
   # Override the default authorize and add in the global option. This will allow

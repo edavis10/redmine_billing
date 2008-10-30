@@ -350,3 +350,31 @@ describe AccountsPayablesController, "#bulk_update with an unsuccessful save" do
   end
 end
 
+describe AccountsPayablesController, "#timesheet" do
+  include AccountsPayablesControllerSpecHelper
+  
+  before(:each) do
+    login
+    
+  end
+  
+  it 'should be successful' do
+    get :timesheet, :time_entry_ids => [ ]
+    response.should be_success
+  end
+
+  it 'should render the timesheet template' do
+    get :timesheet, :time_entry_ids => [ ]
+    response.should render_template('accounts_payables/timesheet')
+  end
+  
+  it 'should load the vendor_invoices' do
+    @vendor_invoice_one = vendor_invoice_factory(1)
+    @vendor_invoice_two = vendor_invoice_factory(2)
+    @vendor_invoices = [@vendor_invoice_one, @vendor_invoice_two]
+    VendorInvoice.should_receive(:find).with(:all).and_return(@vendor_invoices)
+
+    get :timesheet, :time_entry_ids => []
+    assigns[:vendor_invoices].should eql(@vendor_invoices)
+  end
+end

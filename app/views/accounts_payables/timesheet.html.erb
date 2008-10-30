@@ -1,8 +1,18 @@
 <h1><%= l(:billing_add_time_to_invoice) %></h1>
 
+<% form_tag(update_time_entries_accounts_payables_path, :method => :put) do |f| %>
+<% @time_entries.each do |entry| %>
+<%= hidden_field_tag 'time_entry_ids[]', entry %>
+<% end %>
 <p>
-  TODO: Existing
+  <%= select_tag('id',
+    content_tag('option', "-- Invoices --", :value => '') + options_from_collection_for_select(@vendor_invoices, "id", "number"), :include_blank => true ) %>
 </p>
+
+<p>
+  <%= submit_tag(l(:billing_add_time_to_existing_invoice)) %>
+</p>
+<% end %>
 
 <h3><%= l(:billing_create_new_vendor_invoice) %></h3>
 
