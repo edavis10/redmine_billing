@@ -30,4 +30,22 @@ class BillingTimesheetooks < Redmine::Hook::ViewListener
       javascript_include_tag('facebox', :plugin => "billing_plugin")
 
   end
+  
+  def plugin_timesheet_controller_report_pre_fetch_time_entries(context = { })
+    if !context[:params][:timesheet].nil? && !context[:params][:timesheet][:vendor_invoice].nil?
+      # Extend time an insane amount
+      context[:timesheet].date_from = 100.years.ago.strftime("%Y-%m-%d")
+      context[:timesheet].date_to = 100.years.from_now.strftime("%Y-%m-%d")
+      # Add vendor_invoice
+      context[:timesheet].vendor_invoice = context[:params][:timesheet][:vendor_invoice]
+    end
+  end
+  
+  def plugin_timesheet_model_timesheet_conditions(context = { })
+    unless context[:timesheet].vendor_invoice.nil?
+      vendor_invoice_id = context[:timesheet].vendor_invoice
+      context[:conditions][0] << " AND vendor_invoice_id IN (?) "
+      context[:conditions] << vendor_invoice_id
+    end
+  end
 end
