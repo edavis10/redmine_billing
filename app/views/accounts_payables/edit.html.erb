@@ -35,6 +35,9 @@
 <p>
   <%= f.text_field :amount %> <small>Enter only for Fixed Rate Invoices</small>
 </p>
+<p>
+  <%= f.select :project_id, User.current.projects.find(:all).collect { |p| [p.name, p.id]}, { :include_blank => true }%> <small>Enter only for Fixed Rate Invoices</small>
+</p>
 </fieldset>
 
 <%= f.submit l(:button_save), :class => 'button-small'  %>

@@ -6,7 +6,8 @@ module VendorInvoiceSpecHelper
     object_options = { 
       :id => id,
       :number => '9000',
-      :invoiced_on => Date.today
+      :invoiced_on => Date.today,
+      :project_id => nil
     }.merge(options)
     
     vendor_invoice = VendorInvoice.new object_options
@@ -36,7 +37,9 @@ describe VendorInvoice, 'when saving' do
     vendor_invoice = vendor_invoice_object_factory(1,
                                                    {
                                                      :amount => 200.00,
-                                                     :billing_status => 'unbilled'})
+                                                     :billing_status => 'unbilled',
+                                                     :project_id => 1
+                                                   })
 
     vendor_invoice.save.should eql(true)
     vendor_invoice.reload

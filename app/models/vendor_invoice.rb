@@ -1,10 +1,13 @@
 class VendorInvoice < ActiveRecord::Base
   has_and_belongs_to_many :users
   has_many :time_entries
+  belongs_to :project
   
   validates_presence_of :number
   validates_presence_of :invoiced_on
   validates_presence_of :billing_status
+  validates_presence_of :project_id, :if => Proc.new { |vi| !vi.amount.nil? || vi.billing_type == 'fixed' }, :message => "can't be blank on Fixed Rate Invoices"
+  validates_presence_of :amount, :if => Proc.new { |vi| !vi.project_id.nil? || vi.billing_type == 'fixed' }, :message => "can't be blank on Fixed Rate Invoices"
   
   before_save :set_billing_type
   

@@ -25,6 +25,11 @@
   <p>
     <%= l(:field_amount) %>: <%= h @vendor_invoice.amount %>
   </p>
+<% unless @vendor_invoice.project.nil? %>
+  <p>
+    <%= l(:field_project) %>: <%= h @vendor_invoice.project.name %>
+  </p>
+<% end %>
 </div>
 
 <% content_for :header_tags do %>
