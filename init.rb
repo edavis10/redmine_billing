@@ -29,10 +29,16 @@ Redmine::Plugin.register :redmine_billing do
   description 'This is a plugin for Redmine'
   version '0.0.1'
 
-  permission(:use_accounts_payable, { :accounts_payables => [:index, :show, :new, :create, :edit, :update, :destroy, :context_menu, :bulk_edit, :bulk_update, :auto_complete_for_vendor_invoice_number, :timesheet, :update_time_entries, :unbilled_po] })
+  permission(:use_accounts_payable, { :accounts_payables => [:index, :show, :new, :create, :edit, :update, :destroy, :context_menu, :bulk_edit, :bulk_update, :auto_complete_for_vendor_invoice_number, :timesheet, :update_time_entries, :unbilled_po, :unspent_labor] })
 
   # Allows a user to see all invoices for the project they have this Role+Permission on
   permission :all_invoices_on_project, { }
   
   menu :top_menu, :accounts_payables, {:controller => 'accounts_payables', :action => 'index'}, :caption => :accounts_payable_menu, :if => Proc.new{User.current.logged?} 
+end
+
+begin
+  require_dependency 'budget' unless Object.const_defined?('Budget')
+rescue LoadError
+  # budget_plugin is not installed
 end

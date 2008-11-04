@@ -11,6 +11,7 @@ billing_add_time_to_invoice: Add time to invoice
 billing_add_time_to_existing_invoice: Add time to existing invoice
 billing_vendor_invoice_hours: View hours associated with this invoice
 billing_export_unbilled_po: Export unbilled PO
+billing_export_unspent_labor_budget: Export unspent labor budget
 
 # Labels
 label_vendor_invoice: Invoice

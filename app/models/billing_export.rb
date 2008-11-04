@@ -25,4 +25,25 @@ class BillingExport
 
     return totals.sort
   end
+
+  
+
+  def self.unspent_labor
+    # all unarchived
+    projects = Project.find_all_by_status(Project::STATUS_ACTIVE)
+
+    totals = { }
+
+    # Guard in case the budget_plugin isn't installed
+    if Object.const_defined?("Budget")
+      projects.each do |project|
+        budget = Budget.new(project.id)
+        totals[project.name] = budget.labor_budget_left || 0.0
+      end
+    else
+      totals["Please install the budget_plugin to use this feature"] = 0
+    end
+
+    return totals.sort
+  end
 end

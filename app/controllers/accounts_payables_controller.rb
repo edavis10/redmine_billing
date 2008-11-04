@@ -220,8 +220,33 @@ class AccountsPayablesController < ApplicationController
                   :filename => "unbilled_po.csv")
       }
     end
-    
   end
+    
+  def unspent_labor
+    respond_to do |format|
+      format.csv { 
+        @data = BillingExport.unspent_labor
+        csv_string = FasterCSV.generate do |csv|
+          csv << [
+                  "Unspent Labor Budget",
+                  @data.collect {|v| v[1]}.sum
+                 ]
+
+          @data.each do |project_name, amount|
+            csv << [
+                    [project_name],
+                    [amount]
+                   ]
+          end
+        end
+
+        send_data(csv_string,
+                  :type => 'text/csv; charset=utf-8; header=present',
+                  :filename => "unspent_labor.csv")
+      }
+    end
+  end
+  
   private
   
   # Override the default authorize and add in the global option. This will allow
