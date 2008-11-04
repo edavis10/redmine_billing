@@ -27,3 +27,4 @@ field_billing_status: Billing Status
 field_invoiced_on: Date
 field_vendor_invoice: Invoice
 button_invoice: Invoice
+field_total_value: Total Value of Project
