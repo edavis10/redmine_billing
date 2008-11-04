@@ -8,11 +8,15 @@ class BillingExport
       amount_billed = 0
       # Fixed amount invoices
       ve = VendorInvoice.find(:all, :conditions => {:project_id => project.id, :billing_type => "fixed"})
-      amount_billed += ve.collect(&:amount).sum
+      amount_billed += ve.collect(&:amount).reject { |amount| amount.nil?}.sum
 
       # Hourly
-      ve = VendorInvoice.find(:all, :conditions => ["#{TimeEntry.table_name}.project_id = ?", project.id], :include => :time_entries)
-      amount_billed += ve.collect {|i| i.amount_for_user }.sum
+      ve = VendorInvoice.find(:all,
+                              :conditions => ["#{TimeEntry.table_name}.project_id = ? AND billing_type = ?",
+                                              project.id,
+                                              'hourly'],
+                              :include => :time_entries)
+      amount_billed += ve.collect {|i| i.amount_for_user }.reject { |amount| amount.nil? }.sum
       
       total_value = project.total_value || 0
       
