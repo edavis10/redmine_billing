@@ -10,6 +10,7 @@ billing_bulk_edit_selected_vendor_invoices: Bulk edit selected invoices
 billing_add_time_to_invoice: Add time to invoice
 billing_add_time_to_existing_invoice: Add time to existing invoice
 billing_vendor_invoice_hours: View hours associated with this invoice
+billing_export_unbilled_po: Export unbilled PO
 
 # Labels
 label_vendor_invoice: Invoice
