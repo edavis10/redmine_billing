@@ -1,6 +1,6 @@
 <div class="contextual">
-  <%= link_to l(:billing_invoice_title_plural), accounts_payables_path %>
-  <%= link_to l(:billing_create_new_vendor_invoice), new_accounts_payable_path %>
+  <%= link_to l(:billing_invoice_title_plural), accounts_payables_path, { :class => 'icon icon-invoices'}  %>
+  <%= link_to l(:billing_create_new_vendor_invoice), new_accounts_payable_path, { :class => 'icon icon-add-invoice'}  %>
 </div>
 
 <h2><%= l(:billing_bulk_edit_selected_vendor_invoices)%></h2>
