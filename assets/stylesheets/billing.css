@@ -12,3 +12,33 @@ a.billing-status-internal { }
 .icon-csv { background-image: url(../images/page_excel.png) }
 .icon-add-invoice { background-image: url(../images/table_add.png) }
 .icon-invoices { background-image: url(../images/table_multiple.png) }
+
+table.list td { text-align: left; padding: 2px;}
+table.list td.numeric { text-align: right; }
+
+/*
+
+These will work if you want a fixed width at 907px
+
+th.header-toggle {  width: 16px; }
+th.header-date { width: 85px; }
+th.header-member { width: 120px; }
+th.header-invoice-number { width: 120px; }
+th.header-invoice-status { width: 100px; }
+th.header-invoice-hours { width: 85px; }
+th.header-invoice-amount { width: 120px; }
+th.header-invoice-type { width: 45px; }
+th.header-invoice-comment { width: 200px; }
+th.header-invoice-actions { width: 16px; }
+*/
+
+th.header-toggle {  width: 2%; }
+th.header-date { width: 9%; }
+th.header-member { width: 14%; }
+th.header-invoice-number { width: 14%; }
+th.header-invoice-status { width: 11%; }
+th.header-invoice-hours { width: 9%; }
+th.header-invoice-amount { width: 14%; }
+th.header-invoice-type { width: 5%; }
+th.header-invoice-comment { width: 20%; }
+th.header-invoice-actions { width: 2%; }

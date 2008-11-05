@@ -21,33 +21,33 @@
 </h3>
 <table class="list issues">
   <thead>
-    <th>
+    <th scope="col" class="header-toggle">
       <%= link_to image_tag('toggle_check.png'), {}, :onclick => 'toggleIssuesSelection(Element.up(this, "table")); return false;',
                                                            :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
     </th>
-    <th><%= l(:label_date) %></th>
-    <th><%= l(:label_member) %></th>
-    <th><%= l(:label_vendor_invoice) %></th>
-    <th><%= l(:label_vendor_invoice_status) %></th>
-    <th><%= l(:label_vendor_invoice_hours) %></th>
-    <th><%= l(:label_vendor_invoice_amount) %></th>
-    <th><%= l(:label_vendor_invoice_billing_type) %></th>
-    <th><%= l(:label_vendor_invoice_comment) %></th>
-    <th></th>
+    <th scope="col" class="header-date"><%= l(:label_date) %></th>
+    <th scope="col" class="header-member"><%= l(:label_member) %></th>
+    <th scope="col" class="header-invoice-number"><%= l(:label_vendor_invoice) %></th>
+    <th scope="col" class="header-invoice-status"><%= l(:label_vendor_invoice_status) %></th>
+    <th scope="col" class="header-invoice-hours"><%= l(:label_vendor_invoice_hours) %></th>
+    <th scope="col" class="header-invoice-amount"><%= l(:label_vendor_invoice_amount) %></th>
+    <th scope="col" class="header-invoice-type"><%= l(:label_vendor_invoice_billing_type) %></th>
+    <th scope="col" class="header-invoice-comment"><%= l(:label_vendor_invoice_comment) %></th>
+    <th scope="col" class="header-invoice-actions"></th>
   </thead>
   <tbody>
     <% vendor_invoices.each do |invoice| %>
     <tr class="<%= cycle("odd", "even") %> hascontextmenu">
-      <td align="center"><%= check_box_tag 'ids[]', invoice.id, false, { :class => 'checkbox' } %></td>
-      <td align="center"><%= format_date(invoice.invoiced_on) %></td>
-      <td align="center"><%= user.name %></td>
-      <td align="center"><%= vendor_invoice_number_for(invoice) %></td>
-      <td align="center"><%= invoice.billing_status %></td>
-      <td align="center"><%= user_hours_for_vendor_invoice(invoice, user) %></td>
-      <td align="center"><%= user_amount_for_vendor_invoice(invoice, user) %></td>
-      <td align="center"><%= invoice.billing_type %></td>
+      <td><%= check_box_tag 'ids[]', invoice.id, false, { :class => 'checkbox' } %></td>
+      <td><%= format_date(invoice.invoiced_on) %></td>
+      <td><%= user.name %></td>
+      <td><%= vendor_invoice_number_for(invoice) %></td>
+      <td><%= invoice.billing_status %></td>
+      <td class="numeric"><%= user_hours_for_vendor_invoice(invoice, user) %></td>
+      <td class="numeric"><%= user_amount_for_vendor_invoice(invoice, user) %></td>
+      <td><%= invoice.billing_type %></td>
       <td><%= h invoice.comment %></td>
-      <td align="center">
+      <td>
         <%= link_to image_tag('edit.png'), edit_accounts_payable_path(invoice), :title => l(:button_edit) %> 
       </td>
   </tr>
