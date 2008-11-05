@@ -46,4 +46,30 @@ class BillingExport
 
     return totals.sort
   end
+  
+  def self.unbilled_labor
+    totals = { }
+
+    # All users
+    users = User.find(:all)
+    users.each do |user|
+      totals[user.name] = 0.0
+
+      # Each project
+      user.projects.each do |project|
+        # Non Billed hours
+        non_billed = project.time_entries.find_all_by_user_id_and_vendor_invoice_id(user.id, nil).collect(&:hours).reject {|i| i.nil?}.sum
+        non_billed ||= 0.0
+
+        # Amount
+        membership = Member.find_by_user_id_and_project_id(user.id, project.id)
+        rate = membership.rate unless membership.nil? || !membership.respond_to?(:rate)
+        rate ||= 0.0
+
+        totals[user.name] += rate * non_billed
+      end
+    end
+    
+    return totals.sort
+  end
 end

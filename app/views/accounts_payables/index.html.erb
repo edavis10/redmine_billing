@@ -2,6 +2,7 @@
   <%= link_to l(:billing_create_new_vendor_invoice), new_accounts_payable_path %>
   <%= link_to l(:billing_export_unbilled_po), formatted_unbilled_po_accounts_payables_path(:format => 'csv') %>
   <%= link_to l(:billing_export_unspent_labor_budget), formatted_unspent_labor_accounts_payables_path(:format => 'csv') %>
+  <%= link_to l(:billing_export_unbilled_labor), formatted_unbilled_labor_accounts_payables_path(:format => 'csv') %>
 </div>
 
 <h2><%= l(:billing_accounts_payable_title)%></h2>
