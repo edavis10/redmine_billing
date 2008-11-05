@@ -12,6 +12,8 @@ a.billing-status-internal { }
 .icon-csv { background-image: url(../images/page_excel.png) }
 .icon-add-invoice { background-image: url(../images/table_add.png) }
 .icon-invoices { background-image: url(../images/table_multiple.png) }
+.icon-edit-invoice { background-image: url(../images/table_edit.png) }
+.icon-invoice-hours { background-image: url(../images/clock.png) }
 
 table.list td { text-align: left; padding: 2px;}
 table.list td.numeric { text-align: right; }

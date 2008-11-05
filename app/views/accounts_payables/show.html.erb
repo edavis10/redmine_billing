@@ -1,8 +1,8 @@
 <div class="contextual">
-  <%= link_to l(:billing_invoice_title_plural), accounts_payables_path %>
-  <%= link_to l(:billing_create_new_vendor_invoice), new_accounts_payable_path %>
-  <%= link_to l(:billing_invoice_edit), edit_accounts_payable_path(@vendor_invoice) %>
-  <%= link_to l(:billing_vendor_invoice_hours), :controller => 'timesheet', :action => 'report', :timesheet => { :vendor_invoice => @vendor_invoice.id } %>
+  <%= link_to l(:billing_invoice_title_plural), accounts_payables_path, { :class => 'icon icon-invoices'} %>
+  <%= link_to l(:billing_create_new_vendor_invoice), new_accounts_payable_path, { :class => 'icon icon-add-invoice'} %>
+  <%= link_to l(:billing_invoice_edit), edit_accounts_payable_path(@vendor_invoice), { :class => 'icon icon-edit-invoice'} %>
+  <%= link_to l(:billing_vendor_invoice_hours), { :controller => 'timesheet', :action => 'report', :timesheet => { :vendor_invoice => @vendor_invoice.id }}, { :class => 'icon icon-invoice-hours'} %>
 </div>
 
 <h2><%= l(:billing_invoice_title)%></h2>
