@@ -15,7 +15,7 @@
     <%= l(:field_invoiced_on) %>: <%= format_date(@vendor_invoice.invoiced_on) %>
   </p>
   <p>
-    <%= l(:field_user_ids) %>: <%= h(@vendor_invoice.users.collect(&:name)) unless @vendor_invoice.users.empty? %>
+    <%= l(:field_user_ids) %>: <%= h(@vendor_invoice.users.collect(&:name).join(', ')) unless @vendor_invoice.users.empty? %>
   </p>
   <p>
     <%= l(:field_comment) %>: <%= h @vendor_invoice.comment %>
