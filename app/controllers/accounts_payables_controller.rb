@@ -288,7 +288,7 @@ class AccountsPayablesController < ApplicationController
   
   def allowed_to_view_vendor_invoice?(vendor_invoice)
     # Allow if given :use_accounts_payable permission
-    return true if User.current.allowed_to?(:use_accounts_payable, nil, { :global => true })
+    return true if VendorInvoice.allowed_to_use_accounts_payable?(User.current)
 
     # Allow if the user is assigned
     return true if !vendor_invoice.users.nil? && @vendor_invoice.users.include?(User.current)

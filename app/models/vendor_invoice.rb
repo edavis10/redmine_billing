@@ -69,6 +69,10 @@ class VendorInvoice < ActiveRecord::Base
     self.users.collect(&:name).join(", ")
   end
   
+  def self.allowed_to_use_accounts_payable?(user)
+    return user.allowed_to?(:use_accounts_payable, nil, { :global => true })
+  end
+  
   # OPTIMIZE: Try to use less SQL queries and less AR object construction
   def self.search_allowed(user, term)
     
