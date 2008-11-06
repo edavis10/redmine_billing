@@ -82,6 +82,7 @@ describe AccountsPayablesController, "#show" do
   
   before(:each) do
     login
+    @current_user.should_receive(:allowed_to?).with(:use_accounts_payable, nil, { :global => true }).and_return(true)
     
     @vendor_invoice = vendor_invoice_factory(1)
     VendorInvoice.stub!(:find).and_return(@vendor_invoice)

@@ -2,7 +2,7 @@ class AccountsPayablesController < ApplicationController
   unloadable
   layout 'base'
   # Redmine fitlers
-  before_filter :authorize
+  before_filter :authorize, :except => [:show]
 
   before_filter :load_vendor_invoice, :only => [ :show, :edit, :update, :destroy, :update_time_entries ]
   before_filter :load_vendor_invoices, :only => [ :bulk_edit, :bulk_update ]
@@ -91,9 +91,13 @@ class AccountsPayablesController < ApplicationController
 
   def show          
     respond_to do |format|
-      format.html
-      format.xml  { render :xml => @vendor_invoice }
-      format.js
+      if allowed_to_view_vendor_invoice?(@vendor_invoice)
+        format.html
+        format.xml  { render :xml => @vendor_invoice }
+        format.js
+      else
+        format.html { render_403 }
+      end
     end
   end
 
@@ -280,6 +284,17 @@ class AccountsPayablesController < ApplicationController
   def authorize(ctrl = params[:controller], action = params[:action])
     allowed = User.current.allowed_to?({:controller => ctrl, :action => action}, nil, { :global => true})
     allowed ? true : deny_access
+  end
+  
+  def allowed_to_view_vendor_invoice?(vendor_invoice)
+    # Allow if given :use_accounts_payable permission
+    return true if User.current.allowed_to?(:use_accounts_payable, nil, { :global => true })
+
+    # Allow if the user is assigned
+    return true if !vendor_invoice.users.nil? && @vendor_invoice.users.include?(User.current)
+    
+    # Deny rest
+    return false
   end
   
   def allowed_projects
