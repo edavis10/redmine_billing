@@ -2,6 +2,7 @@ class BillingTimelogHooks < Redmine::Hook::ViewListener
   include AutoCompleteMacrosHelper
 
   def view_timelog_edit_form_bottom(context={ })
+    if VendorInvoice.allowed_to_use_accounts_payable?(User.current)
     form = context[:form]
 
     o = ''
@@ -38,5 +39,8 @@ EOJS
     o << js
     o << "</p>"
     return o
+    else
+      return ''
+    end
   end
 end
