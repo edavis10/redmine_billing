@@ -26,7 +26,14 @@
     <%= l(:field_billing_status) %>: <%= h @vendor_invoice.billing_status %>
   </p>
   <p>
-    <%= l(:field_amount) %>: <%= h @vendor_invoice.amount %>
+    <%= l(:field_amount) %>:
+    <% if @vendor_invoice.billing_type == 'hourly' %>
+    <%= h number_to_currency(@vendor_invoice.amount_for_user) %>
+    <% else %>
+    <%= h number_to_currency(@vendor_invoice.amount) %>
+    <% end %>
+
+    
   </p>
 <% unless @vendor_invoice.project.nil? %>
   <p>
