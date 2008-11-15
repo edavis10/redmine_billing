@@ -1,4 +1,7 @@
 module VendorInvoicesHelper
+  # Number percision
+  BillingPluginPrecision = 2
+  
   def vendor_invoice_number_for(invoice)
     link_to invoice.number, accounts_payable_path(invoice), :class => (invoice.billing_status.nil? ? '': 'billing-status-' + invoice.billing_status)
   end
@@ -19,9 +22,9 @@ module VendorInvoicesHelper
       # nothing
       return ""
     when 1
-      return total.to_s
+      return number_with_precision(total, BillingPluginPrecision)
     else
-      return invoice.hours(user).to_s + ' of ' + total.to_s
+      return number_with_precision(invoice.hours(user), BillingPluginPrecision) + ' of ' + number_with_precision(total, BillingPluginPrecision)
     end
   end
 
