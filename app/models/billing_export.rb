@@ -1,4 +1,10 @@
 class BillingExport
+  include ActionView::Helpers::NumberHelper
+  extend ActionView::Helpers::NumberHelper
+
+  Precision = 2
+
+  
   def self.unbilled_po
     # all unarchived
     projects = Project.find_all_by_status(Project::STATUS_ACTIVE)
@@ -20,7 +26,7 @@ class BillingExport
       
       total_value = project.total_value || 0
       
-      totals[project.name] = total_value - amount_billed
+      totals[project.name] = number_with_precision(total_value - amount_billed, Precision)
     end
 
     return totals.sort
@@ -38,7 +44,7 @@ class BillingExport
     if Object.const_defined?("Budget")
       projects.each do |project|
         budget = Budget.new(project.id)
-        totals[project.name] = budget.labor_budget_left || 0.0
+        totals[project.name] = number_with_precision(budget.labor_budget_left || 0.0, Precision)
       end
     else
       totals["Please install the budget_plugin to use this feature"] = 0
@@ -66,7 +72,7 @@ class BillingExport
         rate = membership.rate unless membership.nil? || !membership.respond_to?(:rate)
         rate ||= 0.0
 
-        totals[user.name] += rate * non_billed
+        totals[user.name] += (rate * non_billed).round(Precision)
       end
     end
     
