@@ -25,7 +25,7 @@
   <%= f.text_field :invoiced_on, :size => 10, :required => true %><%= calendar_for('vendor_invoice_invoiced_on') %>
 </p>
 <p>
-<%= f.select :user_ids, User.find(:all).collect { |u| [u.name, u.id]}, { },{ :multiple => true, :size => 5} %>
+<%= f.select :user_ids, User.find(:all).sort { |a,b| a.to_s.downcase <=> b.to_s.downcase }.collect { |u| [u.name, u.id]}, { },{ :multiple => true, :size => 5} %>
 </p>
 <p>
   <%= f.text_field :comment %>
