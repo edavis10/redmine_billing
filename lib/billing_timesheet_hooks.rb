@@ -25,10 +25,21 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
   
   def plugin_timesheet_view_timesheets_report_header_tags(context = { })
     return javascript_include_tag('jquery-1.2.6.min.js', :plugin => "billing_plugin") +
+      javascript_include_tag('jquery.dimensions.min.js', :plugin => "billing_plugin") +
+      javascript_include_tag('billing-timesheet.js', :plugin => "billing_plugin") +
       javascript_tag("jQuery.noConflict();") +
       stylesheet_link_tag("facebox.css", :plugin => "billing_plugin", :media => "screen") +
       javascript_include_tag('facebox', :plugin => "billing_plugin")
 
+  end
+  
+  def plugin_timesheet_view_timesheets_report_bottom(context = { })
+    o = ''
+    o << content_tag(:div,
+                     'This is the content',
+                     :style => 'position:absolute;right:0px;top:100px;padding:40px;', :id => 'floating-counter'
+                     )
+    return o
   end
   
   def plugin_timesheet_controller_report_pre_fetch_time_entries(context = { })
