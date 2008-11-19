@@ -1,0 +1,4 @@
+div#floating-counter { position:absolute; right:10px; top:50px; border: 3px #333333 solid; background: white; padding: 10px; font-weight: bold;}
+div#floating-counter #minimize { text-align: right; float: right;}
+div#floating-counter p#total-time { font-size: 150%; margin: 8px 0px; text-align:center; }
+div#floating-counter ul { list-style: none; padding: 0; }

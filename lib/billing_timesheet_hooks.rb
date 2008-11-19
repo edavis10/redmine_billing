@@ -29,16 +29,31 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
       javascript_include_tag('billing-timesheet.js', :plugin => "billing_plugin") +
       javascript_tag("jQuery.noConflict();") +
       stylesheet_link_tag("facebox.css", :plugin => "billing_plugin", :media => "screen") +
-      javascript_include_tag('facebox', :plugin => "billing_plugin")
+      javascript_include_tag('facebox', :plugin => "billing_plugin") +
+      stylesheet_link_tag("billing-timesheet.css", :plugin => "billing_plugin", :media => "screen")
 
   end
   
   def plugin_timesheet_view_timesheets_report_bottom(context = { })
+    # TODO: Wish I could just render :partial in here
+    inner_content = <<HTML
+<a href='#' id="minimize">-</a>
+<h3>Selected Time Summary</h3>
+<p id="total-time">
+ 06:20 | $60.20
+</p>
+<p id="time-entry-count">
+ 9 Time Entries
+</p>
+<hr />
+<ul>
+ <li>Eric Davis: 7 | 5:00 | $1,000,000</li>
+ <li>Joe Don: 2 | 1:00 | $1,000</li>
+</ul>
+
+HTML
     o = ''
-    o << content_tag(:div,
-                     'This is the content',
-                     :style => 'position:absolute;right:0px;top:100px;padding:40px;', :id => 'floating-counter'
-                     )
+    o << content_tag(:div,inner_content, :id => 'floating-counter')
     return o
   end
   
