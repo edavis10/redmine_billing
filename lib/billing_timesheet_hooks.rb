@@ -37,8 +37,9 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
   def plugin_timesheet_view_timesheets_report_bottom(context = { })
     # TODO: Wish I could just render :partial in here
     inner_content = <<HTML
-<a href='#' id="minimize">-</a>
+<a href='javascript:void(0)' id="minimize" onclick="jQuery('#counter-details').toggle(); return false;">-</a>
 <h3>Selected Time Summary</h3>
+<div id="counter-details">
 <p id="total-time">
  06:20 | $60.20
 </p>
@@ -50,7 +51,7 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
  <li>Eric Davis: 7 | 5:00 | $1,000,000</li>
  <li>Joe Don: 2 | 1:00 | $1,000</li>
 </ul>
-
+</div>
 HTML
     o = ''
     o << content_tag(:div,inner_content, :id => 'floating-counter')
