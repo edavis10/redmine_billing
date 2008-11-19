@@ -1,4 +1,4 @@
-class BillingTimesheetooks < Redmine::Hook::ViewListener
+class BillingTimesheetHooks < Redmine::Hook::ViewListener
 
   def plugin_timesheet_view_timesheets_context_menu(context={ })
     time_entries = context[:time_entries]
