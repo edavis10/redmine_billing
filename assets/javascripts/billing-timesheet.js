@@ -7,7 +7,9 @@ Used for the floating time counter
 var name = '#floating-counter';
 var menuYloc = null;
 
-jQuery(document).ready(function(){  
+jQuery(document).ready(function(){
+
+  // Floating time counter
   menuYloc = parseInt(jQuery(name).css("top").substring(0, jQuery(name).css("top").indexOf("px")))
 
   // Listener for the scroll page event
@@ -15,4 +17,15 @@ jQuery(document).ready(function(){
     var offset = menuYloc + jQuery(document).scrollTop() + "px";
     jQuery(name).animate({top:offset},{duration:500,queue:false});
   });
+
+
+    // Listener for selected rows
+    jQuery('form#time_entries').click(function () {
+        selected = jQuery('form#time_entries input:checked').length
+        if (selected > 0) {
+            jQuery('#floating-counter').show();
+        } else {
+            jQuery('#floating-counter').hide();
+        }
+    });
 });

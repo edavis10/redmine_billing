@@ -54,7 +54,7 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
 </div>
 HTML
     o = ''
-    o << content_tag(:div,inner_content, :id => 'floating-counter')
+    o << content_tag(:div, inner_content, :id => 'floating-counter', :style => 'display:none;')
     return o
   end
   
