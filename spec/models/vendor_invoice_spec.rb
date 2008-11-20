@@ -91,3 +91,47 @@ describe VendorInvoice, 'user_names' do
     vendor_invoice.user_names.should eql('Joe User, Jane User')
   end
 end
+
+describe VendorInvoice, 'fixed?' do
+  it 'should be false if a generic VendorInvoice is created' do
+    VendorInvoice.new.fixed?.should be_false
+  end
+
+  it 'should be true if a FixedVendorInvoice is created' do
+    FixedVendorInvoice.new.fixed?.should be_true
+  end
+
+  it 'should be false if a HourlyVendorInvoice is created' do
+    HourlyVendorInvoice.new.fixed?.should be_false
+  end
+end
+
+describe VendorInvoice, 'hourly?' do
+  it 'should be false if a generic VendorInvoice is created' do
+    VendorInvoice.new.hourly?.should be_false
+  end
+
+  it 'should be false if a FixedVendorInvoice is created' do
+    FixedVendorInvoice.new.hourly?.should be_false
+  end
+
+  it 'should be true if a HourlyVendorInvoice is created' do
+    HourlyVendorInvoice.new.hourly?.should be_true
+  end
+end
+
+describe VendorInvoice, 'open?' do
+  it 'should be true if the billing_status is paid' do
+    VendorInvoice.new({ :billing_status => 'paid'}).open?.should be_true
+  end
+
+  it 'should be true if the billing_status is not paid' do
+    VendorInvoice.new({ :billing_status => 'hold' }).open?.should be_false
+  end
+end
+
+describe VendorInvoice, 'humanize' do
+  it 'should return the an empty string' do
+    VendorInvoice.new.humanize.should eql('')
+  end
+end
