@@ -39,15 +39,7 @@ class SelectedTimeEntry
       account[:name] = user.name
       account[:number_of_entries] = time_entries.length
       account[:time] = total_of_user_time_entries(time_entries)
-      account[:amount] = 0.0
-      time_entries.each do |te|
-        # Wish there was a standard API to get member rates
-        # TODO: Extract to method
-        mem = Member.find_by_user_id_and_project_id(te.user_id, te.project_id)
-        if !mem.nil? && mem.respond_to?(:rate) && !mem.rate.nil?
-          account[:amount] += mem.rate * te.hours
-        end
-      end
+      account[:amount] = total_amount_for_user(time_entries)
       account[:formatted_amount] = number_to_currency(account[:amount], :precision => 2)
       account[:formatted_time] = number_with_precision(account[:time], 2)
       data << account
@@ -60,6 +52,19 @@ class SelectedTimeEntry
   
   def total_of_user_time_entries(time_entries)
     time_entries.collect(&:hours).reject { |t| t.nil? }.sum
+  end
+  
+  def total_amount_for_user(time_entries)
+    total = 0.0
+
+    time_entries.each do |te|
+      # Wish there was a standard API to get member rates
+      mem = Member.find_by_user_id_and_project_id(te.user_id, te.project_id)
+      if !mem.nil? && mem.respond_to?(:rate) && !mem.rate.nil?
+        total += mem.rate * te.hours
+      end
+    end
+    return total
   end
 
   # Groups time entries into a hash based on the user_id
