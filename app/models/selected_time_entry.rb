@@ -4,6 +4,7 @@ class SelectedTimeEntry
   include ActionView::Helpers::NumberHelper
   
   attr_accessor :time_entries
+  attr_accessor :grouped_time_entries
   
   def self.find_all_by_id(ids)
     object = SelectedTimeEntry.new
@@ -29,19 +30,19 @@ class SelectedTimeEntry
   def collect_member_data
     data = []
     return data if self.time_entries.nil? || self.time_entries.empty?
-    
-    entry_ids = self.time_entries.collect(&:id).uniq
-    users = self.time_entries.collect(&:user).uniq
-    users.each do |user|
-      account = { }
-      user_time_entries = TimeEntry.find_all_by_id_and_user_id(entry_ids, user.id)
 
+    group_time_entries_by_user
+    
+    self.grouped_time_entries.each do |user_id, time_entries|
+      user = User.find(user_id)
+      account = { }
       account[:name] = user.name
-      account[:number_of_entries] = user_time_entries.length
-      account[:time] = total_of_user_time_entries(user_time_entries)
+      account[:number_of_entries] = time_entries.length
+      account[:time] = total_of_user_time_entries(time_entries)
       account[:amount] = 0.0
-      user_time_entries.each do |te|
+      time_entries.each do |te|
         # Wish there was a standard API to get member rates
+        # TODO: Extract to method
         mem = Member.find_by_user_id_and_project_id(te.user_id, te.project_id)
         if !mem.nil? && mem.respond_to?(:rate) && !mem.rate.nil?
           account[:amount] += mem.rate * te.hours
@@ -59,5 +60,17 @@ class SelectedTimeEntry
   
   def total_of_user_time_entries(time_entries)
     time_entries.collect(&:hours).reject { |t| t.nil? }.sum
+  end
+
+  # Groups time entries into a hash based on the user_id
+  def group_time_entries_by_user
+    self.grouped_time_entries = { }
+    self.time_entries.each do |time_entry|
+      unless self.grouped_time_entries.key?(time_entry.user_id)
+        self.grouped_time_entries[time_entry.user_id] = []
+      end
+      
+      self.grouped_time_entries[time_entry.user_id] << time_entry
+    end
   end
 end
