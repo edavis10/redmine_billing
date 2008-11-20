@@ -72,9 +72,9 @@ class VendorInvoice < ActiveRecord::Base
     else
       invoices = []
       # All fixed bids
-      invoices << self.find(:all, :conditions => [ "LOWER(number) LIKE (?) AND billing_type = ?", '%' + term + '%', 'fixed'])
+      invoices << self.find(:all, :conditions => [ "LOWER(number) LIKE (?) AND type = ?", '%' + term + '%', FixedVendorInvoice.name])
       # All hourly where ...
-      hourly = self.find(:all, :conditions => [ "LOWER(number) LIKE (?) AND billing_type = ?", '%' + term + '%', 'hourly'])
+      hourly = self.find(:all, :conditions => [ "LOWER(number) LIKE (?) AND type = ?", '%' + term + '%', HourlyVendorInvoice.name])
       hourly.each do |invoice|
         if invoice.users.include?(user)
           # ... the user is the invoice owner or ...
