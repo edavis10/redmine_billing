@@ -54,4 +54,10 @@ class SelectedTimeEntry
 
     return data
   end
+  
+  private
+  
+  def total_of_user_time_entries(time_entries)
+    time_entries.collect(&:hours).reject { |t| t.nil? }.sum
+  end
 end
