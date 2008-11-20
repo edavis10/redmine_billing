@@ -1,0 +1,2 @@
+class FixedVendorInvoice < VendorInvoice
+end
