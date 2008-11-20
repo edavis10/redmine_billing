@@ -38,7 +38,7 @@ class SelectedTimeEntry
 
       account[:name] = user.name
       account[:number_of_entries] = user_time_entries.length
-      account[:time] = user_time_entries.collect(&:hours).reject { |t| t.nil? }.sum
+      account[:time] = total_of_user_time_entries(user_time_entries)
       account[:amount] = 0.0
       user_time_entries.each do |te|
         # Wish there was a standard API to get member rates
