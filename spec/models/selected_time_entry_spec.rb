@@ -16,8 +16,24 @@ module SelectedTimeEntrySpecHelper
 end
 
 describe SelectedTimeEntry, 'to_json' do
-  it 'should return a json string'
-  it 'should collect member data'
+  it 'should return a string' do
+    @selected_time_entry = SelectedTimeEntry.new
+    @selected_time_entry.to_json.should be_a_kind_of(String)
+  end
+  
+  it 'should be a valid JSON string' do
+    @selected_time_entry = SelectedTimeEntry.new
+    lambda { 
+      JSON.parse(@selected_time_entry.to_json)
+    }.should_not raise_error(JSON::ParserError)
+    
+  end
+
+  it 'should collect member data' do
+    @selected_time_entry = SelectedTimeEntry.new
+    @selected_time_entry.should_receive(:collect_member_data).and_return([])
+    @selected_time_entry.to_json
+  end
 end
 
 describe SelectedTimeEntry, 'collect_member_data' do
