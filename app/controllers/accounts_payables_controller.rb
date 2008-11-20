@@ -183,6 +183,13 @@ class AccountsPayablesController < ApplicationController
     @time_entries = params[:time_entry_ids]
     render :layout => false
   end
+  
+  def time_counter
+    respond_to do |format|
+      @time_entries = SelectedTimeEntry.find_all_by_id(params[:ids])
+      format.json { render :json => @time_entries.to_json}
+    end
+  end
 
   def update_time_entries
     respond_to do |format|

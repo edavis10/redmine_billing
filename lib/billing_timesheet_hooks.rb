@@ -30,7 +30,8 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
       javascript_tag("jQuery.noConflict();") +
       stylesheet_link_tag("facebox.css", :plugin => "billing_plugin", :media => "screen") +
       javascript_include_tag('facebox', :plugin => "billing_plugin") +
-      stylesheet_link_tag("billing-timesheet.css", :plugin => "billing_plugin", :media => "screen")
+      stylesheet_link_tag("billing-timesheet.css", :plugin => "billing_plugin", :media => "screen") +
+      javascript_tag("var time_counter_url = '#{formatted_time_counter_accounts_payables_path(:format => 'json')}'")
 
   end
   
@@ -41,15 +42,11 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
 <h3>Selected Time Summary</h3>
 <div id="counter-details">
 <p id="total-time">
- 06:20 | $60.20
 </p>
 <p id="time-entry-count">
- 9 Time Entries
 </p>
 <hr />
 <ul>
- <li>Eric Davis: 7 | 5:00 | $1,000,000</li>
- <li>Joe Don: 2 | 1:00 | $1,000</li>
 </ul>
 </div>
 HTML

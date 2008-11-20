@@ -19,7 +19,7 @@ jQuery(document).ready(function(){
   });
 
 
-    // Listener for selected rows
+    // Listener for selected rows for the floating counter visability
     jQuery('form#time_entries').click(function () {
         selected = jQuery('form#time_entries input:checked').length
         if (selected > 0) {
@@ -28,4 +28,26 @@ jQuery(document).ready(function(){
             jQuery('#floating-counter').hide();
         }
     });
+
+    // Listener for selecting and de-selecting the bulk edits
+    jQuery('form#time_entries input[type=checkbox]').click(function () {
+        jQuery.getJSON(time_counter_url,
+                    jQuery('form#time_entries input:checked').serialize(),
+                    function (data, textStatus) {
+
+                        // Update floating-counter
+                        // TODO: Hard coded strings
+                        jQuery('#total-time').html(data.total_time + ' | ' + data.total_amount);
+                        jQuery('#time-entry-count').html(data.total_entries + ' Time Entries');
+
+                        member_list = '';
+                        // Build up the list
+                        data.members.each(function(member, index) {
+                            member_list += "<li>" + member.name + ": " + member.number_of_entries + " | " + member.time + " | " + member.amount +"</li>";
+                        });
+
+                        jQuery('#floating-counter ul').html(member_list);
+                    });
+    });
+
 });
