@@ -6,7 +6,7 @@ class AccountsPayablesController < ApplicationController
 
   before_filter :load_vendor_invoice, :only => [ :show, :edit, :update, :destroy, :update_time_entries ]
   before_filter :load_vendor_invoices, :only => [ :bulk_edit, :bulk_update ]
-  before_filter :load_all_vendor_invoices, :only => [ :timesheet ]
+  before_filter :load_all_hourly_vendor_invoices, :only => [ :timesheet ]
   before_filter :new_vendor_invoice, :only => [ :new ]
   before_filter :create_vendor_invoice, :only => [ :create ]
   before_filter :update_vendor_invoice, :only => [ :update ]
@@ -24,8 +24,8 @@ class AccountsPayablesController < ApplicationController
     @vendor_invoices = VendorInvoice.find_all_by_id(params[:ids])
   end
 
-  def load_all_vendor_invoices
-    @vendor_invoices = VendorInvoice.find(:all)
+  def load_all_hourly_vendor_invoices
+    @vendor_invoices = HourlyVendorInvoice.find(:all)
   end
 
   def new_vendor_invoice

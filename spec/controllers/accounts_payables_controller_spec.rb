@@ -373,7 +373,7 @@ describe AccountsPayablesController, "#timesheet" do
     @vendor_invoice_one = vendor_invoice_factory(1)
     @vendor_invoice_two = vendor_invoice_factory(2)
     @vendor_invoices = [@vendor_invoice_one, @vendor_invoice_two]
-    VendorInvoice.should_receive(:find).with(:all).and_return(@vendor_invoices)
+    HourlyVendorInvoice.should_receive(:find).with(:all).and_return(@vendor_invoices)
 
     get :timesheet, :time_entry_ids => []
     assigns[:vendor_invoices].should eql(@vendor_invoices)
