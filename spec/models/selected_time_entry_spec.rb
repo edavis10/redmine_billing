@@ -29,14 +29,19 @@ describe SelectedTimeEntry, 'collect_member_data' do
   end
   
   describe 'response record' do
-    it 'should have the user name' do
+    before(:each) do
       @user = mock_model(User)
-      @user.should_receive(:name).and_return("Test User")
+      @user.stub!(:name).and_return("Test User")
       @time_entry_one = mock_model(TimeEntry, :id => 1)
       @time_entry_one.should_receive(:user).and_return(@user)
-      
+
       @selected_time_entry = SelectedTimeEntry.new
       @selected_time_entry.time_entries = [@time_entry_one]
+    end
+    
+    it 'should have the user name' do
+      @user.should_receive(:name).and_return("Test User")
+
       response = @selected_time_entry.collect_member_data
       response.should have_at_least(1).thing
       response[0][:name].should eql('Test User')
@@ -45,14 +50,8 @@ describe SelectedTimeEntry, 'collect_member_data' do
     it 'should have the count of time_entries for the user'
 
     it 'should have the total time for the user' do
-      @user = mock_model(User)
-      @user.stub!(:name).and_return("Test User")
-      @time_entry_one = mock_model(TimeEntry, :id => 1)
-      @time_entry_one.should_receive(:user).and_return(@user)
-      
-      @selected_time_entry = SelectedTimeEntry.new
-      @selected_time_entry.time_entries = [@time_entry_one]
       @selected_time_entry.should_receive(:total_of_user_time_entries).and_return(4.0)
+
       response = @selected_time_entry.collect_member_data
       response.should have_at_least(1).thing
       response[0][:time].should eql(4.0)
