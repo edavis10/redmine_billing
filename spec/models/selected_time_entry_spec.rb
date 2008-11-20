@@ -78,14 +78,31 @@ describe SelectedTimeEntry, 'collect_member_data' do
       response[0][:time].should eql(4.0)
     end
 
-    it 'should have an amount for the user'
-    it 'should format the amount into currency'
-    it 'should format time into a hundredths'
+    it 'should have an amount for the user' do
+      @selected_time_entry.should_receive(:total_amount_for_user).and_return(1_000.00)
+
+      response = @selected_time_entry.collect_member_data
+      response.should have_at_least(1).thing
+      response[0][:amount].should eql(1_000.00)
+    end
+
+    it 'should format the amount into currency' do
+      @selected_time_entry.stub!(:total_amount_for_user).and_return(1_000.00)
+
+      response = @selected_time_entry.collect_member_data
+      response.should have_at_least(1).thing
+      response[0][:formatted_amount].should eql("$1,000.00")
+    end
+
+    it 'should format time into a hundredths' do
+      @selected_time_entry.stub!(:total_of_user_time_entries).and_return(4.125)
+
+      response = @selected_time_entry.collect_member_data
+      response.should have_at_least(1).thing
+      response[0][:formatted_time].should eql("4.13")
+    end
+
   end
-  
-  it 'should total the time from the Time Entries'
-  
-  it 'should calculate the amount from the Time Entries and the Members rate'
 end
 
 describe SelectedTimeEntry, 'total_of_user_time_entries (private)' do
