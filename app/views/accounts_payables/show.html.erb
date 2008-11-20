@@ -27,7 +27,7 @@
   </p>
   <p>
     <%= l(:field_amount) %>:
-    <% if @vendor_invoice.billing_type == 'hourly' %>
+    <% if @vendor_invoice.hourly? %>
     <%= h number_to_currency(@vendor_invoice.amount_for_user) %>
     <% else %>
     <%= h number_to_currency(@vendor_invoice.amount) %>
