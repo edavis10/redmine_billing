@@ -28,28 +28,28 @@ class SelectedTimeEntry
   
   def collect_member_data
     data = []
-    unless self.time_entries.nil? || self.time_entries.empty?
-      entry_ids = self.time_entries.collect(&:id).uniq
-      users = self.time_entries.collect(&:user).uniq
-      users.each do |user|
-        account = { }
-        user_time_entries = TimeEntry.find_all_by_id_and_user_id(entry_ids, user.id)
+    return data if self.time_entries.nil? || self.time_entries.empty?
+    
+    entry_ids = self.time_entries.collect(&:id).uniq
+    users = self.time_entries.collect(&:user).uniq
+    users.each do |user|
+      account = { }
+      user_time_entries = TimeEntry.find_all_by_id_and_user_id(entry_ids, user.id)
 
-        account[:name] = user.name
-        account[:number_of_entries] = user_time_entries.length
-        account[:time] = user_time_entries.collect(&:hours).reject { |t| t.nil? }.sum
-        account[:amount] = 0.0
-        user_time_entries.each do |te|
-          # Wish there was a standard API to get member rates
-          mem = Member.find_by_user_id_and_project_id(te.user_id, te.project_id)
-          if !mem.nil? && mem.respond_to?(:rate) && !mem.rate.nil?
-            account[:amount] += mem.rate * te.hours
-          end
+      account[:name] = user.name
+      account[:number_of_entries] = user_time_entries.length
+      account[:time] = user_time_entries.collect(&:hours).reject { |t| t.nil? }.sum
+      account[:amount] = 0.0
+      user_time_entries.each do |te|
+        # Wish there was a standard API to get member rates
+        mem = Member.find_by_user_id_and_project_id(te.user_id, te.project_id)
+        if !mem.nil? && mem.respond_to?(:rate) && !mem.rate.nil?
+          account[:amount] += mem.rate * te.hours
         end
-        account[:formatted_amount] = number_to_currency(account[:amount], :precision => 2)
-        account[:formatted_time] = number_with_precision(account[:time], 2)
-        data << account
       end
+      account[:formatted_amount] = number_to_currency(account[:amount], :precision => 2)
+      account[:formatted_time] = number_with_precision(account[:time], 2)
+      data << account
     end
 
     return data
