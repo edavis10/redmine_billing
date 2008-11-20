@@ -46,6 +46,12 @@
 <p>
   <%= f.select :project_id, User.current.projects.find(:all).collect { |p| [p.name, p.id]}, { :include_blank => true }%> <small>Enter only for Fixed Rate Invoices</small>
 </p>
+<% else %>
+<p>
+  <%= f.label(:amount) %>
+  <%= text_field_tag 'calc_amount', number_to_currency(@vendor_invoice.amount_for_user), { :disabled => true } %> <small>Calculated based on the Time Entries</small>
+</p>
+
 <% end %>
 </fieldset>
 
