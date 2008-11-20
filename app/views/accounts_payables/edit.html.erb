@@ -4,8 +4,11 @@
   <%= link_to(l(:billing_vendor_invoice_hours), { :controller => 'timesheet', :action => 'report', :timesheet => { :vendor_invoice => @vendor_invoice.id }}, { :class => 'icon icon-invoice-hours'} ) unless @vendor_invoice.new_record? %>
 </div>
 
-<h2><%= l(:billing_new_invoice_title)%></h2>
-
+<% if @vendor_invoice.fixed? %>
+<h2><%= l(:billing_fixed_invoice_title)%></h2>
+<% else %>
+<h2><%= l(:billing_hourly_invoice_title)%></h2>
+<% end %>
 <% labelled_tabular_form_for(:vendor_invoice,
                              @vendor_invoice,
                              :url => @vendor_invoice.new_record? ? accounts_payables_path() : accounts_payable_path(@vendor_invoice),
@@ -17,6 +20,8 @@
 <% @vendor_invoice.time_entry_ids.each do |entry| %>
 <%= hidden_field_tag 'time_entry_ids[]', entry %>
 <% end %>
+
+<%= f.hidden_field :type %>
 
 <p>
   <%= f.text_field :number, :size => 10, :required => true %>
@@ -33,12 +38,15 @@
 <p>
   <%= f.select :billing_status, BillingStatus.to_array, { :required => true, :selected => @vendor_invoice.billing_status_id} %>
 </p>
+
+<% if @vendor_invoice.fixed? %>
 <p>
   <%= f.text_field :amount %> <small>Enter only for Fixed Rate Invoices</small>
 </p>
 <p>
   <%= f.select :project_id, User.current.projects.find(:all).collect { |p| [p.name, p.id]}, { :include_blank => true }%> <small>Enter only for Fixed Rate Invoices</small>
 </p>
+<% end %>
 </fieldset>
 
 <%= f.submit l(:button_save), :class => 'button-small'  %>

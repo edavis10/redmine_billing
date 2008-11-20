@@ -5,6 +5,8 @@ billing_create_new_vendor_invoice: Create New Invoice
 billing_invoice_title: Invoice
 billing_invoice_title_plural: Invoices
 billing_new_invoice_title: Invoice
+billing_fixed_invoice_title: Fixed Bid Invoice
+billing_hourly_invoice_title: Hourly Invoice
 billing_invoice_edit: Edit Invoice
 billing_bulk_edit_selected_vendor_invoices: Bulk edit selected invoices
 billing_add_time_to_invoice: Add time to invoice

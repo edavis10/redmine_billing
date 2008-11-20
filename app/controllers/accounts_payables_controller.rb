@@ -29,12 +29,20 @@ class AccountsPayablesController < ApplicationController
   end
 
   def new_vendor_invoice
-    @vendor_invoice = VendorInvoice.new
-    @vendor_invoice.time_entry_ids = params[:time_entry_ids] unless params[:time_entry_ids].nil?
+    if params[:type] && params[:type] == 'hourly'
+      @vendor_invoice = HourlyVendorInvoice.new
+      @vendor_invoice.time_entry_ids = params[:time_entry_ids] unless params[:time_entry_ids].nil?
+    else
+      @vendor_invoice = FixedVendorInvoice.new
+    end
   end
 
   def create_vendor_invoice
-    @vendor_invoice = VendorInvoice.new(params[:vendor_invoice])
+    if params[:vendor_invoice][:type] == HourlyVendorInvoice.name
+      @vendor_invoice = HourlyVendorInvoice.new(params[:vendor_invoice])
+    else
+      @vendor_invoice = FixedVendorInvoice.new(params[:vendor_invoice])
+    end
     @vendor_invoice.time_entry_ids = params[:time_entry_ids] unless params[:time_entry_ids].nil?
     @created = @vendor_invoice.save
   end

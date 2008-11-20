@@ -110,7 +110,7 @@ describe AccountsPayablesController, "#new" do
   before(:each) do
     login
     @vendor_invoice = vendor_invoice_factory(1)
-    VendorInvoice.stub!(:new).and_return(@vendor_invoice)
+    FixedVendorInvoice.stub!(:new).and_return(@vendor_invoice)
   end
   
   it 'should be successful' do
@@ -119,7 +119,7 @@ describe AccountsPayablesController, "#new" do
   end
 
   it 'should load a new vendor invoice' do
-    VendorInvoice.should_receive(:new).and_return(@vendor_invoice)
+    FixedVendorInvoice.should_receive(:new).and_return(@vendor_invoice)
     get :new
     assigns[:vendor_invoice].should_not be_nil
   end
@@ -138,7 +138,7 @@ describe AccountsPayablesController, "#create with successful save" do
     login
     @vendor_invoice = vendor_invoice_factory(1)
     @vendor_invoice.stub!(:save).and_return(true)
-    VendorInvoice.stub!(:new).and_return(@vendor_invoice)
+    FixedVendorInvoice.stub!(:new).and_return(@vendor_invoice)
   end
   
   it 'should redirect to the vendor invoice' do
@@ -165,7 +165,7 @@ describe AccountsPayablesController, "#create with unsuccessful save" do
     login
     @vendor_invoice = vendor_invoice_factory(1)
     @vendor_invoice.stub!(:save).and_return(false)
-    VendorInvoice.stub!(:new).and_return(@vendor_invoice)
+    FixedVendorInvoice.stub!(:new).and_return(@vendor_invoice)
   end
 
   it 'should render the new vendor invoice form' do
