@@ -31,6 +31,16 @@ jQuery(document).ready(function(){
 
     // Listener for selecting and de-selecting the bulk edits
     jQuery('form#time_entries input[type=checkbox]').click(function () {
+        updateCounter();
+    });
+
+    // Listener for selecting and de-selecting the bulk edits
+    jQuery('a.toggle-all').click(function () {
+        updateCounter();
+        return true;
+    });
+
+    function updateCounter() {
         jQuery.getJSON(time_counter_url,
                     jQuery('form#time_entries input:checked').serialize(),
                     function (data, textStatus) {
@@ -48,6 +58,6 @@ jQuery(document).ready(function(){
 
                         jQuery('#floating-counter ul').html(member_list);
                     });
-    });
+    }
 
 });
