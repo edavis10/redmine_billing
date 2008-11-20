@@ -3,6 +3,8 @@ class AccountsPayablesController < ApplicationController
   layout 'base'
   # Redmine fitlers
   before_filter :authorize, :except => [:show]
+  
+  include ActionView::Helpers::NumberHelper
 
   before_filter :load_vendor_invoice, :only => [ :show, :edit, :update, :destroy, :update_time_entries ]
   before_filter :load_vendor_invoices, :only => [ :bulk_edit, :bulk_update ]
@@ -223,7 +225,7 @@ class AccountsPayablesController < ApplicationController
         csv_string = FasterCSV.generate do |csv|
           csv << [
                   "Unbilled PO",
-                  @data.collect {|v| v[1]}.sum
+                  number_with_precision(@data.collect {|v| v[1].to_f}.sum, 2)
                  ]
 
           @data.each do |project_name, amount|
@@ -248,7 +250,7 @@ class AccountsPayablesController < ApplicationController
         csv_string = FasterCSV.generate do |csv|
           csv << [
                   "Unspent Labor Budget",
-                  @data.collect {|v| v[1]}.sum
+                  number_with_precision(@data.collect {|v| v[1].to_f}.sum,2)
                  ]
 
           @data.each do |project_name, amount|
