@@ -7,6 +7,33 @@ Used for the floating time counter
 var name = '#floating-counter';
 var menuYloc = null;
 
+
+// Allows an event to be delayed
+//
+// http://ihatecode.blogspot.com/2008/04/jquery-time-delay-event-binding-plugin.html
+(function($){
+    $.fn.delay = function(options) {
+
+        var timer;
+        function count(scope){
+            if (timer != null) {
+                clearTimeout(timer);
+            }
+            var newFn = function() {
+                options.fn.apply(scope);
+            };
+            timer = setTimeout(newFn, options.delay);
+        }
+       
+        return this.each(function() {
+            var obj = $(this);
+            obj.bind(options.event, function () {
+                 count(this);  
+            });
+        });
+    };
+})(jQuery);
+
 jQuery(document).ready(function(){
 
   // Floating time counter
@@ -18,27 +45,17 @@ jQuery(document).ready(function(){
     jQuery(name).animate({top:offset},{duration:500,queue:false});
   });
 
-
-    // Listener for selected rows for the floating counter visability
-    jQuery('form#time_entries').click(function () {
-        selected = jQuery('form#time_entries input:checked').length
-        if (selected > 0) {
-            jQuery('#floating-counter').show();
-        } else {
-            jQuery('#floating-counter').hide();
+    // Needs a very small delay to give the Context Menu a chance to toggle
+    // the checkbox
+    jQuery('table.list').delay({
+        delay: 1,
+        event: 'click',
+        fn: function() {
+            updateCounter();
+            updateCounterVisability();
         }
     });
 
-    // Listener for selecting and de-selecting the bulk edits
-    jQuery('form#time_entries input[type=checkbox]').click(function () {
-        updateCounter();
-    });
-
-    // Listener for selecting and de-selecting the bulk edits
-    jQuery('a.toggle-all').click(function () {
-        updateCounter();
-        return true;
-    });
 
     function updateCounter() {
         jQuery.getJSON(time_counter_url,
@@ -58,6 +75,15 @@ jQuery(document).ready(function(){
 
                         jQuery('#floating-counter ul').html(member_list);
                     });
+    }
+
+    function updateCounterVisability() {
+        selected = jQuery('form#time_entries input:checked').length
+        if (selected > 0) {
+            jQuery('#floating-counter').show();
+        } else {
+            jQuery('#floating-counter').hide();
+        }
     }
 
 });
