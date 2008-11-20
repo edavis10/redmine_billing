@@ -21,6 +21,8 @@
 <%= hidden_field_tag 'time_entry_ids[]', entry %>
 <% end %>
 
+<%= hidden_field_tag 'type', 'hourly' %>
+
 <p>
   <%= submit_tag(l(:billing_create_new_vendor_invoice)) %>
 </p>
