@@ -6,36 +6,25 @@ class VendorInvoice < ActiveRecord::Base
   validates_presence_of :number
   validates_presence_of :invoiced_on
   validates_presence_of :billing_status
-  validates_presence_of :project_id, :if => Proc.new { |vi| !vi.amount.nil? || vi.billing_type == 'fixed' }, :message => "can't be blank on Fixed Rate Invoices"
-  validates_presence_of :amount, :if => Proc.new { |vi| !vi.project_id.nil? || vi.billing_type == 'fixed' }, :message => "can't be blank on Fixed Rate Invoices"
-  
-  before_save :set_billing_type
-  
-  # A VendorInvoice is the billing_type of fixed if it has amount
-  def set_billing_type
-    if !self.read_attribute(:amount).nil? && self.read_attribute(:amount) > 0
-      self.write_attribute(:billing_type, 'fixed')
-    else
-      self.write_attribute(:billing_type, 'hourly')
-    end
-
-    return true
-  end
   
   def billing_status_id
     BillingStatus.find_by_id(self.billing_status)
   end
   
   def fixed?
-    return self.read_attribute(:billing_type) == "fixed"
+    return self.class == FixedVendorInvoice
   end
 
   def hourly?
-    return self.read_attribute(:billing_type) == "hourly"
+    return self.class == HourlyVendorInvoice
   end
   
   def open?
     self.billing_status == "paid"
+  end
+  
+  def humanize
+    Inflector.humanize(self.class.to_s.gsub(/VendorInvoice/,''))
   end
 
   # Returns the hours logged to the vendor invoice

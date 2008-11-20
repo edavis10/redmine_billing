@@ -30,35 +30,6 @@ module VendorInvoiceSpecHelper
   end
 end
 
-describe VendorInvoice, 'when saving' do
-  include VendorInvoiceSpecHelper
-  
-  it 'should set the type to fixed if amount is present' do
-    vendor_invoice = vendor_invoice_object_factory(1,
-                                                   {
-                                                     :amount => 200.00,
-                                                     :billing_status => 'unbilled',
-                                                     :project_id => 1
-                                                   })
-
-    vendor_invoice.save.should eql(true)
-    vendor_invoice.reload
-    vendor_invoice.billing_type.should eql('fixed')
-  end
-
-  it 'should set the type to hourly if amount is absent' do
-    vendor_invoice = vendor_invoice_object_factory(1,
-                                                   {
-                                                     :amount => nil,
-                                                     :billing_status => 'unbilled'})
-
-    vendor_invoice.save.should eql(true)
-    vendor_invoice.reload
-    vendor_invoice.billing_type.should eql('hourly')
-
-  end
-end
-
 describe VendorInvoice, 'hours' do
   include VendorInvoiceSpecHelper
   

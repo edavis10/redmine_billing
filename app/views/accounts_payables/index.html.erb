@@ -45,7 +45,7 @@
       <td><%= invoice.billing_status %></td>
       <td class="numeric"><%= user_hours_for_vendor_invoice(invoice, user) %></td>
       <td class="numeric"><%= user_amount_for_vendor_invoice(invoice, user) %></td>
-      <td><%= invoice.billing_type %></td>
+      <td><%= invoice.humanize %></td>
       <td><%= h invoice.comment %></td>
       <td>
         <%= link_to image_tag('edit.png'), edit_accounts_payable_path(invoice), :title => l(:button_edit) %> 
