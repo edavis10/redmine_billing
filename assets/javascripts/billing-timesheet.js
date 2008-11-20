@@ -43,7 +43,7 @@ jQuery(document).ready(function(){
                         member_list = '';
                         // Build up the list
                         data.members.each(function(member, index) {
-                            member_list += "<li>" + member.name + ": " + member.number_of_entries + " | " + member.time + " | " + member.amount +"</li>";
+                            member_list += "<li>" + member.name + ": " + member.number_of_entries + " | " + member.formatted_time + " | " + member.formatted_amount +"</li>";
                         });
 
                         jQuery('#floating-counter ul').html(member_list);
