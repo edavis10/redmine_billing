@@ -29,7 +29,7 @@ class VendorInvoice < ActiveRecord::Base
   end
   
   def humanize
-    Inflector.humanize(self.class.to_s.gsub(/VendorInvoice/,''))
+    ActiveSupport::Inflector.humanize(self.class.to_s.gsub(/VendorInvoice/,''))
   end
 
   # Returns the hours logged to the vendor invoice
