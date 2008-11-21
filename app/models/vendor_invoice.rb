@@ -7,6 +7,11 @@ class VendorInvoice < ActiveRecord::Base
   validates_presence_of :invoiced_on
   validates_presence_of :billing_status
   
+  def billing_type
+    ActiveSupport::Deprecation.warn('VendorInvoice#billing_type should be replaced with STI classes.')
+    self.read_attribute(:billing_type)
+  end
+  
   def billing_status_id
     BillingStatus.find_by_id(self.billing_status)
   end
