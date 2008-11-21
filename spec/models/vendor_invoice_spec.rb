@@ -135,3 +135,69 @@ describe VendorInvoice, 'humanize' do
     VendorInvoice.new.humanize.should eql('')
   end
 end
+
+describe VendorInvoice, 'amount_for_user with no parameter' do
+  include VendorInvoiceSpecHelper
+
+  it 'should return 0 if there are no time entries' do
+    vendor_invoice = vendor_invoice_object_factory(1)
+    vendor_invoice.should_receive(:time_entries).and_return([])
+    
+    vendor_invoice.amount_for_user.should eql(0)
+  end
+  
+  it 'should return the total of all the time_entries multipled by the Member rate' do
+    @user = mock_model(User, :id => 1, :to_param => 1)
+    @project = mock_model(Project, :id => 10)
+    @member = mock_model(Member, :id => 20, :user => @user, :project_id => @project.id, :rate => 1000.0)
+    time_entry_one = time_entry_mock_factory(1, { :user_id => @user.id, :hours => 3, :project_id => @project.id})
+    time_entry_two = time_entry_mock_factory(2, { :user_id => @user.id, :hours => 10, :project_id => @project.id})
+    Member.should_receive(:find_by_user_id_and_project_id).with(@user.id, @project.id).twice.and_return(@member)
+
+    vendor_invoice = vendor_invoice_object_factory(1)
+    vendor_invoice.should_receive(:time_entries).at_least(:once).and_return([time_entry_one, time_entry_two])
+    
+    vendor_invoice.amount_for_user.should eql(13000.0)
+
+  end
+  
+  it 'should return 0 if Member rate isnt used' do
+    @user = mock_model(User, :id => 1, :to_param => 1)
+    @project = mock_model(Project, :id => 10)
+    @member = mock_model(Member, :id => 20, :user => @user, :project_id => @project.id) # No rate
+    time_entry_one = time_entry_mock_factory(1, { :user_id => @user.id, :hours => 3, :project_id => @project.id})
+    time_entry_two = time_entry_mock_factory(2, { :user_id => @user.id, :hours => 10, :project_id => @project.id})
+    Member.should_receive(:find_by_user_id_and_project_id).with(@user.id, @project.id).twice.and_return(@member)
+
+    vendor_invoice = vendor_invoice_object_factory(1)
+    vendor_invoice.should_receive(:time_entries).at_least(:once).and_return([time_entry_one, time_entry_two])
+    
+    vendor_invoice.amount_for_user.should eql(0)
+
+  end
+end
+
+describe VendorInvoice, 'amount_for_user with a user parameter' do
+  include VendorInvoiceSpecHelper
+
+  before(:each) do
+    @user = mock_model(User, :id => 1, :to_param => 1)
+  end
+  
+  it 'should return the total of all the time_entries for that user multipled by the Member rate' do
+    @user = mock_model(User, :id => 1, :to_param => 1)
+    @user2 = mock_model(User, :id => 2, :to_param => 2)
+    @project = mock_model(Project, :id => 10)
+    @member = mock_model(Member, :id => 20, :user => @user, :project_id => @project.id, :rate => 1000.0)
+    @member2 = mock_model(Member, :id => 21, :user => @user2, :project_id => @project.id, :rate => 5.0)
+    time_entry_one = time_entry_mock_factory(1, { :user => @user, :user_id => @user.id, :hours => 3, :project_id => @project.id})
+    time_entry_two = time_entry_mock_factory(2, { :user => @user2, :user_id => @user2.id, :hours => 10, :project_id => @project.id})
+    Member.should_receive(:find_by_user_id_and_project_id).with(@user.id, @project.id).and_return(@member)
+
+    vendor_invoice = vendor_invoice_object_factory(1)
+    vendor_invoice.should_receive(:time_entries).at_least(:once).and_return([time_entry_one, time_entry_two])
+    
+    vendor_invoice.amount_for_user(@user).should eql(3000.0)
+
+  end
+end
