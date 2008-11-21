@@ -5,8 +5,8 @@ require 'fastercsv'
 Dir[File.join(directory,'vendor','plugins','*')].each do |dir|
   path = File.join(dir, 'lib')
   $LOAD_PATH << path
-  Dependencies.load_paths << path
-  Dependencies.load_once_paths.delete(path)
+  ActiveSupport::Dependencies.load_paths << path
+  ActiveSupport::Dependencies.load_once_paths.delete(path)
 end
 
 # AutoComplete
