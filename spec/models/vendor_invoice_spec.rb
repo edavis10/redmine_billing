@@ -146,13 +146,11 @@ describe VendorInvoice, 'amount_for_user with no parameter' do
     vendor_invoice.amount_for_user.should eql(0)
   end
   
-  it 'should return the total of all the time_entries multipled by the Member rate' do
+  it 'should return the total of all the cost of the time_entries' do
     @user = mock_model(User, :id => 1, :to_param => 1)
     @project = mock_model(Project, :id => 10)
-    @member = mock_model(Member, :id => 20, :user => @user, :project_id => @project.id, :rate => 1000.0)
-    time_entry_one = time_entry_mock_factory(1, { :user_id => @user.id, :hours => 3, :project_id => @project.id})
-    time_entry_two = time_entry_mock_factory(2, { :user_id => @user.id, :hours => 10, :project_id => @project.id})
-    Member.should_receive(:find_by_user_id_and_project_id).with(@user.id, @project.id).twice.and_return(@member)
+    time_entry_one = time_entry_mock_factory(1, { :user_id => @user.id, :hours => 3, :project_id => @project.id, :cost => 3000.0})
+    time_entry_two = time_entry_mock_factory(2, { :user_id => @user.id, :hours => 10, :project_id => @project.id, :cost => 10000.0})
 
     vendor_invoice = vendor_invoice_object_factory(1)
     vendor_invoice.should_receive(:time_entries).at_least(:once).and_return([time_entry_one, time_entry_two])
@@ -161,13 +159,11 @@ describe VendorInvoice, 'amount_for_user with no parameter' do
 
   end
   
-  it 'should return 0 if Member rate isnt used' do
+  it "should return 0 if a Time Entry doesn't have a cost" do
     @user = mock_model(User, :id => 1, :to_param => 1)
     @project = mock_model(Project, :id => 10)
-    @member = mock_model(Member, :id => 20, :user => @user, :project_id => @project.id) # No rate
-    time_entry_one = time_entry_mock_factory(1, { :user_id => @user.id, :hours => 3, :project_id => @project.id})
-    time_entry_two = time_entry_mock_factory(2, { :user_id => @user.id, :hours => 10, :project_id => @project.id})
-    Member.should_receive(:find_by_user_id_and_project_id).with(@user.id, @project.id).twice.and_return(@member)
+    time_entry_one = time_entry_mock_factory(1, { :user_id => @user.id, :hours => 3, :project_id => @project.id, :cost => nil})
+    time_entry_two = time_entry_mock_factory(2, { :user_id => @user.id, :hours => 10, :project_id => @project.id, :cost => nil})
 
     vendor_invoice = vendor_invoice_object_factory(1)
     vendor_invoice.should_receive(:time_entries).at_least(:once).and_return([time_entry_one, time_entry_two])
@@ -184,15 +180,12 @@ describe VendorInvoice, 'amount_for_user with a user parameter' do
     @user = mock_model(User, :id => 1, :to_param => 1)
   end
   
-  it 'should return the total of all the time_entries for that user multipled by the Member rate' do
+  it 'should return the total cost of all the Time Entries for that user' do
     @user = mock_model(User, :id => 1, :to_param => 1)
     @user2 = mock_model(User, :id => 2, :to_param => 2)
     @project = mock_model(Project, :id => 10)
-    @member = mock_model(Member, :id => 20, :user => @user, :project_id => @project.id, :rate => 1000.0)
-    @member2 = mock_model(Member, :id => 21, :user => @user2, :project_id => @project.id, :rate => 5.0)
-    time_entry_one = time_entry_mock_factory(1, { :user => @user, :user_id => @user.id, :hours => 3, :project_id => @project.id})
-    time_entry_two = time_entry_mock_factory(2, { :user => @user2, :user_id => @user2.id, :hours => 10, :project_id => @project.id})
-    Member.should_receive(:find_by_user_id_and_project_id).with(@user.id, @project.id).and_return(@member)
+    time_entry_one = time_entry_mock_factory(1, { :user => @user, :user_id => @user.id, :hours => 3, :project_id => @project.id, :cost => 3000.0})
+    time_entry_two = time_entry_mock_factory(2, { :user => @user2, :user_id => @user2.id, :hours => 10, :project_id => @project.id, :cost => 50.0})
 
     vendor_invoice = vendor_invoice_object_factory(1)
     vendor_invoice.should_receive(:time_entries).at_least(:once).and_return([time_entry_one, time_entry_two])

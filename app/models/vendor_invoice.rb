@@ -49,10 +49,7 @@ class VendorInvoice < ActiveRecord::Base
     amount = 0
     self.time_entries.each do |te|
       if user.nil? || te.user == user
-        mem = Member.find_by_user_id_and_project_id(te.user_id, te.project_id)
-        if !mem.nil? && mem.respond_to?(:rate) && !mem.rate.nil?
-          amount += mem.rate * te.hours
-        end
+        amount += te.cost unless te.cost.nil?
       end
     end
 
