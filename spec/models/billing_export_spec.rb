@@ -30,16 +30,11 @@ describe BillingExport, "unbilled_labor" do
     @user_one.should_receive(:projects).and_return([project])
     @user_two.should_receive(:projects).and_return([project])
 
-    time_entry_one = mock_model(TimeEntry, :hours => 10)
-    time_entry_two = mock_model(TimeEntry, :hours => 100)
+    time_entry_one = mock_model(TimeEntry, :hours => 10, :cost => 250.0)
+    time_entry_two = mock_model(TimeEntry, :hours => 100, :cost => 10000.0)
     TimeEntry.should_receive(:find_all_by_user_id_and_vendor_invoice_id).with(@user_one.id, nil).and_return([time_entry_one])
     TimeEntry.should_receive(:find_all_by_user_id_and_vendor_invoice_id).with(@user_two.id, nil).and_return([time_entry_two])
 
-    membership_user_one = mock_model(Member, :rate => 25.0)
-    membership_user_two = mock_model(Member, :rate => 100.0)
-    Member.should_receive(:find_by_user_id_and_project_id).with(@user_one.id, project.id).and_return(membership_user_one)
-    Member.should_receive(:find_by_user_id_and_project_id).with(@user_two.id, project.id).and_return(membership_user_two)
-    
     result = BillingExport.unbilled_labor
     result[0][0].should eql(@user_two.name)
     result[0][1].should eql(10000.0)
