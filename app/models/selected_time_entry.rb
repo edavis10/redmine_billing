@@ -51,7 +51,7 @@ class SelectedTimeEntry
   private
   
   def total_of_user_time_entries(time_entries)
-    time_entries.collect(&:hours).reject { |t| t.nil? }.sum
+    time_entries.collect(&:hours).compact.sum
   end
   
   def total_amount_for_user(time_entries)
