@@ -1,32 +1,21 @@
 #!/usr/bin/env ruby
 require "fileutils"
+require 'rubygems'
+gem 'rspec'
+gem 'rspec-rails'
 
 Dir[File.expand_path(File.dirname(__FILE__)) + "/lib/tasks/**/*.rake"].sort.each { |ext| load ext }
 
-# Modifided from the RSpec on Rails plugins
 PLUGIN_ROOT = File.expand_path(File.dirname(__FILE__))
-REDMINE_APP = File.expand_path(File.dirname(__FILE__) + '/../../../app')
-REDMINE_LIB = File.expand_path(File.dirname(__FILE__) + '/../../../lib')
-
-# In rails 1.2, plugins aren't available in the path until they're loaded.
-# Check to see if the rspec plugin is installed first and require
-# it if it is.  If not, use the gem version.
-rspec_base = File.expand_path(File.dirname(__FILE__) + '/../rspec/lib')
-$LOAD_PATH.unshift(rspec_base) if File.exist?(rspec_base)
+# Allows loading of an environment config based on the environment
+REDMINE_ROOT = ENV["REDMINE_ROOT"] || File.dirname(__FILE__) + "/../../.."
+REDMINE_APP = File.expand_path(REDMINE_ROOT + '/app')
+REDMINE_LIB = File.expand_path(REDMINE_ROOT + '/lib')
 
 require 'rake'
 require 'rake/clean'
 require 'rake/rdoctask'
-begin
-  require 'spec/rake/spectask'
-  require 'spec/translator'
-rescue LoadError
-  puts ("*" * 20) + " ERROR " + ('*' *20)
-  puts "RSpec or RSpec on Rails is not installed.  Please install them and retry. (http://rspec.info)"
-  puts
-  puts ("*" * 20) + " ERROR " + ('*' *20)
-  exit -1
-end
+require 'spec/rake/spectask'
 
 PROJECT_NAME = 'billing_plugin'
 REDMINE_PROJECT_NAME = 'redmine-billing'
