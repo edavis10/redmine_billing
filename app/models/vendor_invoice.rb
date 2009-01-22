@@ -46,14 +46,9 @@ class VendorInvoice < ActiveRecord::Base
   
   def amount_for_user(user=nil)
     return 0 if self.time_entries.size <= 0
-    amount = 0
-    self.time_entries.each do |te|
-      if user.nil? || te.user == user
-        amount += te.cost unless te.cost.nil?
-      end
-    end
-
-    return amount
+    return self.time_entries.select do |time_entry|
+      user.nil? || time_entry.user == user
+    end.collect(&:cost).compact.sum
   end
   
   def user_names
