@@ -55,16 +55,7 @@ class SelectedTimeEntry
   end
   
   def total_amount_for_user(time_entries)
-    total = 0.0
-
-    time_entries.each do |te|
-      # Wish there was a standard API to get member rates
-      mem = Member.find_by_user_id_and_project_id(te.user_id, te.project_id)
-      if !mem.nil? && mem.respond_to?(:rate) && !mem.rate.nil? && !te.hours.nil?
-        total += mem.rate * te.hours
-      end
-    end
-    return total
+    return time_entries.collect(&:cost).compact.sum
   end
 
   # Groups time entries into a hash based on the user_id

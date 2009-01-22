@@ -57,6 +57,7 @@ describe SelectedTimeEntry, 'collect_member_data' do
 
     @selected_time_entry = SelectedTimeEntry.new
     @selected_time_entry.time_entries = [@time_entry_one, @time_entry_two]
+    @selected_time_entry.stub!(:total_amount_for_user)
     @selected_time_entry.collect_member_data.should have(2).things
     
   end
@@ -70,6 +71,7 @@ describe SelectedTimeEntry, 'collect_member_data' do
 
       @selected_time_entry = SelectedTimeEntry.new
       @selected_time_entry.time_entries = [@time_entry_one]
+      @selected_time_entry.stub!(:total_amount_for_user)
     end
     
     it 'should have the user name' do
@@ -140,13 +142,9 @@ end
 
 describe SelectedTimeEntry, 'total_amount_for_user (private)' do
   it 'should total the cost of each time_entry' do
-    project = mock_model(Project)
-    user = mock_model(User)
-    time_entry_one = mock_model(TimeEntry, :id => 1, :user_id => user.id, :project_id => project.id, :hours => 2.0)
-    time_entry_two = mock_model(TimeEntry, :id => 2, :user_id => user.id, :project_id => project.id, :hours => 1.0)
-    time_entry_three = mock_model(TimeEntry, :id => 2, :user_id => user.id, :project_id => project.id, :hours => nil)
-    member = mock_model(Member, :rate => 200.0)
-    Member.should_receive(:find_by_user_id_and_project_id).at_least(3).times.and_return(member)
+    time_entry_one = mock_model(TimeEntry, :id => 1, :cost => 400.0)
+    time_entry_two = mock_model(TimeEntry, :id => 2, :cost => 200.0)
+    time_entry_three = mock_model(TimeEntry, :id => 2, :cost => 0.0)
 
     selected_time_entry = SelectedTimeEntry.new
     selected_time_entry.send(:total_amount_for_user, [time_entry_one, time_entry_two, time_entry_three]).should eql(600.0)
