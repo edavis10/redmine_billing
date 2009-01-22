@@ -173,8 +173,8 @@ describe VendorInvoiceFilter, '.filter!' do
     vendor_invoice_filter.users = [user1, user2]
     
     vendor_invoice_filter.filter!
-    vendor_invoice_filter.vendor_invoices.should include(user1)
-    vendor_invoice_filter.vendor_invoices.should include(user2)
+    vendor_invoice_filter.vendor_invoices.keys.should include(user1)
+    vendor_invoice_filter.vendor_invoices.keys.should include(user2)
   end
 end
 
