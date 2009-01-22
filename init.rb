@@ -42,3 +42,10 @@ begin
 rescue LoadError
   # budget_plugin is not installed
 end
+
+begin
+  require_dependency 'rate' unless Object.const_defined?('Rate')
+rescue LoadError
+  # rate_plugin is not installed
+  raise Exception.new("ERROR: The Rate plugin is not installed.  Please install the Rate plugin or downgrade to version 0.2.0 of the Billing plugin.")
+end
