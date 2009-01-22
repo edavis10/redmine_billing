@@ -60,7 +60,7 @@ class BillingExport
 
       user.projects.each do |project|
         non_billed_time = project.time_entries.find_all_by_user_id_and_vendor_invoice_id(user.id, nil)
-        totals[user.name] += non_billed_time.collect(&:cost).compact.sum.round(Precision)
+        totals[user.name] += non_billed_time.collect(&:cost).compact.sum.to_f.round(Precision)
       end
     end
     
