@@ -27,7 +27,7 @@ Redmine::Plugin.register :redmine_billing do
   name 'Redmine Billing plugin'
   author 'Author name'
   description 'This is a plugin for Redmine'
-  version '0.0.1'
+  version '0.3.0'
 
   permission(:use_accounts_payable, { :accounts_payables => [:index, :new, :create, :edit, :update, :destroy, :context_menu, :bulk_edit, :bulk_update, :auto_complete_for_vendor_invoice_number, :timesheet, :update_time_entries, :unbilled_po, :unspent_labor, :unbilled_labor, :time_counter] })
 
