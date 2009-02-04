@@ -1,7 +1,6 @@
 class VendorInvoiceFilter
   attr_accessor :date_from
   attr_accessor :date_to
-  attr_accessor :period
   attr_accessor :projects
   attr_accessor :activities
   attr_accessor :users
