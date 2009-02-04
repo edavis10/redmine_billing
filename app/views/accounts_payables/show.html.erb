@@ -35,6 +35,9 @@
 
     
   </p>
+
+  <%= render :partial => 'hours_without_rates', :locals => { :hours => @vendor_invoice.hours_without_rates } %>
+
 <% unless @vendor_invoice.project.nil? %>
   <p>
     <%= l(:field_project) %>: <%= h @vendor_invoice.project.name %>

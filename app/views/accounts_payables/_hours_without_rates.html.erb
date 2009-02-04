@@ -1,0 +1,7 @@
+<% if hours > 0 %>
+<p>
+  <%= l(:label_vendor_invoice_hours_without_rates) %>: 
+  <%= link_to number_with_precision(hours), { :controller => 'timesheet', :action => 'report', :timesheet => { :vendor_invoice => 0 }} %>
+
+</p>
+<% end %>
