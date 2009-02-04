@@ -54,6 +54,17 @@ HTML
     o << content_tag(:div, inner_content, :id => 'floating-counter', :style => 'display:none;')
     return o
   end
+
+  # Adds a CSS class to the row on the Timesheet if a time_entry is missing a 
+  # rate (based on it's cost).
+  def plugin_timesheet_view_timesheets_time_entry_row_class(context = { })
+    time_entry = context[:time_entry]
+    if time_entry.cost && time_entry.cost <= 0 && time_entry.hours > 0
+      return "missing-rate"
+    else
+      return ""
+    end
+  end
   
   def plugin_timesheet_controller_report_pre_fetch_time_entries(context = { })
     if !context[:params][:timesheet].nil? && !context[:params][:timesheet][:vendor_invoice].nil?
