@@ -86,7 +86,14 @@ class VendorInvoiceFilter
   end
   
   def conditions_for_user(user)
-    return ["invoiced_on >= (:from) AND invoiced_on <= (:to) AND billing_status IN (:billing_status) AND " +
+    # Allow nil from and to values to represent 'all'
+    if self.date_from && self.date_to
+      date_conditions = "invoiced_on >= (:from) AND invoiced_on <= (:to) AND "
+    else
+      date_conditions = ""
+    end
+
+    return [date_conditions + " billing_status IN (:billing_status) AND " +
             # Check project field for fixed billing_types
             "(type = (:fixed) AND #{VendorInvoice.table_name}.project_id IN (:projects)" +
             # Check time_entry fields for hourly types
