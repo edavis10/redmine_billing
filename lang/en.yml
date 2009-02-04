@@ -23,6 +23,7 @@ label_vendor_invoice_hours: Hours
 label_vendor_invoice_amount: Value
 label_vendor_invoice_billing_type: Type
 label_vendor_invoice_comment: Comment
+label_vendor_invoice_hours_without_rates: Hours without rates
 
 # Fields
 field_number: 'Invoice #'

@@ -31,6 +31,12 @@ class VendorInvoice < ActiveRecord::Base
   def humanize
     ActiveSupport::Inflector.humanize(self.class.to_s.gsub(/VendorInvoice/,''))
   end
+  
+  # Returns the sum of hours on TimeEntries for this VendorInvoice that are missing
+  # a cost value.
+  def hours_without_rates
+    self.time_entries.collect {|te| te.cost <= 0 ? te : nil}.compact.collect(&:hours).sum
+  end
 
   # Returns the hours logged to the vendor invoice
   # Optionally only shows ones logged by the +user+
