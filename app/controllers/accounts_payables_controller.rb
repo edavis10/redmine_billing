@@ -16,6 +16,7 @@ class AccountsPayablesController < ApplicationController
   before_filter :load_vendor_invoice_filter, :only => [ :index ]
 
   helper :vendor_invoices
+  helper :timelog
 
   protected
   def load_vendor_invoice
@@ -71,10 +72,17 @@ class AccountsPayablesController < ApplicationController
   end
 
   def load_vendor_invoice_filter
+    @free_period = true
     if params && params[:vendor_invoice_filter]
       @vendor_invoice_filter = VendorInvoiceFilter.new( params[:vendor_invoice_filter] )
     else
       @vendor_invoice_filter = VendorInvoiceFilter.new
+    end
+    
+    # Override the range in date_to and date_from if the periods are used
+    if params[:period_type] == '1' || (params[:period_type].nil? && !params[:period].nil?)
+      @vendor_invoice_filter.period = params[:period].to_s
+      @free_period = false
     end
     
     @vendor_invoice_filter.allowed_projects = allowed_projects

@@ -137,6 +137,80 @@ describe VendorInvoiceFilter, 'initializing' do
 
 end
 
+describe VendorInvoiceFilter, '#period=' do
+  describe 'should set the date_to and date_from for' do
+    before(:each) do
+      @date = Date.new(2009,2,4)
+      Date.stub!(:today).and_return(@date)
+      @vendor_invoice_filter = VendorInvoiceFilter.new
+    end
+    
+    it 'today' do
+      @vendor_invoice_filter.should_receive(:date_from=).with(@date)
+      @vendor_invoice_filter.should_receive(:date_to=).with(@date)
+      @vendor_invoice_filter.period = 'today'
+    end
+    
+    it 'yesterday' do
+      @vendor_invoice_filter.should_receive(:date_from=).with(@date.yesterday)
+      @vendor_invoice_filter.should_receive(:date_to=).with(@date.yesterday)
+      @vendor_invoice_filter.period = 'yesterday'
+    end
+    
+    it 'current_week' do
+      @vendor_invoice_filter.should_receive(:date_from=).with(Date.new(2009, 2, 2))
+      @vendor_invoice_filter.should_receive(:date_from).and_return(Date.new(2009, 2, 2))
+      @vendor_invoice_filter.should_receive(:date_to=).with(Date.new(2009, 2, 8))
+      @vendor_invoice_filter.period = 'current_week'
+    end
+    
+    it 'last_week' do
+      @vendor_invoice_filter.should_receive(:date_from=).with(Date.new(2009, 1, 26))
+      @vendor_invoice_filter.should_receive(:date_from).and_return(Date.new(2009, 1, 26))
+      @vendor_invoice_filter.should_receive(:date_to=).with(Date.new(2009, 2, 1))
+      @vendor_invoice_filter.period = 'last_week'
+    end
+    
+    it '7_days' do
+      @vendor_invoice_filter.should_receive(:date_from=).with(@date - 7)
+      @vendor_invoice_filter.should_receive(:date_to=).with(@date)
+      @vendor_invoice_filter.period = '7_days'
+    end
+    
+    it 'current_month' do
+      @vendor_invoice_filter.should_receive(:date_from=).with(Date.new(2009, 2, 1))
+      @vendor_invoice_filter.should_receive(:date_from).and_return(Date.new(2009, 2, 1))
+      @vendor_invoice_filter.should_receive(:date_to=).with(Date.new(2009, 2, 28))
+      @vendor_invoice_filter.period = 'current_month'
+    end
+    
+    it 'last_month' do
+      @vendor_invoice_filter.should_receive(:date_from=).with(Date.new(2009, 1, 1))
+      @vendor_invoice_filter.should_receive(:date_from).and_return(Date.new(2009, 1, 1))
+      @vendor_invoice_filter.should_receive(:date_to=).with(Date.new(2009, 1, 31))
+      @vendor_invoice_filter.period = 'last_month'
+    end
+    
+    it '30_days' do
+      @vendor_invoice_filter.should_receive(:date_from=).with(@date - 30)
+      @vendor_invoice_filter.should_receive(:date_to=).with(@date)
+      @vendor_invoice_filter.period = '30_days'
+    end
+    
+    it 'current_year' do
+      @vendor_invoice_filter.should_receive(:date_from=).with(Date.new(2009,1,1))
+      @vendor_invoice_filter.should_receive(:date_to=).with(Date.new(2009,12,31))
+      @vendor_invoice_filter.period = 'current_year'
+    end
+    
+    it 'all' do
+      @vendor_invoice_filter.should_receive(:date_from=).with(nil)
+      @vendor_invoice_filter.should_receive(:date_to=).with(nil)
+      @vendor_invoice_filter.period = 'all'
+    end
+  end
+end
+
 describe VendorInvoiceFilter, '.filter!' do
   include VendorInvoiceFilterSpecHelper
   

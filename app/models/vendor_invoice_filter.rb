@@ -1,6 +1,7 @@
 class VendorInvoiceFilter
   attr_accessor :date_from
   attr_accessor :date_to
+  attr_accessor :period
   attr_accessor :projects
   attr_accessor :activities
   attr_accessor :users
@@ -26,8 +27,42 @@ class VendorInvoiceFilter
     end
 
     self.date_from = options[:date_from] || 1.month.ago.to_date
-    self.date_to = options[:date_to] || Date.today.to_s
+    self.date_to = options[:date_to] || Date.today
     self.billing_status = options[:billing_status] || BillingStatus.names.map { |n| n.to_s }
+  end
+  
+  def period=(period)
+    # Stolen from the TimelogController
+    case period.to_s
+    when 'today'
+      self.date_from = self.date_to = Date.today
+    when 'yesterday'
+      self.date_from = self.date_to = Date.today - 1
+    when 'current_week' # Mon -> Sun
+      self.date_from = Date.today - (Date.today.cwday - 1)%7
+      self.date_to = self.date_from + 6
+    when 'last_week'
+      self.date_from = Date.today - 7 - (Date.today.cwday - 1)%7
+      self.date_to = self.date_from + 6
+    when '7_days'
+      self.date_from = Date.today - 7
+      self.date_to = Date.today
+    when 'current_month'
+      self.date_from = Date.civil(Date.today.year, Date.today.month, 1)
+      self.date_to = (self.date_from >> 1) - 1
+    when 'last_month'
+      self.date_from = Date.civil(Date.today.year, Date.today.month, 1) << 1
+      self.date_to = (self.date_from >> 1) - 1
+    when '30_days'
+      self.date_from = Date.today - 30
+      self.date_to = Date.today
+    when 'current_year'
+      self.date_from = Date.civil(Date.today.year, 1, 1)
+      self.date_to = Date.civil(Date.today.year, 12, 31)
+    when 'all'
+      self.date_from = self.date_to = nil
+    end
+    self
   end
   
   def filter!
