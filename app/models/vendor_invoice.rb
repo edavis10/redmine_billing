@@ -35,7 +35,12 @@ class VendorInvoice < ActiveRecord::Base
   # Returns the sum of hours on TimeEntries for this VendorInvoice that are missing
   # a cost value.
   def hours_without_rates
-    self.time_entries.collect {|te| te.cost <= 0 ? te : nil}.compact.collect(&:hours).sum
+    self.time_entries_without_rates.collect(&:hours).sum
+  end
+
+  # Returns the TimeEntries without a cost value.
+  def time_entries_without_rates
+    self.time_entries.collect {|te| te.cost <= 0 ? te : nil}.compact
   end
 
   # Returns the hours logged to the vendor invoice

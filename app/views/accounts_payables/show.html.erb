@@ -36,7 +36,10 @@
     
   </p>
 
-  <%= render :partial => 'hours_without_rates', :locals => { :hours => @vendor_invoice.hours_without_rates } %>
+  <%= render :partial => 'hours_without_rates', :locals => {
+    :hours => @vendor_invoice.hours_without_rates,
+    :ids => @vendor_invoice.time_entries_without_rates.collect(&:id)
+  } %>
 
 <% unless @vendor_invoice.project.nil? %>
   <p>

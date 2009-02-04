@@ -1,7 +1,7 @@
 <% if hours > 0 %>
 <p>
   <%= l(:label_vendor_invoice_hours_without_rates) %>: 
-  <%= link_to number_with_precision(hours), { :controller => 'timesheet', :action => 'report', :timesheet => { :vendor_invoice => 0 }} %>
+  <%= link_to number_with_precision(hours), { :controller => 'timesheet', :action => 'report', :timesheet => { :potential_time_entry_ids => ids }} %>
 
 </p>
 <% end %>

@@ -195,6 +195,34 @@ describe VendorInvoice, 'amount_for_user with a user parameter' do
   end
 end
 
+describe VendorInvoice, "#time_entries_without_rates" do
+  include VendorInvoiceSpecHelper
+
+  it 'should be empty if there are no time entries' do
+    vendor_invoice = VendorInvoice.new
+    vendor_invoice.time_entries_without_rates.should be_empty
+  end
+
+  it 'should be empty if all time entries have a cost (rate)' do
+    time_entry_one = time_entry_mock_factory(1, { :cost => 100 })
+    time_entry_two = time_entry_mock_factory(2, { :cost => 100 })
+    
+    vendor_invoice = VendorInvoice.new
+    vendor_invoice.should_receive(:time_entries).and_return([time_entry_one, time_entry_two])
+    vendor_invoice.time_entries_without_rates.should be_empty
+  end
+
+  it 'should return all the TimeEntries without a cost (rate)' do
+    time_entry_one = time_entry_mock_factory(1, { :cost => 100 })
+    time_entry_two = time_entry_mock_factory(2, { :cost => 0, :hours => 100.335 })
+    time_entry_three = time_entry_mock_factory(3, { :cost => 0, :hours => 10.1 })
+    
+    vendor_invoice = VendorInvoice.new
+    vendor_invoice.should_receive(:time_entries).and_return([time_entry_one, time_entry_two, time_entry_three])
+    vendor_invoice.time_entries_without_rates.should eql([time_entry_two, time_entry_three])
+  end
+end
+
 
 describe VendorInvoice, "#hours_without_rates" do
   include VendorInvoiceSpecHelper
