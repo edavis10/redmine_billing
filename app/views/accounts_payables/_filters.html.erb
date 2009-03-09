@@ -21,8 +21,8 @@
 
 <p>
   <label for="vendor_invoice_filter[projects][]"><%= l(:label_project)%>:</label><br />
-  <%= select_tag 'vendor_invoice_filter[projects][]',
-    options_from_collection_for_select(@vendor_invoice_filter.allowed_projects, :id, :name, @vendor_invoice_filter.projects.collect(&:id)),
+  <%= select_tag 'vendor_invoice_filter[projects][]', 
+      project_tree_options_for_select_with_multiple_selected(@vendor_invoice_filter.allowed_projects, @vendor_invoice_filter.projects),
     { :multiple => true, :size => 8}
   %>
 </p>

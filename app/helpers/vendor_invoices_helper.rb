@@ -81,4 +81,14 @@ module VendorInvoicesHelper
     return "(" + number_to_currency(open) + "/" + number_to_currency(total) + ")"
 
   end
+
+  # Renders the options in a nested Project tree with multiple
+  # selected items.
+  #
+  def project_tree_options_for_select_with_multiple_selected(projects, selected, options = {})
+    options = project_tree_options_for_select(projects) do |project|
+       { :selected => (selected.include?(project) ? 'selected' : nil) }
+    end
+    return options
+  end
 end
