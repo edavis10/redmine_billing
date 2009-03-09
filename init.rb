@@ -34,7 +34,17 @@ Redmine::Plugin.register :redmine_billing do
   # Allows a user to see all invoices for the project they have this Role+Permission on
   permission :all_invoices_on_project, { }
   
-  menu :top_menu, :accounts_payables, {:controller => 'accounts_payables', :action => 'index'}, :caption => :accounts_payable_menu, :if => Proc.new{User.current.logged?} 
+  menu(:top_menu,
+       :accounts_payables,
+       {
+         :controller => 'accounts_payables',
+         :action => 'index'
+       },
+       :caption => :accounts_payable_menu,
+       :if => Proc.new {
+         User.current.logged? &&
+         User.current.allowed_to?(:use_accounts_payable, nil, :global => true)
+       })
 end
 
 begin
