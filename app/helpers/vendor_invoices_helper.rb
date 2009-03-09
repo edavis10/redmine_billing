@@ -1,4 +1,5 @@
 module VendorInvoicesHelper
+  extend ApplicationHelper
   # Number percision
   BillingPluginPrecision = 2
   
@@ -91,4 +92,24 @@ module VendorInvoicesHelper
     end
     return options
   end
+
+  # Wrap the project_tree_options_for_select API for 0.8 to use the
+  # old project > subproject style options
+  def project_tree_options_for_select(projects, options = {})
+    projects_by_root = projects.group_by(&:root)
+
+    html = ''
+    projects_by_root.keys.sort.each do |root|
+      html << content_tag('option',
+                          h(root.name),
+                          :value => url_for(:controller => 'projects', :action => 'show', :id => root))
+      projects_by_root[root].sort.each do |project|
+        next if project == root
+        html << content_tag('option',
+                            ('&#187; ' + h(project.name)),
+                            :value => url_for(:controller => 'projects', :action => 'show', :id => project))
+      end
+    end
+    return html
+  end unless respond_to?(:project_tree_options_for_select)
 end
