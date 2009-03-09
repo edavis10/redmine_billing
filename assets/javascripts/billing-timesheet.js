@@ -24,11 +24,11 @@ var menuYloc = null;
             };
             timer = setTimeout(newFn, options.delay);
         }
-       
+
         return this.each(function() {
             var obj = $(this);
             obj.bind(options.event, function () {
-                 count(this);  
+                 count(this);
             });
         });
     };
@@ -37,7 +37,7 @@ var menuYloc = null;
 jQuery(document).ready(function(){
 
   // Floating time counter
-  menuYloc = parseInt(jQuery(name).css("top").substring(0, jQuery(name).css("top").indexOf("px")))
+  menuYloc = parseInt(jQuery(name).css("top").substring(0, jQuery(name).css("top").indexOf("px")));
 
   // Listener for the scroll page event
   jQuery(window).scroll(function () {
@@ -78,7 +78,7 @@ jQuery(document).ready(function(){
     }
 
     function updateCounterVisability() {
-        selected = jQuery('form#time_entries input:checked').length
+        selected = jQuery('form#time_entries input:checked').length;
         if (selected > 0) {
             jQuery('#floating-counter').show();
         } else {
