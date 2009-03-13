@@ -147,7 +147,7 @@ HTML
     separator_option = '<option disabled="disabled">---</option>'
     html = <<EOHTML
 <p>
-  <label for="timesheet[billing_status][]">#{ l(:field_billing_status) }:</label><br />
+  <label for="timesheet[billing_status][]" class="select_all">#{ l(:field_billing_status) }:</label><br />
   #{ select_tag('timesheet[billing_status][]',
     unassigned_option +
      separator_option +
