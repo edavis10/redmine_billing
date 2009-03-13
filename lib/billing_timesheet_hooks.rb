@@ -92,12 +92,23 @@ HTML
   end
   
   def plugin_timesheet_controller_report_pre_fetch_time_entries(context = { })
+    # Specific Vendor Invoice
     if !context[:params][:timesheet].nil? && !context[:params][:timesheet][:vendor_invoice].nil?
       # Extend time an insane amount
       context[:timesheet].date_from = 100.years.ago.strftime("%Y-%m-%d")
       context[:timesheet].date_to = 100.years.from_now.strftime("%Y-%m-%d")
       # Add vendor_invoice
       context[:timesheet].vendor_invoice = context[:params][:timesheet][:vendor_invoice]
+    end
+
+    # Billing Status Filters
+    if !context[:params][:timesheet].nil? && !context[:params][:timesheet][:billing_status].nil?
+      # Reject the unassigned filter
+      context[:params][:timesheet][:billing_status].delete('unassigned')
+      
+      unless context[:params][:timesheet][:billing_status].empty?
+        context[:timesheet].billing_statuses = context[:params][:timesheet][:billing_status]
+      end
     end
   end
   
@@ -107,8 +118,50 @@ HTML
       context[:conditions][0] << " AND vendor_invoice_id IN (?) "
       context[:conditions] << vendor_invoice_id
     end
+
+    if context[:timesheet].billing_statuses && !context[:timesheet].billing_statuses.empty?
+      context[:conditions][0] << " AND #{VendorInvoice.table_name}.billing_status IN (?) "
+      context[:conditions] << context[:timesheet].billing_statuses
+    end
   end
 
+  def plugin_timesheet_model_timesheet_includes(context = { })
+    if context[:timesheet].billing_statuses && !context[:timesheet].billing_statuses.empty?
+      context[:includes] << :vendor_invoice
+    end
+  end
+
+  # Add the Billing Status as a Filter to the Timesheet form
+  def plugin_timesheet_view_timesheet_form(context = {})
+    if context[:params] && context[:params][:timesheet] && context[:params][:timesheet][:billing_status]
+      billing_statuses = context[:params][:timesheet][:billing_status]
+    else
+      billing_statuses = nil
+    end
+
+    # Select unassigned if there are no billing statuses selected or
+    # if it's been selected
+    unassigned_selected = (billing_statuses.nil? || billing_statuses.include?('unassigned'))
+
+    unassigned_option = "<option #{ unassigned_selected ? "selected='selected'" : "" } value='unassigned'>Unassigned</option>"
+    separator_option = '<option disabled="disabled">---</option>'
+    html = <<EOHTML
+<p>
+  <label for="timesheet[billing_status][]">#{ l(:field_billing_status) }:</label><br />
+  #{ select_tag('timesheet[billing_status][]',
+    unassigned_option +
+     separator_option +
+    options_for_select(BillingStatus.to_array_of_strings, billing_statuses),
+    { :multiple => true, :size => context[:list_size]})
+  }
+
+</p>
+EOHTML
+    return html
+  end
+
+  ### Helpers
+  
   # Returns the cost of a time entry, checking user permissions
   def cost_item(time_entry)
     if User.current.logged? && (User.current.allowed_to?(:view_rate, time_entry.project) || User.current.admin?)
