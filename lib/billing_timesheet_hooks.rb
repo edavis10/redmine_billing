@@ -65,6 +65,31 @@ HTML
       return ""
     end
   end
+
+  # Cost and Invoice header columns
+  def plugin_timesheet_views_timesheet_group_header(context = {})
+    return "<th width='8%'>#{l(:billing_cost)}</th>" +
+      "<th width='8%'>#{l(:billing_invoice_title)}</th>"
+  end
+
+  def plugin_timesheet_views_timesheet_time_entry(context = {})
+    time_entry = context[:time_entry]
+    o = ''
+    o << cost_cell(time_entry)
+    o << invoice_cell(time_entry)
+    
+    return o
+  end
+
+  def plugin_timesheet_views_timesheet_time_entry_sum(context = {})
+    time_entries = context[:time_entries]
+    o = ''
+    costs = time_entries.collect {|time_entry| cost_item(time_entry)}.compact.sum
+    o << td_cell(number_to_currency(costs))
+    o << td_cell("&nbsp;") # Can't sum invoices
+    
+    return o
+  end
   
   def plugin_timesheet_controller_report_pre_fetch_time_entries(context = { })
     if !context[:params][:timesheet].nil? && !context[:params][:timesheet][:vendor_invoice].nil?
@@ -82,5 +107,39 @@ HTML
       context[:conditions][0] << " AND vendor_invoice_id IN (?) "
       context[:conditions] << vendor_invoice_id
     end
+  end
+
+  # Returns the cost of a time entry, checking user permissions
+  def cost_item(time_entry)
+    if User.current.logged? && (User.current.allowed_to?(:view_rate, time_entry.project) || User.current.admin?)
+      return time_entry.cost
+    else
+      return nil
+    end
+  end
+
+  # Returns a td cell of the time_entry's cost
+  def cost_cell(time_entry)
+    cost = cost_item(time_entry)
+    if cost
+      return td_cell(number_to_currency(cost))
+    else
+      return td_cell('&nbsp;')
+    end
+  end
+
+  # Returns a td cell of the time_entry's invoice
+  def invoice_cell(time_entry)
+    if User.current.logged? && User.current.allowed_to?(:use_accounts_payable, nil, :global => true) && time_entry.vendor_invoice
+      invoice = link_to(h(time_entry.vendor_invoice.number),
+                        accounts_payable_path(time_entry.vendor_invoice))
+    else
+      invoice = '&nbsp;'
+    end
+    return td_cell(invoice)
+  end
+
+  def td_cell(html)
+    return content_tag(:td, html, :align => 'right')
   end
 end

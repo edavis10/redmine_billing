@@ -15,6 +15,7 @@ billing_vendor_invoice_hours: View hours associated with this invoice
 billing_export_unbilled_po: Export unbilled PO
 billing_export_unspent_labor_budget: Export unspent labor budget
 billing_export_unbilled_labor: Export unbilled labor
+billing_cost: Cost
 
 # Labels
 label_vendor_invoice: Invoice
