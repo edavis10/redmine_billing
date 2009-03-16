@@ -44,6 +44,7 @@
   <%= f.text_field :amount %> <small>Enter only for Fixed Rate Invoices</small>
 </p>
 <p>
+  <%= f.label(:project) %>
   <%= select_tag('vendor_invoice[project_id]',
                  '<option value=""></option>' +
                  project_tree_options_for_select(User.current.projects.find(:all), {:selected => @vendor_invoice.project }),
