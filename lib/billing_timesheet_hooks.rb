@@ -103,10 +103,10 @@ HTML
 
     # Billing Status Filters
     if !context[:params][:timesheet].nil? && !context[:params][:timesheet][:billing_status].nil?
-      # Reject the unassigned filter
-      context[:params][:timesheet][:billing_status].delete('unassigned')
-      
-      unless context[:params][:timesheet][:billing_status].empty?
+      # Unassigned overrides the other statuses
+      if context[:params][:timesheet][:billing_status].include?('unassigned')
+        context[:timesheet].billing_statuses = ['unassigned']
+      else
         context[:timesheet].billing_statuses = context[:params][:timesheet][:billing_status]
       end
     end
@@ -120,8 +120,14 @@ HTML
     end
 
     if context[:timesheet].billing_statuses && !context[:timesheet].billing_statuses.empty?
-      context[:conditions][0] << " AND #{VendorInvoice.table_name}.billing_status IN (?) "
-      context[:conditions] << context[:timesheet].billing_statuses
+      if context[:timesheet].billing_statuses.include?("unassigned")
+        # No status
+        context[:conditions][0] << " AND #{TimeEntry.table_name}.vendor_invoice_id IS NULL "
+      else
+        # Specific statuses
+        context[:conditions][0] << " AND #{VendorInvoice.table_name}.billing_status IN (?) "
+        context[:conditions] << context[:timesheet].billing_statuses
+      end
     end
   end
 
@@ -141,7 +147,7 @@ HTML
 
     # Select unassigned if there are no billing statuses selected or
     # if it's been selected
-    unassigned_selected = (billing_statuses.nil? || billing_statuses.include?('unassigned'))
+    unassigned_selected = (billing_statuses && billing_statuses.include?('unassigned'))
 
     unassigned_option = "<option #{ unassigned_selected ? "selected='selected'" : "" } value='unassigned'>Unassigned</option>"
     separator_option = '<option disabled="disabled">---</option>'
