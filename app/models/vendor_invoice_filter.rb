@@ -16,7 +16,7 @@ class VendorInvoiceFilter
     unless options[:activities].nil?
       self.activities = options[:activities].collect { |a| a.to_i }
     else
-      self.activities =  Enumeration::get_values('ACTI').collect(&:id)
+      self.activities = RedmineCompatibility::Enumeration.activities.collect(&:id)
     end
 
     unless options[:users].nil?

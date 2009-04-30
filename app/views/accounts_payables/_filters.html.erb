@@ -26,11 +26,11 @@
     { :multiple => true, :size => 8}
   %>
 </p>
-             
+              
 <p>
   <label for="vendor_invoice_filter[activities][]"><%= l(:label_activity)%>:</label><br />
   <%= select_tag 'vendor_invoice_filter[activities][]',
-    options_from_collection_for_select(Enumeration::get_values('ACTI'), :id, :name, @vendor_invoice_filter.activities),
+    options_from_collection_for_select( RedmineCompatibility::Enumeration.activities, :id, :name, @vendor_invoice_filter.activities),
     { :multiple => true, :size => 8}
   %>
 </p>
