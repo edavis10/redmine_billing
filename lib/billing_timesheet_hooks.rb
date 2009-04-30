@@ -8,13 +8,13 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
       o << content_tag(:li,
                        context_menu_link(GLoc.l(:button_invoice),
                                          timesheet_accounts_payables_path(:time_entry_ids => time_entries.collect(&:id)),
-                                         :style => "background-image: url(#{image_path('invoice.png', :plugin => 'billing_plugin')});",
+                                         :style => "background-image: url(#{image_path('invoice.png', :plugin => 'redmine_billing')});",
                                          :disabled => true))
     else
       o << content_tag(:li,
                        context_menu_link(GLoc.l(:button_invoice),
                                          timesheet_accounts_payables_path(:time_entry_ids => time_entries.collect(&:id)),
-                                         :style => "background-image: url(#{image_path('invoice.png', :plugin => 'billing_plugin')});",
+                                         :style => "background-image: url(#{image_path('invoice.png', :plugin => 'redmine_billing')});",
                                          :rel => 'facebox'));
       
     end
@@ -24,13 +24,13 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
   end
   
   def plugin_timesheet_view_timesheets_report_header_tags(context = { })
-    return javascript_include_tag('jquery-1.2.6.min.js', :plugin => "billing_plugin") +
-      javascript_include_tag('jquery.dimensions.min.js', :plugin => "billing_plugin") +
-      javascript_include_tag('billing-timesheet.js', :plugin => "billing_plugin") +
+    return javascript_include_tag('jquery-1.2.6.min.js', :plugin => "redmine_billing") +
+      javascript_include_tag('jquery.dimensions.min.js', :plugin => "redmine_billing") +
+      javascript_include_tag('billing-timesheet.js', :plugin => "redmine_billing") +
       javascript_tag("jQuery.noConflict();") +
-      stylesheet_link_tag("facebox.css", :plugin => "billing_plugin", :media => "screen") +
-      javascript_include_tag('facebox', :plugin => "billing_plugin") +
-      stylesheet_link_tag("billing-timesheet.css", :plugin => "billing_plugin", :media => "screen") +
+      stylesheet_link_tag("facebox.css", :plugin => "redmine_billing", :media => "screen") +
+      javascript_include_tag('facebox', :plugin => "redmine_billing") +
+      stylesheet_link_tag("billing-timesheet.css", :plugin => "redmine_billing", :media => "screen") +
       javascript_tag("var time_counter_url = '#{formatted_time_counter_accounts_payables_path(:format => 'json')}'")
 
   end
