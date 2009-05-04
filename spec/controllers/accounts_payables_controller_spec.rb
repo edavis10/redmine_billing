@@ -77,6 +77,43 @@ describe AccountsPayablesController, "#index" do
   end
 end
 
+describe AccountsPayablesController, "#filter" do
+  include AccountsPayablesControllerSpecHelper
+  
+  before(:each) do
+    login
+    
+    @vendor_invoice_one = vendor_invoice_factory(1)
+    @vendor_invoice_two = vendor_invoice_factory(2)
+    @vendor_invoices = [@vendor_invoice_one, @vendor_invoice_two]
+
+    @user_one = user_factory(1)
+    @user_one.stub!(:vendor_invoices).and_return(@vendor_invoices)
+
+    @user_two = user_factory(2)
+    @user_two.stub!(:vendor_invoices).and_return([])
+    @users = [@user_one, @user_two]
+    User.stub!(:find).with(:all).and_return(@users)
+    
+    controller.stub!(:allowed_projects).and_return([])
+  end
+  
+  it 'should be successful' do
+    post :filter, :vendor_invoice_filter => {}
+    response.should be_success
+  end
+
+  it 'should load the vendor invoice filter' do
+    controller.should_receive(:load_vendor_invoice_filter)
+    post :filter, :vendor_invoice_filter => {}
+  end
+
+  it 'should render the index template' do
+    post :filter, :vendor_invoice_filter => {}
+    response.should render_template('accounts_payables/index')
+  end
+end
+
 describe AccountsPayablesController, "#show" do
   include AccountsPayablesControllerSpecHelper
   

@@ -38,6 +38,7 @@ Redmine::Plugin.register :redmine_billing do
                                       :create,
                                       :destroy,
                                       :edit,
+                                      :filter,
                                       :index,
                                       :new,
                                       :time_counter,

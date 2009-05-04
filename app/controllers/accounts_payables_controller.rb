@@ -13,7 +13,7 @@ class AccountsPayablesController < ApplicationController
   before_filter :create_vendor_invoice, :only => [ :create ]
   before_filter :update_vendor_invoice, :only => [ :update ]
   before_filter :update_vendor_invoices, :only => [ :bulk_update ]
-  before_filter :load_vendor_invoice_filter, :only => [ :index ]
+  before_filter :load_vendor_invoice_filter, :only => [ :index, :filter ]
 
   helper :vendor_invoices
   helper :timelog
@@ -101,12 +101,17 @@ class AccountsPayablesController < ApplicationController
   public
   def index
     respond_to do |format|
-      format.html
+      format.html { render :action => 'index' }
       format.xml  { render :xml => @users.collect(&:vendor_invoices) }
       format.js
     end
   end
 
+  # Similar to index but is filtered via a HTTP POST
+  def filter
+    index
+  end
+  
   def show          
     respond_to do |format|
       if allowed_to_view_vendor_invoice?(@vendor_invoice)

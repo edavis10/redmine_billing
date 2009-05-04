@@ -9,5 +9,6 @@ resources(:accounts_payables,
             :unbilled_po => :get,
             :unspent_labor => :get,
             :unbilled_labor => :get,
-            :time_counter => :get
+            :time_counter => :get,
+            :filter => :post
           })
