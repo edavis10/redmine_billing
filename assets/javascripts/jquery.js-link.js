@@ -8,10 +8,10 @@
 
     return this.each(function() {
       // apply plugin functionality to each element
-      $(this).click(callLink);
+      $(this).click(runFacebox);
     });
 
-    function callLink() {
+    function runFacebox() {
       var fieldsSelected = $(opts.selector);
       if (fieldsSelected.length > 0) {
         this.href = opts.basePath + '?';

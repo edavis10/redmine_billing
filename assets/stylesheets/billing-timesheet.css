@@ -4,4 +4,5 @@ div#floating-counter p#total-time { font-size: 150%; margin: 8px 0px; text-align
 div#floating-counter ul { list-style: none; padding: 0; }
 tr.missing-rate { color: red; }
 
-a.invoice-command { background: url(../images/invoice.png) no-repeat; padding-left: 20px; }
+div.invoice-menu { float:right; padding: 10px;}
+a.invoice-button { background: url(../images/invoice.png) no-repeat; padding-left: 20px; text-align:left;}

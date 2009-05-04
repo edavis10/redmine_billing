@@ -32,7 +32,14 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
       stylesheet_link_tag("facebox.css", :plugin => "redmine_billing", :media => "screen") +
       javascript_include_tag('facebox', :plugin => "redmine_billing") +
       stylesheet_link_tag("billing-timesheet.css", :plugin => "redmine_billing", :media => "screen") +
-      javascript_tag("var time_counter_url = '#{formatted_time_counter_accounts_payables_path(:format => 'json')}'")
+      javascript_tag("var time_counter_url = '#{formatted_time_counter_accounts_payables_path(:format => 'json')}'") +
+      javascript_tag("jQuery(document).ready(function() {
+                          jQuery('.invoice-button').show().jsLink({
+                             basePath: '#{url_for(:controller => 'accounts_payables', :action => 'timesheet')}',
+                             selector: '#time_entries :checkbox:checked',
+                             selectorFieldNames: 'time_entry_ids[]=',
+                             errorMessage: 'Please select some time entries before trying to invoice them'
+                           })});")
 
   end
   
@@ -55,23 +62,14 @@ HTML
     o = ''
     o << content_tag(:div, inner_content, :id => 'floating-counter', :style => 'display:none;')
     # Invoice button
-    if context[:timesheet] && context[:timesheet].time_entries && context[:timesheet].time_entries.size > 0
-      o << content_tag(:div,
-                       "<a id ='invoice-selected' href='' style='display:none' class='invoice-command'>#{l(:button_invoice)}</a>")
-
-      o << javascript_tag(
-                          "jQuery('#invoice-selected').show().jsLink({
-                             basePath: '#{url_for(:controller => 'accounts_payables', :action => 'timesheet')}',
-                             selector: '#time_entries :checkbox:checked',
-                             selectorFieldNames: 'time_entry_ids[]=',
-                             errorMessage: 'Please select some time entries before trying to invoice them'
-                           })")
-      
-    end
-      
+    o << invoice_button(context[:timesheet])
     return o
   end
 
+  def plugin_timesheet_views_timesheets_report_before_time_entries(context = { })
+    return invoice_button(context[:timesheet])
+  end
+  
   # Adds a CSS class to the row on the Timesheet if a time_entry is missing a 
   # rate (based on it's cost).
   def plugin_timesheet_view_timesheets_time_entry_row_class(context = { })
@@ -217,5 +215,15 @@ EOHTML
 
   def td_cell(html)
     return content_tag(:td, html, :align => 'right')
+  end
+
+  def invoice_button(timesheet)
+    if timesheet && timesheet.time_entries && timesheet.time_entries.size > 0
+      return content_tag(:div,
+                         "<a href='' style='display:none' class='invoice-button'>#{l(:button_invoice)}</a>",
+                         :class => 'invoice-menu')
+    else
+      return ''
+    end
   end
 end
