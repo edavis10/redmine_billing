@@ -27,6 +27,7 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
     return javascript_include_tag('jquery-1.2.6.min.js', :plugin => "redmine_billing") +
       javascript_include_tag('jquery.dimensions.min.js', :plugin => "redmine_billing") +
       javascript_include_tag('billing-timesheet.js', :plugin => "redmine_billing") +
+      javascript_include_tag('jquery.js-link.js', :plugin => "redmine_billing") +
       javascript_tag("jQuery.noConflict();") +
       stylesheet_link_tag("facebox.css", :plugin => "redmine_billing", :media => "screen") +
       javascript_include_tag('facebox', :plugin => "redmine_billing") +
@@ -56,29 +57,16 @@ HTML
     # Invoice button
     if context[:timesheet] && context[:timesheet].time_entries && context[:timesheet].time_entries.size > 0
       o << content_tag(:div,
-                       "<a id ='invoice-selected' href='' style='background-image: url(#{image_path('invoice.png', :plugin => 'redmine_billing')});'>#{l(:button_invoice)}</a>")
-      o << javascript_tag("var invoice_base_path = '#{url_for(:controller => 'accounts_payables', :action => 'timesheet')}'")
+                       "<a id ='invoice-selected' href='' style='display:none' class='invoice-command'>#{l(:button_invoice)}</a>")
+
       o << javascript_tag(
-                      "jQuery('#invoice-selected').click(function() {
-  var selected_time_fields = jQuery('#time_entries :checkbox:checked');
-  if (selected_time_fields.length > 0) {
-    this.href = invoice_base_path + '?';
-    var link = this;
-    selected_time_fields.each(function (ele) {
-      link.href = link.href + 'time_entry_ids[]=' + this.value + '&';
-    });
-
-
-    jQuery.facebox({ ajax: link.href });
-
-
-    return false;
-  } else {
-    alert('Please select some time entries before trying to invoice them');
-    return false;
-  }
-});")
-
+                          "jQuery('#invoice-selected').show().jsLink({
+                             basePath: '#{url_for(:controller => 'accounts_payables', :action => 'timesheet')}',
+                             selector: '#time_entries :checkbox:checked',
+                             selectorFieldNames: 'time_entry_ids[]=',
+                             errorMessage: 'Please select some time entries before trying to invoice them'
+                           })")
+      
     end
       
     return o

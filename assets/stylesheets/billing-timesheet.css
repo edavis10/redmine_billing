@@ -3,3 +3,5 @@ div#floating-counter #minimize { text-align: right; float: right;}
 div#floating-counter p#total-time { font-size: 150%; margin: 8px 0px; text-align:center; }
 div#floating-counter ul { list-style: none; padding: 0; }
 tr.missing-rate { color: red; }
+
+a.invoice-command { background: url(../images/invoice.png) no-repeat; padding-left: 20px; }
