@@ -167,6 +167,49 @@ describe AccountsPayablesController, "#new" do
   end
 end
 
+describe AccountsPayablesController, "#new hourly" do
+  include AccountsPayablesControllerSpecHelper
+
+  before(:each) do
+    login
+    @vendor_invoice = vendor_invoice_factory(1,:type => 'HourlyVendorInvoice')
+    HourlyVendorInvoice.stub!(:new).and_return(@vendor_invoice)
+  end
+  
+  it 'should be successful' do
+    get :new, :type => 'hourly'
+    response.should be_success
+  end
+
+  it 'should load a new vendor invoice' do
+    HourlyVendorInvoice.should_receive(:new).and_return(@vendor_invoice)
+    get :new, :type => 'hourly'
+    assigns[:vendor_invoice].should_not be_nil
+  end
+
+  it 'should render the edit template' do
+    get :new, :type => 'hourly'
+    response.should render_template('accounts_payables/edit')
+  end
+
+  it 'should assign any passed in time_entry_ids' do
+    @vendor_invoice.should_receive(:time_entry_ids=).with(['12','13'])
+    @vendor_invoice.stub!(:set_default_user)
+    get :new, :type => 'hourly', :time_entry_ids => ['12','13']
+  end
+
+  it 'should pre-select the user based on the first Time Entry' do
+    time_entry_one = mock_model(TimeEntry, :spent_on => Date.today, :user_id => 1)
+    time_entry_two = mock_model(TimeEntry, :spent_on => Date.yesterday, :user_id => 2)
+    time_entry_ids = [time_entry_one.id, time_entry_two.id]
+    
+    @vendor_invoice.should_receive(:time_entry_ids=).with(time_entry_ids)
+    @vendor_invoice.should_receive(:set_default_user)
+    get :new, :type => 'hourly', :time_entry_ids => time_entry_ids
+
+  end
+end
+
 describe AccountsPayablesController, "#create with successful save" do
   include AccountsPayablesControllerSpecHelper
 

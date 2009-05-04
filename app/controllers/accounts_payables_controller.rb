@@ -34,7 +34,10 @@ class AccountsPayablesController < ApplicationController
   def new_vendor_invoice
     if params[:type] && params[:type] == 'hourly'
       @vendor_invoice = HourlyVendorInvoice.new
-      @vendor_invoice.time_entry_ids = params[:time_entry_ids] unless params[:time_entry_ids].nil?
+      unless params[:time_entry_ids].nil?
+        @vendor_invoice.time_entry_ids = params[:time_entry_ids]
+        @vendor_invoice.set_default_user
+      end
     else
       @vendor_invoice = FixedVendorInvoice.new
     end
