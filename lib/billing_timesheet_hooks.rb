@@ -37,6 +37,7 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
   
   def plugin_timesheet_view_timesheets_report_bottom(context = { })
     # TODO: Wish I could just render :partial in here
+    # Floating time counter
     inner_content = <<HTML
 <a href='javascript:void(0)' id="minimize" onclick="jQuery('#counter-details').toggle(); return false;">-</a>
 <h3>Selected Time Summary</h3>
@@ -52,6 +53,34 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
 HTML
     o = ''
     o << content_tag(:div, inner_content, :id => 'floating-counter', :style => 'display:none;')
+    # Invoice button
+    if context[:timesheet] && context[:timesheet].time_entries && context[:timesheet].time_entries.size > 0
+      o << content_tag(:div,
+                       "<a id ='invoice-selected' href='' style='background-image: url(#{image_path('invoice.png', :plugin => 'redmine_billing')});'>#{l(:button_invoice)}</a>")
+      o << javascript_tag("var invoice_base_path = '#{url_for(:controller => 'accounts_payables', :action => 'timesheet')}'")
+      o << javascript_tag(
+                      "jQuery('#invoice-selected').click(function() {
+  var selected_time_fields = jQuery('#time_entries :checkbox:checked');
+  if (selected_time_fields.length > 0) {
+    this.href = invoice_base_path + '?';
+    var link = this;
+    selected_time_fields.each(function (ele) {
+      link.href = link.href + 'time_entry_ids[]=' + this.value + '&';
+    });
+
+
+    jQuery.facebox({ ajax: link.href });
+
+
+    return false;
+  } else {
+    alert('Please select some time entries before trying to invoice them');
+    return false;
+  }
+});")
+
+    end
+      
     return o
   end
 
