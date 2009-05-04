@@ -6,14 +6,14 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
     o = ''
     if time_entries.size <= 0
       o << content_tag(:li,
-                       context_menu_link(GLoc.l(:button_invoice),
-                                         timesheet_accounts_payables_path(:time_entry_ids => time_entries.collect(&:id)),
+                       context_menu_link(l(:button_invoice),
+                                         {:controller=>"accounts_payables", :action=>"timesheet", :time_entry_ids => time_entries.collect(&:id)},
                                          :style => "background-image: url(#{image_path('invoice.png', :plugin => 'redmine_billing')});",
                                          :disabled => true))
     else
       o << content_tag(:li,
-                       context_menu_link(GLoc.l(:button_invoice),
-                                         timesheet_accounts_payables_path(:time_entry_ids => time_entries.collect(&:id)),
+                       context_menu_link(l(:button_invoice),
+                                         {:controller=>"accounts_payables", :action=>"timesheet", :time_entry_ids => time_entries.collect(&:id)},
                                          :style => "background-image: url(#{image_path('invoice.png', :plugin => 'redmine_billing')});",
                                          :rel => 'facebox'));
       
@@ -191,7 +191,7 @@ EOHTML
   def invoice_cell(time_entry)
     if User.current.logged? && User.current.allowed_to?(:use_accounts_payable, nil, :global => true) && time_entry.vendor_invoice
       invoice = link_to(h(time_entry.vendor_invoice.number),
-                        accounts_payable_path(time_entry.vendor_invoice))
+                        {:controller=>"accounts_payables", :action=>"show", :id => time_entry.vendor_invoice})
     else
       invoice = '&nbsp;'
     end
