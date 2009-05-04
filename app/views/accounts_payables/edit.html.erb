@@ -47,7 +47,7 @@
   <%= f.label(:project) %>
   <%= select_tag('vendor_invoice[project_id]',
                  '<option value=""></option>' +
-                 project_tree_options_for_select(User.current.projects.find(:all), {:selected => @vendor_invoice.project }),
+                 project_tree_options_for_select(Project.active, {:selected => @vendor_invoice.project }),
                  { :include_blank => true } )%>
   <small>Enter only for Fixed Rate Invoices</small>
 </p>
