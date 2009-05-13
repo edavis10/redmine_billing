@@ -433,6 +433,7 @@ end
 
 describe AccountsPayablesController, "#timesheet" do
   include AccountsPayablesControllerSpecHelper
+  integrate_views
   
   before(:each) do
     login
@@ -450,8 +451,8 @@ describe AccountsPayablesController, "#timesheet" do
   end
   
   it 'should load the vendor_invoices' do
-    @vendor_invoice_one = vendor_invoice_factory(1)
-    @vendor_invoice_two = vendor_invoice_factory(2)
+    @vendor_invoice_one = vendor_invoice_factory(1, :number => '100012')
+    @vendor_invoice_two = vendor_invoice_factory(2, :number => 'A004')
     @vendor_invoices = [@vendor_invoice_one, @vendor_invoice_two]
     HourlyVendorInvoice.should_receive(:find).with(:all).and_return(@vendor_invoices)
 
