@@ -9,6 +9,13 @@ a.billing-status-rejected {color: #CC0000;}
 a.billing-status-pro_bono { }
 a.billing-status-internal { }
 
+/* Lighten uncommon billing statuses */
+select.billing-status option[value=internal],
+select.billing-status option[value=hold],
+select.billing-status option[value=pro_bono],
+select.billing-status option[value=rejected],
+select.billing-status option[value=unbilled] { color: #999999; }
+
 .icon-csv { background-image: url(../images/page_excel.png) }
 .icon-add-invoice { background-image: url(../images/table_add.png) }
 .icon-invoices { background-image: url(../images/table_multiple.png) }
