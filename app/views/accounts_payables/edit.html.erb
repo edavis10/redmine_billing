@@ -36,7 +36,7 @@
   <%= f.text_field :comment %>
 </p>
 <p>
-  <%= f.select :billing_status, BillingStatus.to_array, { :required => true, :selected => @vendor_invoice.billing_status_id} %>
+  <%= f.select :billing_status, BillingStatus.to_array, { :required => true, :selected => @vendor_invoice.billing_status_id}, :class => 'billing-status' %>
 </p>
 
 <% if @vendor_invoice.fixed? %>
