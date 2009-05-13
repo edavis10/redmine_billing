@@ -5,4 +5,7 @@ div#floating-counter ul { list-style: none; padding: 0; }
 tr.missing-rate { color: red; }
 
 div.invoice-menu { float:right; padding: 10px;}
+div#floating-counter div.invoice-menu {float:none; text-align:left;} /* Floating counter invoice button */
 a.invoice-button { background: url(../images/invoice.png) no-repeat; padding-left: 20px; text-align:left;}
+
+

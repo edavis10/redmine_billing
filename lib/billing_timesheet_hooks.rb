@@ -58,6 +58,7 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
 <ul>
 </ul>
 </div>
+#{invoice_button(context[:timesheet])}
 HTML
     o = ''
     o << content_tag(:div, inner_content, :id => 'floating-counter', :style => 'display:none;')
