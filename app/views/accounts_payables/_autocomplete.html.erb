@@ -1,5 +1,5 @@
 <ul>
 <% @vendor_invoices.each do |invoice| %>
-   <li id="<%= invoice.id %>"><%= invoice.number %><span class="informal"> - <%= invoice.user_names %></span></li>
+   <li id="<%= invoice.id %>"><span class="informal"><%= invoice.user_names %> - </span><%= invoice.number %></li>
 <% end %>
 </ul>
