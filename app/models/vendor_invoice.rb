@@ -6,6 +6,11 @@ class VendorInvoice < ActiveRecord::Base
   validates_presence_of :number
   validates_presence_of :invoiced_on
   validates_presence_of :billing_status
+
+  def initialize(params={})
+    super(params)
+    self.invoiced_on ||= Date.today
+  end
   
   def billing_type
     ActiveSupport::Deprecation.warn('VendorInvoice#billing_type should be replaced with STI classes.')

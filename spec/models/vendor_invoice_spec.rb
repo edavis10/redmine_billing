@@ -30,6 +30,13 @@ module VendorInvoiceSpecHelper
   end
 end
 
+describe VendorInvoice, '#new' do
+  it "should default invoiced_on to today's date" do
+    Date.stub!(:today).and_return(Date.today)
+    VendorInvoice.new.invoiced_on.should eql(Date.today)
+  end
+end
+
 describe VendorInvoice, 'hours' do
   include VendorInvoiceSpecHelper
   
