@@ -6,7 +6,9 @@
 <% end %>
 <p>
   <%= select_tag('id',
-    content_tag('option', "-- Invoices --", :value => '') + options_from_collection_for_select(@vendor_invoices, "id", "number"), :include_blank => true ) %>
+    content_tag('option', "-- Invoices --", :value => '') +
+                options_for_select(@vendor_invoices.sort {|a,b| a.user_names <=> b.user_names }.collect {|vendor_invoice| ["#{vendor_invoice.number} - #{vendor_invoice.user_names}", vendor_invoice.id]}),
+                :include_blank => true ) %>
 </p>
 
 <p>

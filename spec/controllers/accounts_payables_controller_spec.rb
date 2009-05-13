@@ -451,12 +451,25 @@ describe AccountsPayablesController, "#timesheet" do
   end
   
   it 'should load the vendor_invoices' do
-    @vendor_invoice_one = vendor_invoice_factory(1, :number => '100012')
-    @vendor_invoice_two = vendor_invoice_factory(2, :number => 'A004')
+    @vendor_invoice_one = vendor_invoice_factory(1, :number => '100012', :user_names => 'Test User One')
+    @vendor_invoice_two = vendor_invoice_factory(2, :number => 'A004', :user_names => 'Test User Two')
     @vendor_invoices = [@vendor_invoice_one, @vendor_invoice_two]
     HourlyVendorInvoice.should_receive(:find).with(:all).and_return(@vendor_invoices)
 
     get :timesheet, :time_entry_ids => []
     assigns[:vendor_invoices].should eql(@vendor_invoices)
+  end
+
+  it 'should show the user names in the vendor invoice select field' do
+    @vendor_invoice_one = vendor_invoice_factory(1, :number => '100012', :user_names => 'Test User One')
+    @vendor_invoice_two = vendor_invoice_factory(2, :number => 'A004', :user_names => 'Test User Two')
+    @vendor_invoices = [@vendor_invoice_one, @vendor_invoice_two]
+    HourlyVendorInvoice.should_receive(:find).with(:all).and_return(@vendor_invoices)
+
+    get :timesheet, :time_entry_ids => []
+    response.should have_tag('option[value=?]','1',/Test User One/)
+    response.should have_tag('option[value=?]','1',/100012/)
+    response.should have_tag('option[value=?]','2',/Test User Two/)
+    response.should have_tag('option[value=?]','2',/A004/)
   end
 end
