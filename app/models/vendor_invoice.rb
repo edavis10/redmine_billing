@@ -1,4 +1,5 @@
 class VendorInvoice < ActiveRecord::Base
+  unloadable
   has_and_belongs_to_many :users
   has_many :time_entries
   belongs_to :project
