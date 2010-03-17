@@ -18,10 +18,20 @@ require_dependency 'billing_timelog_hooks'
 require_dependency 'billing_timesheet_hooks'
 require_dependency 'billing_project_hooks'
 
-# Patches
-require_dependency 'billing_user_patch'
-require_dependency 'billing_time_entry_patch'
-require_dependency 'billing_timesheet_patch'
+# Patches to the Redmine core.
+require 'dispatcher'
+
+Dispatcher.to_prepare :redmine_billing do
+  require_dependency 'principal'
+  require_dependency 'user'
+  User.send(:include, BillingUserPatch)
+
+  require_dependency 'timesheet'
+  Timesheet.send(:include, BillingTimesheetPatch)
+
+  require_dependency 'time_entry'
+  TimeEntry.send(:include, BillingTimeEntryPatch)
+end
 
 Redmine::Plugin.register :redmine_billing do
   name 'Redmine Billing plugin'

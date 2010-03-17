@@ -1,6 +1,3 @@
-require_dependency 'principal'
-require_dependency 'user'
-
 # Patches Redmine's Users dynamically.  Adds a relationship 
 # User has and belongs to many Vendor Invoice
 module BillingUserPatch
@@ -23,8 +20,5 @@ module BillingUserPatch
   module InstanceMethods
   end
 end
-
-# Add module
-User.send(:include, BillingUserPatch)
 
 

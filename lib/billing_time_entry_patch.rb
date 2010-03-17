@@ -1,5 +1,3 @@
-require_dependency 'time_entry'
-
 # Patches Redmine's Time Entries dynamically.  Adds a relationship 
 # Time Entry belongs to a Vendor Invoice
 module BillingTimeEntryPatch
@@ -23,8 +21,3 @@ module BillingTimeEntryPatch
   module InstanceMethods
   end
 end
-
-# Add module
-TimeEntry.send(:include, BillingTimeEntryPatch)
-
-

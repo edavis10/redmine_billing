@@ -1,5 +1,3 @@
-require_dependency 'timesheet'
-
 # Patches Timesheets dynamically.
 module BillingTimesheetPatch
   def self.included(base) # :nodoc:
@@ -22,8 +20,4 @@ module BillingTimesheetPatch
   module InstanceMethods
   end
 end
-
-# Add module
-Timesheet.send(:include, BillingTimesheetPatch)
-
 
