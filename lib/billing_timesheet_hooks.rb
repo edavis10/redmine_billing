@@ -158,7 +158,7 @@ HTML
     if context[:params] && context[:params][:timesheet] && context[:params][:timesheet][:billing_status]
       billing_statuses = context[:params][:timesheet][:billing_status]
     else
-      billing_statuses = nil
+      billing_statuses = ['unassigned']
     end
 
     # Select unassigned if there are no billing statuses selected or
