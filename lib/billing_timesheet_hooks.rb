@@ -131,8 +131,8 @@ HTML
   def plugin_timesheet_model_timesheet_conditions(context = { })
     unless context[:timesheet].vendor_invoice.nil?
       vendor_invoice_id = context[:timesheet].vendor_invoice
-      context[:conditions][0] << " AND vendor_invoice_id IN (?) "
-      context[:conditions] << vendor_invoice_id
+      context[:conditions][0] << " AND vendor_invoice_id IN (:vendor_invoice) "
+      context[:conditions][1][:vendor_invoice] = vendor_invoice_id
     end
 
     if context[:timesheet].billing_statuses && !context[:timesheet].billing_statuses.empty?
@@ -141,8 +141,8 @@ HTML
         context[:conditions][0] << " AND #{TimeEntry.table_name}.vendor_invoice_id IS NULL "
       else
         # Specific statuses
-        context[:conditions][0] << " AND #{VendorInvoice.table_name}.billing_status IN (?) "
-        context[:conditions] << context[:timesheet].billing_statuses
+        context[:conditions][0] << " AND #{VendorInvoice.table_name}.billing_status IN (:billing_statuses) "
+        context[:conditions][1][:billing_statuses] = context[:timesheet].billing_statuses
       end
     end
   end
