@@ -5,6 +5,7 @@ ENV["RAILS_ENV"] = "test"
 # Allows loading of an environment config based on the environment
 redmine_root = ENV["REDMINE_ROOT"] || File.dirname(__FILE__) + "/../../../.."
 require File.expand_path(redmine_root + "/config/environment")
+require File.expand_path(redmine_root + "/test/test_helper")
 
 require 'spec'
 require 'spec/rails'

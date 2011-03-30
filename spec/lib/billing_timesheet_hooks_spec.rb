@@ -1,24 +1,22 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+# just enough infrastructure to get 'assert_select' to work
+require 'action_controller'
+require 'action_controller/assertions/selector_assertions'
+include ActionController::Assertions::SelectorAssertions
+
 def call_hook(method, context = {})
   return BillingTimesheetHooks.instance.send(method, context)
 end
 
 describe BillingTimesheetHooks, '#plugin_timesheet_views_timesheet_group_header' do
-  it 'should render the cost and invoice table headers' do
+  it 'should render the invoice table headers' do
     response = call_hook(:plugin_timesheet_views_timesheet_group_header)
-    response.should have_tag("th","Cost")
     response.should have_tag("th","Invoice")
   end
 end
 
 describe BillingTimesheetHooks, '#plugin_timesheet_views_timesheet_time_entry' do
-  it 'should render a cost cell showing the cost for the time_entry' do
-    BillingTimesheetHooks.instance.should_receive(:cost_cell).and_return('')
-    call_hook(:plugin_timesheet_views_timesheet_time_entry,
-              { :time_entry => mock_model(TimeEntry) })
-  end
-
   it 'should render a invoice cell showing the invoice number for the time_entry' do
     BillingTimesheetHooks.instance.should_receive(:invoice_cell).and_return('')
     call_hook(:plugin_timesheet_views_timesheet_time_entry,

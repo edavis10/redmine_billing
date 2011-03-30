@@ -84,14 +84,12 @@ HTML
 
   # Cost and Invoice header columns
   def plugin_timesheet_views_timesheet_group_header(context = {})
-    return "<th width='8%'>#{l(:billing_cost)}</th>" +
-      "<th width='8%'>#{l(:billing_invoice_title)}</th>"
+    return "<th width='8%'>#{l(:billing_invoice_title)}</th>"
   end
 
   def plugin_timesheet_views_timesheet_time_entry(context = {})
     time_entry = context[:time_entry]
     o = ''
-    o << cost_cell(time_entry)
     o << invoice_cell(time_entry)
     
     return o
