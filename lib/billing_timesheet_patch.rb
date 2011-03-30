@@ -10,6 +10,7 @@ module BillingTimesheetPatch
       unloadable # Send unloadable so it will not be unloaded in development
       attr_accessor :vendor_invoice
       attr_accessor :billing_statuses
+      attr_accessor :billing_status_type # 0=> named, 1=> by ids
     end
 
   end
