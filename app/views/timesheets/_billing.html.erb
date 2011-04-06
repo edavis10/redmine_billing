@@ -1,0 +1,18 @@
+<p id="billing-options">
+  <label><%= l(:field_billing_status)%>:</label>
+  
+  <br />
+
+  <%= radio_button_tag('timesheet[billing_status_type]', '1', billing_status_type != "2") %>
+  <%= select_tag('timesheet[billing_status_group]',
+                 options_for_select([["Any",""], ["Invoiced","invoiced"], ["Not invoiced","unassigned"]], params[:timesheet].nil? ? nil : params[:timesheet][:billing_status_group]),
+                 :onfocus => '$("timesheet_billing_status_type_1").checked = true;') %>
+  <br /><br />
+
+  <%= radio_button_tag('timesheet[billing_status_type]', '2', billing_status_type == "2") %>
+  <span onclick="$('timesheet_billing_status_type_2').checked = true;">
+    <%= select_tag('timesheet[billing_status][]',
+                   options_for_select(BillingStatus.to_array_of_strings, billing_statuses),
+                   { :multiple => true, :size => context[:list_size]}) %>
+  </span>
+</p>

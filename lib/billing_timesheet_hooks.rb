@@ -84,14 +84,12 @@ HTML
 
   # Cost and Invoice header columns
   def plugin_timesheet_views_timesheet_group_header(context = {})
-    return "<th width='8%'>#{l(:billing_cost)}</th>" +
-      "<th width='8%'>#{l(:billing_invoice_title)}</th>"
+    return "<th width='8%'>#{l(:billing_invoice_title)}</th>"
   end
 
   def plugin_timesheet_views_timesheet_time_entry(context = {})
     time_entry = context[:time_entry]
     o = ''
-    o << cost_cell(time_entry)
     o << invoice_cell(time_entry)
     
     return o
@@ -118,12 +116,20 @@ HTML
     end
 
     # Billing Status Filters
-    if !context[:params][:timesheet].nil? && !context[:params][:timesheet][:billing_status].nil?
-      # Unassigned overrides the other statuses
-      if context[:params][:timesheet][:billing_status].include?('unassigned')
-        context[:timesheet].billing_statuses = ['unassigned']
-      else
+    if !context[:params][:timesheet].nil? && !context[:params][:timesheet][:billing_status_type].nil?
+      if context[:params][:timesheet][:billing_status_type] == '2'
+        # Specific status
         context[:timesheet].billing_statuses = context[:params][:timesheet][:billing_status]
+      else
+        # General group
+        case context[:params][:timesheet][:billing_status_group]
+        when ""
+          # Any, no filter
+        when "unassigned" # Not invoiced
+          context[:timesheet].billing_statuses = ['unassigned']
+        when "invoiced"
+          context[:timesheet].billing_statuses = BillingStatus.names
+        end
       end
     end
   end
@@ -142,7 +148,7 @@ HTML
       else
         # Specific statuses
         context[:conditions][0] << " AND #{VendorInvoice.table_name}.billing_status IN (:billing_statuses) "
-        context[:conditions][1][:billing_statuses] = context[:timesheet].billing_statuses
+        context[:conditions][1][:billing_statuses] = context[:timesheet].billing_statuses.collect(&:to_s)
       end
     end
   end
@@ -161,25 +167,22 @@ HTML
       billing_statuses = ['unassigned']
     end
 
-    # Select unassigned if there are no billing statuses selected or
-    # if it's been selected
-    unassigned_selected = (billing_statuses && billing_statuses.include?('unassigned'))
+    if context[:params] && context[:params][:timesheet] && context[:params][:timesheet][:billing_status_type]
+      billing_status_type = context[:params][:timesheet][:billing_status_type].to_s
+    else
+      billing_status_type = "1"
+    end
 
-    unassigned_option = "<option #{ unassigned_selected ? "selected='selected'" : "" } value='unassigned'>Unassigned</option>"
-    separator_option = '<option disabled="disabled">---</option>'
-    html = <<EOHTML
-<p>
-  <label for="timesheet[billing_status][]" class="select_all">#{ l(:field_billing_status) }:</label><br />
-  #{ select_tag('timesheet[billing_status][]',
-    unassigned_option +
-     separator_option +
-    options_for_select(BillingStatus.to_array_of_strings, billing_statuses),
-    { :multiple => true, :size => context[:list_size]})
-  }
+    return context[:controller].send(:render_to_string, {
+                                       :partial => 'timesheets/billing',
+                                       :locals => {
+                                         :context => context,
+                                         :billing_statuses => billing_statuses,
+                                         :params => context[:params],
+                                         :billing_status_type => billing_status_type
 
-</p>
-EOHTML
-    return html
+                                       }
+                                     })
   end
 
   ### Helpers
