@@ -24,16 +24,26 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
   end
   
   def plugin_timesheet_view_timesheets_report_header_tags(context = { })
-    return javascript_include_tag('jquery-1.2.6.min.js', :plugin => "redmine_billing") +
-      javascript_include_tag('jquery.dimensions.min.js', :plugin => "redmine_billing") +
-      javascript_include_tag('billing-timesheet.js', :plugin => "redmine_billing") +
-      javascript_include_tag('jquery.js-link.js', :plugin => "redmine_billing") +
-      javascript_tag("jQuery.noConflict();") +
-      stylesheet_link_tag("facebox.css", :plugin => "redmine_billing", :media => "screen") +
-      javascript_include_tag('facebox', :plugin => "redmine_billing") +
-      stylesheet_link_tag("billing-timesheet.css", :plugin => "redmine_billing", :media => "screen") +
-      javascript_tag("var time_counter_url = '#{formatted_time_counter_accounts_payables_path(:format => 'json')}'") +
-      javascript_tag("jQuery(document).ready(function() {
+    js_libs = []
+    jquery_included = begin
+                        ChiliProject::Compatibility && ChiliProject::Compatibility.using_jquery?
+                      rescue NameError
+                        # No compatibilty test
+                        false
+                      end
+    unless jquery_included
+      js_libs << javascript_include_tag('jquery-1.2.6.min.js', :plugin => "redmine_billing")
+      js_libs << javascript_tag("jQuery.noConflict();")
+    end
+    
+    js_libs << javascript_include_tag('jquery.dimensions.min.js', :plugin => "redmine_billing")
+    js_libs << javascript_include_tag('billing-timesheet.js', :plugin => "redmine_billing")
+    js_libs << javascript_include_tag('jquery.js-link.js', :plugin => "redmine_billing")
+    js_libs << stylesheet_link_tag("facebox.css", :plugin => "redmine_billing", :media => "screen")
+    js_libs << javascript_include_tag('facebox', :plugin => "redmine_billing")
+    js_libs << stylesheet_link_tag("billing-timesheet.css", :plugin => "redmine_billing", :media => "screen")
+    js_libs << javascript_tag("var time_counter_url = '#{formatted_time_counter_accounts_payables_path(:format => 'json')}'")
+    js_libs << javascript_tag("jQuery(document).ready(function() {
                           jQuery('.invoice-button').show().jsLink({
                              basePath: '#{url_for(:controller => 'accounts_payables', :action => 'timesheet')}',
                              selector: '#time_entries :checkbox:checked',
@@ -41,6 +51,7 @@ class BillingTimesheetHooks < Redmine::Hook::ViewListener
                              errorMessage: 'Please select some time entries before trying to invoice them'
                            })});")
 
+    return js_libs.join(' ')
   end
   
   def plugin_timesheet_view_timesheets_report_bottom(context = { })
